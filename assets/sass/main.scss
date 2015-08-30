@@ -1,0 +1,122 @@
+@import "../lib/bootswatch/yeti/_variables.scss";
+$brand-primary:         #008cba !default;
+$brand-success:         #43ac6a !default;
+$brand-info:            #5bc0de !default;
+$brand-warning:         #E99002 !default;
+$brand-danger:          #F04124 !default;
+@import "../lib/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "../lib/bootswatch/yeti/_bootswatch.scss";
+
+$light-blue: lighten($brand-primary, 40%);
+$lighter-blue: lighten($brand-primary, 80%);
+
+$light-gray: lighten($gray-base, 70%) !default;   // #999
+
+$header-color: #0B8044 !default;
+$header-color-dark: darken($header-color, 30%);
+$header-color-red: darken($brand-danger, 20%);
+
+body {
+  background-color: $gray;
+}
+
+#content {
+  background-color: $gray-lighter;
+}
+
+.footer-block {
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+  background-color: $brand-primary;
+  min-height: 40px;
+}
+
+.header {
+  background-color: $light-blue;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/$lighter-blue+-1,f4fcff+0,f4fcff+4,baeeff+100 */
+  background: $lighter-blue; /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover,  $lighter-blue 22%, $light-blue 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(22%,$lighter-blue), color-stop(100%,$light-blue)); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover,  $lighter-blue 22%,$light-blue 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover,  $lighter-blue 22%,$light-blue 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover,  $lighter-blue 22%,$light-blue 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center,  $lighter-blue 22%,$light-blue 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$lighter-blue', endColorstr='$light-blue',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  margin: 0;
+  padding: 1em;
+}
+
+.watermark {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 0.2;
+  filter: alpha(opacity=20); /* For IE8 and earlier */
+}
+
+.front-description {
+  position: relative;
+  overflow: hidden;
+}
+
+.header-title {
+  font-family: 'Fira Sans', sans-serif;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-size: 38px;
+  color: $header-color;
+  text-shadow: 2px 1px 1px $header-color-dark;
+}
+
+.header-sm-title {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 26px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  color: $header-color;
+}
+
+.header-title-red {
+  color: $header-color-red;
+}
+
+.green {
+  color: $header-color;
+}
+
+.companies {
+  background-color: $light-gray;
+  padding: 20px;
+}
+
+.form-required {
+  color: red;
+}
+
+.separator {
+  background-color: $gray-light;
+  margin-top: 10px;
+  padding: 5px;
+}
+
+#header-name {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#company-name {
+  font-weight: 700;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.navbar-nav li a {
+  font-size: 18px;
+}
+
+blockquote {
+  background: transparent url('../img/quote_open.gif') left top no-repeat;
+  padding: 5px 0 0 30px;
+}

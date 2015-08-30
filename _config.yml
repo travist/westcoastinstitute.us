@@ -1,0 +1,18 @@
+title : FeliciaCarroll.com
+kramdown:
+  input: GFM
+permalink: pretty
+exclude:
+  - CNAME
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - asserts/lib
+collections:
+  books:
+    output: true
+    permalink: /:path/
+  chapters:
+    output: false
+  paragraphs:
+    output: false

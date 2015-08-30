@@ -1,0 +1,29 @@
+<header class="row">
+    <div class="row header">
+        <div class="col-sm-2">
+            <a href="/"><img src="/assets/img/sunlogo.png" height="200px" /></a>
+        </div>
+        <div id="company-name" class="col-sm-8">
+            <h2 class="header-title">West Coast Institute for Gestalt Therapy</h2>
+            <h2 class="header-title">with Children & Adolescents</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-8 col-offset-2" id="header-name">
+                Felicia Carroll, LMFT RPT-S<br/>
+                Founder and Director
+            </div>
+        </div>
+        <div style="margin-top: -42px;" class="col-sm-2 col-sm-offset-10">
+            540 Alisal Rd. Ste 1<br/>Solvang CA 93463 USA
+        </div>
+    </div>
+    <div class="navbar navbar-inverse">
+        <ul class="nav navbar-nav">
+            <li class="{% if page.link == 'home' %}active{% endif %}"><a href="/">Home</a></li>
+            {% assign books = (site.books | sort: "weight" reversed) %}
+            {% for book in books %}
+                <li class="{% if book.link == page.link %}active{% endif %}"><a href="/{{ book.link }}">{{ book.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</header>

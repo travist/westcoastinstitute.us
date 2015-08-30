@@ -1,0 +1,18 @@
+<nav class="hidden-print hidden-xs hidden-sm">
+  <ul class="nav">
+    {% assign chapters = (site.chapters | where: "book" , page.book | sort: "weight") %}
+    {% for chapter in chapters %}
+    <li>
+      <a class="btn btn-block btn-default" href="#{{ chapter.chapter }}">{{ chapter.title }}</a>
+      {% assign paragraphs = (site.paragraphs | where: "chapter" , chapter.chapter | sort: "weight") %}
+      <ul class="nav">
+        {% for paragraph in paragraphs %}
+        <li>
+          <a href="#{{ paragraph.slug }}">{{ paragraph.title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+</nav>
