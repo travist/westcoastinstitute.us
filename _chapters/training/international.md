@@ -30,7 +30,6 @@ chapter: international
         <strong>2015 Workshops</strong>
         <ul>
             <li>Nurnberg, Germany - September 30-October 4, 2015</li>
-            <li>Warsaw, Poland - October 8-11, 2015</li>
             <li>Seoul, South Korea - December 19-24, 2015</li>
         </ul>
         <strong>2016 Workshops</strong>
