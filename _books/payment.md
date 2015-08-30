@@ -59,20 +59,21 @@ weight: 8
                     <form action="https://www.paypal.com/cgi-bin/webscr" accept-charset="UTF-8" method="post" id="payment-form" _lpchecked="1" class="form-inline">
                         <div>
                             <div class="form-group">
-                                <label for="edit-amount">Amount: <span class="form-required" title="This field is required.">*</span></label>
+                                <label for="amount">Amount: <span class="form-required" title="This field is required.">*</span></label>
                                 <div class="input-group">
                                     <div class="input-group-addon">$</div>
-                                    <input type="text" maxlength="12" name="edit-amount" id="edit-amount" size="12" value="0" class="form-control required">
+                                    <input type="text" maxlength="12" name="amount" id="amount" size="12" value="0" class="form-control required">
                                     <div class="input-group-addon">USD</div>
                                 </div>
                             </div>
-                            <input type="submit" name="submit" id="edit-submit" value="Pay using PayPal" class="btn btn-primary">
-                            <input type="hidden" name="currency_code" id="edit-currency-code" value="USD">
-                            <input type="hidden" name="business" id="edit-business" value="felicia@feliciacarroll.com">
-                            <input type="hidden" name="cmd" id="edit-cmd" value="_xclick">
-                            <input type="hidden" name="item_name" id="edit-item-name" value="Payment for services">
-                            <input type="hidden" name="no_shipping" id="edit-no-shipping" value="1">
-                            <input type="hidden" name="return" id="edit-return" value="http://feliciacarroll.com/payment/thanks">
+                            <input type="submit" name="submit" value="Pay using PayPal" class="btn btn-primary">
+                            <input type="hidden" name="charset" value="utf-8">
+                            <input type="hidden" name="currency_code" value="USD">
+                            <input type="hidden" name="business" value="felicia@feliciacarroll.com">
+                            <input type="hidden" name="cmd" value="_xclick">
+                            <input type="hidden" name="item_name" value="Payment for services">
+                            <input type="hidden" name="no_shipping" value="1">
+                            <input type="hidden" name="return" value="http://feliciacarroll.com/paymentdone">
                             <input type="hidden" name="form_id" id="edit-payment-form" value="payment_form">
                         </div>
                     </form>
@@ -104,10 +105,10 @@ weight: 8
     $('input[type=checkbox]').change(function() {
         var id = $(this).attr('id');
         var value = parseInt($('#' + id + '-value').text(), 10);
-        var currentValue = parseInt($('#edit-amount').val(), 10);
+        var currentValue = parseInt($('#amount').val(), 10);
         var newValue = currentValue;
         newValue += this.checked ? value : -value;
-        $('#edit-amount').val(newValue);
+        $('#amount').val(newValue);
         $('#total').text(newValue);
     });
 
@@ -116,7 +117,7 @@ weight: 8
     }
     if (QueryString.payment) {
         var payment = (parseInt(QueryString.payment, 10) / 100).toFixed(2);
-        $('#edit-amount').val(payment);
+        $('#amount').val(payment);
     }
 </script>
 
