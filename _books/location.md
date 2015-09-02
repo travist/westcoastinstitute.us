@@ -6,7 +6,7 @@ weight: 2
 ---
 <div class="row" style="text-align:center;margin-bottom: 30px;">
     <div class="header-title">Welcome to Solvang, California!</div>
-    <div class="header-sm-title">Danish capitol of America</div>
+    <div class="header-sm-title">Danish capital of America</div>
     <div class="col-sm-8 col-sm-offset-2">
         <img src="/assets/img/solvang.jpg" class="img-responsive img-thumbnail" />
     </div>
