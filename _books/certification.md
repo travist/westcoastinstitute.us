@@ -57,7 +57,7 @@ weight: 6
 </div>
 <div class="row">
    <div class="col col-sm-6">
-   
+      <img src="/assets/img/Valente-full.jpg" class="img-responsive img-thumbnail" />
    </div>
    <div class="col col-sm-6">
      <p>On August 9, 2015, Valente Orozco, LCSW and RPT-S was given his certificate which acknowledged him as Certified Gestalt Therapist with Children and Adolescents through the West Coast Institute.   Valente completed all the requirements with honorable recognition.  He said upon completion, “I am extremely proud of this designation.  It means more to me than I can express at this time.”  Valente also wrote,  “The two year process has been invaluable in organizing and integrating so much theoretical and clinical information.  Time and effort well-spent.”</p>
