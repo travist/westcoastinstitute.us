@@ -47,8 +47,8 @@ weight: 1
         <img src="/assets/img/Valente-Orozco.jpeg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
-        <h3>Valente Orozco, LCSW, RPT, PPS</h3>
-        <p>Valente works in both outpatient children’s mental health and private practice.  He has worked with children in a variety of settings including school-based mental health, child welfare, and clinic-based mental health.  He is Presented-Elect of the Central Valley Chapter of the California Association for Play Therapy.  He attended the 2012 and 2013 Summer Intensive trainings and is currently studying with the Pacific Gestalt Institute in Los Angeles.</p>
+        <h3>Valente Orozco, LCSW, RPT-S, PPS</h3>
+        <p>Valente currently works in private practice in Clovis California and offers training, supervision, and consultation in Gestalt Therapy with Children and Adolescents. He has worked with children in a variety of settings including school-based mental health, child welfare, and outpatient mental health. Valente served as the 2015 President of the Central Valley Chapter of the California Association for Play Therapy. He attended the 2012 and 2013 Summer Intensive trainings, the 2015 Advanced Spring Intensive, and has studied with the Pacific Gestalt Institute in Los Angeles.</p>
     </div>
 </div>
 <div class="row separator"></div>
