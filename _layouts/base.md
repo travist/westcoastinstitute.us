@@ -9,8 +9,8 @@
 
   <link rel="stylesheet" href="/assets/css/main.css">
   <!-- bower:css -->
-  <link rel='stylesheet' href='../assets/lib/angular-ui-select/dist/select.css' />
-  <link rel='stylesheet' href='../assets/lib/formio/css/formio.css' />
+  <link rel='stylesheet' href='../assets/lib/ui-select/dist/select.css' />
+  <link rel='stylesheet' href='../assets/lib/ng-formio/css/formio.css' />
   <!-- endbower -->
   
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -40,19 +40,19 @@
 
   <!-- bower:js -->
   <script src="../assets/lib/jquery/dist/jquery.js"></script>
-  <script src="../assets/lib/URIjs/src/URI.js"></script>
   <script src="../assets/lib/anchor-js/anchor.js"></script>
-  <script src="../assets/lib/jquery.maskedinput/dist/jquery.maskedinput.js"></script>
   <script src="../assets/lib/angular/angular.js"></script>
-  <script src="../assets/lib/angular-ui-select/dist/select.js"></script>
-  <script src="../assets/lib/angular-paginate-anything/dist/paginate-anything-tpls.js"></script>
+  <script src="../assets/lib/ng-file-upload/ng-file-upload.js"></script>
+  <script src="../assets/lib/angular-sanitize/angular-sanitize.js"></script>
+  <script src="../assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="../assets/lib/moment/moment.js"></script>
   <script src="../assets/lib/angular-moment/angular-moment.js"></script>
-  <script src="../assets/lib/signature_pad/signature_pad.js"></script>
-  <script src="../assets/lib/angular-sanitize/angular-sanitize.js"></script>
   <script src="../assets/lib/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
-  <script src="../assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-  <script src="../assets/lib/formio/dist/formio.js"></script>
+  <script src="../assets/lib/signature_pad/signature_pad.js"></script>
+  <script src="../assets/lib/angular-ui-mask/dist/mask.js"></script>
+  <script src="../assets/lib/ui-select/dist/select.js"></script>
+  <script src="../assets/lib/ng-formio/dist/formio.js"></script>
+  <script src="../assets/lib/urijs/src/URI.js"></script>
   <!-- endbower -->
   
   <script src="/assets/js/main.js"></script>

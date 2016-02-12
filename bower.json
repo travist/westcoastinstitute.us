@@ -14,12 +14,12 @@
     "tests"
   ],
   "dependencies": {
-    "URIjs": "uri.js#~1.16.0",
-    "anchor-js": "~1.2.1",
-    "bootstrap-sass": "~3.3.5",
-    "bootswatch": "~3.3.5+2",
-    "compass-mixins": "~1.0.2",
-    "font-awesome": "fontawesome#~4.4.0",
-    "formio": "develop"
+    "anchor-js": "^3.0.0",
+    "bootstrap-sass": "^3.3.6",
+    "bootswatch": "^3.3.6+1",
+    "compass-mixins": "^1.0.2",
+    "font-awesome": "^4.5.0",
+    "ng-formio": "^1.2.1",
+    "urijs": "^1.17.0"
   }
 }

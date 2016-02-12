@@ -20,4 +20,9 @@ gulp.task('watch', function () {
     gulp.watch('assets/sass/*.scss', ['sass']);
 });
 
-gulp.task('default', ['wiredep']);
+gulp.task('fonts', function() {
+    gulp.src('assets/lib/bootstrap/fonts/*')
+        .pipe(gulp.dest('assets/fonts/bootstrap'));
+});
+
+gulp.task('default', ['sass', 'wiredep', 'fonts']);
