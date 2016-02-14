@@ -10,8 +10,19 @@ chapter: trainers
         <p><img src="/assets/img/training-trainers-2.jpg" class="img-responsive img-thumbnail" /></p>
     </div>
     <div class="col col-sm-6">
-        <h3 class="header-title">November 6 - 12th, 2016</h3>
-        <a href="/register" class="btn btn-primary">Register Now</a>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title header-title">Dates</h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
+                <h4>November 6 - 13, 2016</h4>
+              </li>
+            </ul>
+          </div>
+        </div>
         <p>This training is offered to those who have attended the two intensive trainings or a full International program, and want support to become trainers in their own community/country. Preference will be given to those who are working towards certification through WCI. Participants will develop training outlines, review curriculum materials, set goals, network with other trainers, and receive guidance on leading group dynamics.</p>
         <p>
         <ul>

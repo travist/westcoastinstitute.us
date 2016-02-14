@@ -101,6 +101,10 @@ hr {
 pre {
   overflow: auto; }
 
+.docs-section {
+  margin-top: 80px;
+}
+
 code,
 kbd,
 pre,
@@ -6154,7 +6158,7 @@ body {
   color: #0B8044; }
 
 .companies {
-  background-color: #b3b3b3;
+  background-color: #ccc;
   padding: 20px; }
 
 .form-required {
