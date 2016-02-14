@@ -22,11 +22,11 @@ chapter: summer
             <ul class="list-group">
               <li class="list-group-item">
                 <button class="btn btn-danger" style="float:right" disabled>FULL</button>
-                <h4 style="text-decoration: line-through;">July 16 - 24, 2016</h4>
+                <h4 style="text-decoration: line-through;"><strong>July 16 - 24, 2016</strong></h4>
               </li>
               <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
-                <h4>July 29 - August 6, 2017</h4>
+                <h4><strong>July 29 - August 6, 2017</strong></h4>
               </li>
             </ul>
           </div>
