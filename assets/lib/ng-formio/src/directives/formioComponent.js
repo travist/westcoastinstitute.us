@@ -30,11 +30,12 @@ module.exports = [
       controller: [
         '$scope',
         '$http',
+        '$controller',
         function(
           $scope,
-          $http
+          $http,
+          $controller
         ) {
-
           // Options to match jquery.maskedinput masks
           $scope.uiMaskOptions = {
             maskDefinitions: {
@@ -58,29 +59,6 @@ module.exports = [
           // Initialize the data.
           if (!$scope.data) {
             $scope.resetForm();
-          }
-
-          // If this component references an object, we need to determine the
-          // value by navigating through the object.
-          if (
-            $scope.component &&
-            $scope.component.key
-          ) {
-            var root = '';
-            if ($scope.component.key.indexOf('.') !== -1) {
-              root = $scope.component.key.split('.').shift();
-            }
-            $scope.$watch('data', function(data) {
-              if (!data || angular.equals({}, data)) return;
-              if (root && (!data.hasOwnProperty(root) || angular.equals({}, data[root]))) return;
-              if (root && data[root].hasOwnProperty('_id')) {
-                $scope.data[root + '._id'] = data[root]._id;
-              }
-              var value = Formio.fieldData(data, $scope.component);
-              if (value !== undefined) {
-                $scope.data[$scope.component.key] = value;
-              }
-            });
           }
 
           // Get the settings.
@@ -123,7 +101,13 @@ module.exports = [
 
           // If the component has a controller.
           if (component.controller) {
-            component.controller($scope.component, $scope, $http, Formio);
+            // Maintain reverse compatability by executing the old method style.
+            if (typeof component.controller === 'function') {
+              component.controller($scope.component, $scope, $http, Formio);
+            }
+            else {
+              $controller(component.controller, {$scope: $scope});
+            }
           }
 
           // Establish a default for data.

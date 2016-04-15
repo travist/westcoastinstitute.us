@@ -7,7 +7,8 @@ var app = angular.module('formio', [
   'ui.select',
   'ui.mask',
   'angularMoment',
-  'ngFileUpload'
+  'ngFileUpload',
+  'ngFileSaver'
 ]);
 
 /**
@@ -26,6 +27,8 @@ app.factory('FormioUtils', require('./factories/FormioUtils'));
 
 app.factory('formioInterceptor', require('./factories/formioInterceptor'));
 
+app.factory('formioTableView', require('./factories/formioTableView'));
+
 app.directive('formio', require('./directives/formio'));
 
 app.directive('formioDelete', require('./directives/formioDelete'));
@@ -36,15 +39,21 @@ app.directive('customValidator', require('./directives/customValidator'));
 
 app.directive('formioSubmissions', require('./directives/formioSubmissions'));
 
+app.directive('formioSubmission', require('./directives/formioSubmission'));
+
 app.directive('formioComponent', require('./directives/formioComponent'));
 
 app.directive('formioElement', require('./directives/formioElement'));
+
+app.directive('formioWizard', require('./directives/formioWizard'));
 
 /**
  * Filter to flatten form components.
  */
 app.filter('flattenComponents', require('./filters/flattenComponents'));
-
+app.filter('tableComponents', require('./filters/tableComponents'));
+app.filter('tableView', require('./filters/tableView'));
+app.filter('tableFieldView', require('./filters/tableFieldView'));
 app.filter('safehtml', require('./filters/safehtml'));
 
 app.config([
@@ -68,14 +77,21 @@ require('./plugins')(app);
 app.run([
   '$templateCache',
   function($templateCache) {
-
     // The template for the formio forms.
     $templateCache.put('formio.html',
       fs.readFileSync(__dirname + '/templates/formio.html', 'utf8')
     );
 
+    $templateCache.put('formio-wizard.html',
+      fs.readFileSync(__dirname + '/templates/formio-wizard.html', 'utf8')
+    );
+
     $templateCache.put('formio-delete.html',
       fs.readFileSync(__dirname + '/templates/formio-delete.html', 'utf8')
+    );
+
+    $templateCache.put('formio/submission.html',
+      fs.readFileSync(__dirname + '/templates/formio-submission.html', 'utf8')
     );
 
     $templateCache.put('formio/submissions.html',

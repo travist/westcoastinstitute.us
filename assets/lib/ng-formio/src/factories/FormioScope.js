@@ -1,16 +1,14 @@
 module.exports = [
   'Formio',
   'formioComponents',
-  '$interpolate',
   function(
     Formio,
-    formioComponents,
-    $interpolate
+    formioComponents
   ) {
     return {
       onError: function($scope, $element) {
         return function(error) {
-          if (error.name === 'ValidationError') {
+          if ((error.name === 'ValidationError') && $element) {
             $element.find('#form-group-' + error.details[0].path).addClass('has-error');
             var message = 'ValidationError: ' + error.details[0].message;
             $scope.showAlerts({
@@ -34,21 +32,19 @@ module.exports = [
         };
       },
       register: function($scope, $element, options) {
-        var self = this;
         var loader = null;
-        $scope._src = $scope._src || $scope.src || '';
-        $scope._form = $scope.form || {};
-        $scope._submission = $scope.submission || {data: {}};
-        $scope._submissions = $scope.submissions || [];
         $scope.formLoading = true;
+        $scope.form = angular.isDefined($scope.form) ? $scope.form : {};
+        $scope.submission = angular.isDefined($scope.submission) ? $scope.submission : {data: {}};
+        $scope.submissions = angular.isDefined($scope.submissions) ? $scope.submissions : [];
 
         // Keep track of the elements rendered.
         var elementsRendered = 0;
         $scope.$on('formElementRender', function() {
           elementsRendered++;
-          if (elementsRendered === $scope._form.components.length) {
+          if (elementsRendered === $scope.form.components.length) {
             setTimeout(function() {
-              $scope.$emit('formRender', $scope._form);
+              $scope.$emit('formRender', $scope.form);
             }, 1);
           }
         });
@@ -56,7 +52,6 @@ module.exports = [
         // Used to set the form action.
         var getAction = function(action) {
           if (!action) return '';
-          if ($scope.action) return '';
           if (action.substr(0, 1) === '/') {
             action = Formio.getBaseUrl() + action;
           }
@@ -72,7 +67,7 @@ module.exports = [
           if (!addedData.hasOwnProperty(component.settings.key)) {
             addedData[component.settings.key] = true;
             var defaultComponent = formioComponents.components[component.type];
-            $scope._form.components.push(angular.extend(defaultComponent.settings, component.settings));
+            $scope.form.components.push(angular.extend(defaultComponent.settings, component.settings));
           }
         });
 
@@ -85,20 +80,18 @@ module.exports = [
           }
         });
 
-        // Return the value and set the scope for the model input.
-        $scope.fieldData = function(data, component) {
-          var value = Formio.fieldData(data, component);
-          var componentInfo = formioComponents.components[component.type];
-          if (!componentInfo.tableView) return value;
-          if (component.multiple && (value.length > 0)) {
-            var values = [];
-            angular.forEach(value, function(arrayValue) {
-              values.push(componentInfo.tableView(arrayValue, component, $interpolate));
-            });
-            return values;
+        $scope.$watch('form', function(form) {
+          if (
+            !form ||
+            (Object.keys(form).length === 0) ||
+            !form.components ||
+            !form.components.length
+          ) {
+            return;
           }
-          return componentInfo.tableView(value, component, $interpolate);
-        };
+          $scope.formLoading = false;
+          $scope.$emit('formLoad', $scope.form);
+        });
 
         $scope.updateSubmissions = function() {
           $scope.formLoading = true;
@@ -106,51 +99,63 @@ module.exports = [
           if ($scope.perPage) params.limit = $scope.perPage;
           if ($scope.skip) params.skip = $scope.skip;
           loader.loadSubmissions({params: params}).then(function(submissions) {
-            $scope._submissions = submissions;
+            angular.merge($scope.submissions, angular.copy(submissions));
             $scope.formLoading = false;
             $scope.$emit('submissionsLoad', submissions);
-          }, self.onError($scope));
-        };
+          }, this.onError($scope));
+        }.bind(this);
 
         if ($scope._src) {
           loader = new Formio($scope._src);
           if (options.form) {
             $scope.formLoading = true;
-            loader.loadForm().then(function(form) {
-              $scope._form = form;
+
+            // If a form is already provided, then skip the load.
+            if ($scope.form && Object.keys($scope.form).length) {
               $scope.formLoading = false;
-              $scope.$emit('formLoad', form);
-            }, this.onError($scope));
+              $scope.$emit('formLoad', $scope.form);
+            }
+            else {
+              loader.loadForm().then(function(form) {
+                angular.merge($scope.form, angular.copy(form));
+                $scope.formLoading = false;
+                $scope.$emit('formLoad', $scope.form);
+              }, this.onError($scope));
+            }
           }
           if (options.submission && loader.submissionId) {
             $scope.formLoading = true;
-            loader.loadSubmission().then(function(submission) {
-              $scope._submission = submission;
-              if (!$scope._submission.data) {
-                $scope._submission.data = {};
-              }
+
+            // If a submission is already provided, then skip the load.
+            if ($scope.submission && Object.keys($scope.submission.data).length) {
               $scope.formLoading = false;
-              $scope.$emit('submissionLoad', submission);
-            }, this.onError($scope));
+              $scope.$emit('submissionLoad', $scope.submission);
+            }
+            else {
+              loader.loadSubmission().then(function(submission) {
+                angular.merge($scope.submission, angular.copy(submission));
+                $scope.formLoading = false;
+                $scope.$emit('submissionLoad', submission);
+              }, this.onError($scope));
+            }
           }
           if (options.submissions) {
             $scope.updateSubmissions();
           }
         }
         else {
-
           $scope.formoLoaded = true;
-          $scope.formLoading = false;
+          $scope.formLoading = $scope.form && (Object.keys($scope.form).length === 0);
 
           // Emit the events if these objects are already loaded.
-          if ($scope._form) {
-            $scope.$emit('formLoad', $scope._form);
+          if (!$scope.formLoading) {
+            $scope.$emit('formLoad', $scope.form);
           }
-          if ($scope._submission) {
-            $scope.$emit('submissionLoad', $scope._submission);
+          if ($scope.submission) {
+            $scope.$emit('submissionLoad', $scope.submission);
           }
-          if ($scope._submissions) {
-            $scope.$emit('submissionsLoad', $scope._submissions);
+          if ($scope.submissions) {
+            $scope.$emit('submissionsLoad', $scope.submissions);
           }
         }
 

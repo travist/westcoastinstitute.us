@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.7.2 - 2016-01-29T01:38:58.683Z
+ * Version: 1.8.3 - 2016-03-30T21:12:43.955Z
  * License: MIT
  */
 
@@ -20,9 +20,42 @@ angular.module('ui.mask', [])
             },
             clearOnBlur: true,
             clearOnBlurPlaceholder: false,
-            eventsToHandle: ['input', 'keyup', 'click', 'focus']
+            escChar: '\\',
+            eventsToHandle: ['input', 'keyup', 'click', 'focus'],
+            addDefaultPlaceholder: true
         })
-        .directive('uiMask', ['uiMaskConfig', function(maskConfig) {
+        .provider('uiMask.Config', function() {
+            var options = {};
+
+            this.maskDefinitions = function(maskDefinitions) {
+                return options.maskDefinitions = maskDefinitions;
+            };
+            this.clearOnBlur = function(clearOnBlur) {
+                return options.clearOnBlur = clearOnBlur;
+            };
+            this.clearOnBlurPlaceholder = function(clearOnBlurPlaceholder) {
+                return options.clearOnBlurPlaceholder = clearOnBlurPlaceholder;
+            };
+            this.eventsToHandle = function(eventsToHandle) {
+                return options.eventsToHandle = eventsToHandle;
+            };
+            this.addDefaultPlaceholder = function(addDefaultPlaceholder) {
+                return options.addDefaultPlaceholder = addDefaultPlaceholder;
+            };
+            this.$get = ['uiMaskConfig', function(uiMaskConfig) {
+                var tempOptions = uiMaskConfig;
+                for(var prop in options) {
+                    if (angular.isObject(options[prop]) && !angular.isArray(options[prop])) {
+                        angular.extend(tempOptions[prop], options[prop]);
+                    } else {
+                        tempOptions[prop] = options[prop];
+                    }
+                }
+
+                return tempOptions;
+            }];
+        })
+        .directive('uiMask', ['uiMask.Config', function(maskConfig) {
                 function isFocused (elem) {
                   return elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex);
                 }
@@ -166,7 +199,7 @@ angular.module('ui.mask', [])
                                 iAttrs.$observe('uiMaskPlaceholderChar', initPlaceholderChar);
                             }
 
-                            controller.$formatters.push(formatter);
+                            controller.$formatters.unshift(formatter);
                             controller.$parsers.unshift(parser);
 
                             function uninitialize() {
@@ -197,7 +230,7 @@ angular.module('ui.mask', [])
                                 if (iAttrs.maxlength) { // Double maxlength to allow pasting new val at end of mask
                                     iElement.attr('maxlength', maskCaretMap[maskCaretMap.length - 1] * 2);
                                 }
-                                if ( ! originalPlaceholder) {
+                                if ( ! originalPlaceholder && linkOptions.addDefaultPlaceholder) {
                                     iElement.attr('placeholder', maskPlaceholder);
                                 }
                                 var viewValue = controller.$modelValue;
@@ -314,7 +347,7 @@ angular.module('ui.mask', [])
                                 var maskPlaceholderChars = maskPlaceholder.split(''),
                                         maskPlaceholderCopy, components;
 
-                                //maskCaretMap can have bad values if the input has the ui-mask attribute implemented as an obversable property, i.e. the demo page
+                                //maskCaretMap can have bad values if the input has the ui-mask attribute implemented as an obversable property, e.g. the demo page
                                 if (maskCaretMap && !isNaN(maskCaretMap[0])) {
                                     //Instead of trying to manipulate the RegEx based on the placeholder characters
                                     //we can simply replace the placeholder characters based on the already built
@@ -325,13 +358,13 @@ angular.module('ui.mask', [])
                                     });
                                 }
                                 maskPlaceholderCopy = maskPlaceholderChars.join('');
-                                components = maskPlaceholderCopy.replace(/[_]+/g, '_').replace(/([^_]+)([a-zA-Z0-9])([^_])/g, '$1$2_$3').split('_');
+                                components = maskPlaceholderCopy.replace(/[_]+/g, '_').split('_');
                                 components = components.filter(function(s) {
                                     return s !== '';
                                 });
 
                                 // need a string search offset in cases where the mask contains multiple identical components
-                                // I.E. a mask of 99.99.99-999.99
+                                // E.g., a mask of 99.99.99-999.99
                                 var offset = 0;
                                 return components.map(function(c) {
                                     var componentPosition = maskPlaceholderCopy.indexOf(c, offset);
@@ -357,9 +390,17 @@ angular.module('ui.mask', [])
                                             numberOfOptionalCharacters = 0,
                                             splitMask = mask.split('');
 
+                                    var inEscape = false;
                                     angular.forEach(splitMask, function(chr, i) {
-                                        if (linkOptions.maskDefinitions[chr]) {
-
+                                        if (inEscape) {
+                                            inEscape = false;
+                                            maskPlaceholder += chr;
+                                            characterCount++;
+                                        }
+                                        else if (linkOptions.escChar === chr) {
+                                            inEscape = true;
+                                        }
+                                        else if (linkOptions.maskDefinitions[chr]) {
                                             maskCaretMap.push(characterCount);
 
                                             maskPlaceholder += getPlaceholderChar(i - numberOfOptionalCharacters);
@@ -398,8 +439,10 @@ angular.module('ui.mask', [])
                                         valueMasked = '';
                                         iElement.val('');
                                         scope.$apply(function() {
-                                            //don't call $setViewValue to avoid changing $pristine state.
-                                            controller.$viewValue = '';
+                                            //only $setViewValue when not $pristine to avoid changing $pristine state.
+                                            if (!controller.$pristine) {
+                                                controller.$setViewValue('');
+                                            }
                                         });
                                     }
                                 }
@@ -512,7 +555,7 @@ angular.module('ui.mask', [])
                                 oldSelectionLength = getSelectionLength(this);
 
                                 // These events don't require any action
-                                if (isSelection || (isSelected && (eventType === 'click' || eventType === 'keyup'))) {
+                                if (isSelection || (isSelected && (eventType === 'click' || eventType === 'keyup' || eventType === 'focus'))) {
                                     return;
                                 }
 

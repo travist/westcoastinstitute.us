@@ -3,11 +3,12 @@ module.exports = function() {
     restrict: 'E',
     replace: true,
     scope: {
-      form: '=',
-      submission: '=',
-      src: '=',
-      formAction: '=',
-      resourceName: '='
+      form: '=?',
+      submission: '=?',
+      src: '=?',
+      formAction: '=?',
+      resourceName: '=?',
+      message: '=?'
     },
     templateUrl: 'formio-delete.html',
     controller: [
@@ -23,6 +24,7 @@ module.exports = function() {
         Formio,
         $http
       ) {
+        $scope._src = $scope.src || '';
         $scope.formioAlerts = [];
         // Shows the given alerts (single or array), and dismisses old alerts
         $scope.showAlerts = function(alerts) {
@@ -42,7 +44,8 @@ module.exports = function() {
         }
 
         // Set the resource name
-        $scope._resourceName = resourceName;
+        $scope._resourceName = $scope.resourceName || resourceName;
+        $scope.deleteMessage = $scope.message || 'Are you sure you wish to delete the ' + $scope._resourceName + '?';
 
         // Create delete capability.
         $scope.onDelete = function() {

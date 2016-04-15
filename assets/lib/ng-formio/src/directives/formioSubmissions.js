@@ -3,10 +3,10 @@ module.exports = function() {
     replace: true,
     restrict: 'E',
     scope: {
-      src: '=',
-      form: '=',
-      submissions: '=',
-      perPage: '='
+      src: '=?',
+      form: '=?',
+      submissions: '=?',
+      perPage: '=?'
     },
     templateUrl: 'formio/submissions.html',
     controller: [
@@ -18,6 +18,7 @@ module.exports = function() {
         $element,
         FormioScope
       ) {
+        $scope._src = $scope.src || '';
         $scope.formioAlerts = [];
         // Shows the given alerts (single or array), and dismisses old alerts
         this.showAlerts = $scope.showAlerts = function(alerts) {
@@ -40,9 +41,9 @@ module.exports = function() {
           return !component.hasOwnProperty('tableView') || component.tableView;
         };
 
-        $scope.$watch('_submissions', function(submissions) {
+        $scope.$watch('submissions', function(submissions) {
           if (submissions && submissions.length > 0) {
-            $scope.$emit('submissionLoad', $scope._submissions);
+            $scope.$emit('submissionLoad', $scope.submissions);
           }
         });
       }

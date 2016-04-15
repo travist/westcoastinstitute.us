@@ -1,9 +1,8 @@
 var fs = require('fs');
-module.exports = function (app) {
-
+module.exports = function(app) {
   app.directive('formioSelectItem', [
     '$compile',
-    function ($compile) {
+    function($compile) {
       return {
         restrict: 'E',
         scope: {
@@ -11,7 +10,7 @@ module.exports = function (app) {
           item: '=',
           select: '='
         },
-        link: function (scope, element) {
+        link: function(scope, element) {
           if (scope.template) {
             element.html($compile(angular.element(scope.template))(scope));
           }
@@ -20,64 +19,137 @@ module.exports = function (app) {
     }
   ]);
 
-  app.directive('uiSelectRequired', function () {
+  app.directive('uiSelectRequired', function() {
     return {
       require: 'ngModel',
-      link: function (scope, element, attrs, ngModel) {
+      link: function(scope, element, attrs, ngModel) {
         var oldIsEmpty = ngModel.$isEmpty;
-        ngModel.$isEmpty = function (value) {
+        ngModel.$isEmpty = function(value) {
           return (Array.isArray(value) && value.length === 0) || oldIsEmpty(value);
         };
       }
     };
   });
 
-// A hack to have ui-select open on focus
-  app.directive('uiSelectOpenOnFocus', ['$timeout', function ($timeout) {
+  // A directive to have ui-select open on focus
+  app.directive('uiSelectOpenOnFocus', ['$timeout', function($timeout) {
     return {
       require: 'uiSelect',
       restrict: 'A',
-      link: function ($scope, el, attrs, uiSelect) {
-        var closing = false;
+      link: function($scope, el, attrs, uiSelect) {
+        var autoopen = true;
 
-        angular.element(uiSelect.focusser).on('focus', function () {
-          if (!closing) {
+        angular.element(uiSelect.focusser).on('focus', function() {
+          if (autoopen) {
             uiSelect.activate();
           }
         });
 
-        // Because ui-select immediately focuses the focusser after closing
-        // we need to not re-activate after closing
-        $scope.$on('uis:close', function () {
-          closing = true;
-          $timeout(function () { // I'm so sorry
-            closing = false;
-          });
+        // Disable the auto open when this select element has been activated.
+        $scope.$on('uis:activate', function() {
+          autoopen = false;
+        });
+
+        // Re-enable the auto open after the select element has been closed
+        $scope.$on('uis:close', function() {
+          autoopen = false;
+          $timeout(function() {
+            autoopen = true;
+          }, 250);
         });
       }
     };
   }]);
 
-// Configure the Select component.
+  // Configure the Select component.
   app.config([
     'formioComponentsProvider',
-    function (formioComponentsProvider) {
+    function(formioComponentsProvider) {
       formioComponentsProvider.register('select', {
         title: 'Select',
-        template: function ($scope) {
+        template: function($scope) {
           return $scope.component.multiple ? 'formio/components/select-multiple.html' : 'formio/components/select.html';
         },
-        controller: function (settings, $scope, $http, Formio) {
+        tableView: function(data, component, $interpolate) {
+          var getItem = function(data) {
+            switch (component.dataSrc) {
+              case 'values':
+                component.data.values.forEach(function(item) {
+                  if (item.value === data) {
+                    data = item;
+                  }
+                });
+                return data;
+              case 'json':
+                if (component.valueProperty) {
+                  var selectItems;
+                  try {
+                    selectItems = angular.fromJson(component.data.json);
+                  }
+                  catch (error) {
+                    selectItems = [];
+                  }
+                  selectItems.forEach(function(item) {
+                    if (item[component.valueProperty] === data) {
+                      data = item;
+                    }
+                  });
+                }
+                return data;
+              // TODO: implement url and resource view.
+              case 'url':
+              case 'resource':
+              default:
+                return data;
+            }
+          };
+          if (component.multiple && Array.isArray(data)) {
+            return data.map(getItem).reduce(function(prev, item) {
+              var value;
+              if (typeof item === 'object') {
+                value = $interpolate(component.template)({item: item});
+              }
+              else {
+                value = item;
+              }
+              return (prev === '' ? '' : ', ') + value;
+            });
+          }
+          else {
+            var item = getItem(data);
+            var value;
+            if (typeof item === 'object') {
+              value = $interpolate(component.template)({item: item});
+            }
+            else {
+              value = item;
+            }
+            return value;
+          }
+        },
+        controller: ['$scope', '$http', 'Formio', '$interpolate', function($scope, $http, Formio, $interpolate) {
+          var settings = $scope.component;
           $scope.nowrap = true;
           $scope.selectItems = [];
           var valueProp = $scope.component.valueProperty;
-          $scope.getSelectItem = function (item) {
+          $scope.getSelectItem = function(item) {
             if (!item) {
               return '';
             }
             if (settings.dataSrc === 'values') {
               return item.value;
             }
+
+            // Allow dot notation in the value property.
+            if (valueProp.indexOf('.') !== -1) {
+              var parts = valueProp.split('.');
+              var prop = item;
+              for (var i in parts) {
+                prop = prop[parts[i]];
+              }
+              return prop;
+            }
+
             return valueProp ? item[valueProp] : item;
           };
 
@@ -86,6 +158,16 @@ module.exports = function (app) {
           }
 
           $scope.refreshItems = angular.noop;
+          $scope.$on('refreshList', function(event, url, input) {
+            $scope.refreshItems(input, url);
+          });
+
+          // Add a watch if they wish to refresh on selection of another field.
+          if (settings.refreshOn) {
+            $scope.$watch('data.' + settings.refreshOn, function() {
+              $scope.refreshItems();
+            });
+          }
 
           switch (settings.dataSrc) {
             case 'values':
@@ -100,14 +182,17 @@ module.exports = function (app) {
               }
               break;
             case 'url':
-              if (settings.data.url) {
-                var options = {cache: true};
-                if (settings.data.url.substr(0, 1) === '/') {
-                  settings.data.url = Formio.getBaseUrl() + settings.data.url;
+            case 'resource':
+              var url = '';
+              var options = {cache: true};
+              if (settings.dataSrc === 'url') {
+                url = settings.data.url;
+                if (url.substr(0, 1) === '/') {
+                  url = Formio.getBaseUrl() + settings.data.url;
                 }
 
                 // Disable auth for outgoing requests.
-                if (settings.data.url.indexOf(Formio.getBaseUrl()) === -1) {
+                if (!settings.authenticate && url.indexOf(Formio.getBaseUrl()) === -1) {
                   options = {
                     disableJWT: true,
                     headers: {
@@ -117,24 +202,38 @@ module.exports = function (app) {
                     }
                   };
                 }
+              }
+              else {
+                url = Formio.getBaseUrl();
+                if (settings.data.project) {
+                  url += '/project/' + settings.data.project;
+                }
+                url += '/form/' + settings.data.resource + '/submission?limit=1000';
+              }
 
-                var loaded = false;
-                $scope.refreshItems = function(input) {
-                  var url = settings.data.url;
+              if (url) {
+                $scope.refreshItems = function(input, newUrl) {
+                  newUrl = newUrl || url;
+                  if (!newUrl) {
+                    return;
+                  }
 
+                  // If this is a search, then add that to the filter.
                   if (settings.searchField && input) {
-                    url += ((url.indexOf('?') === -1) ? '?' : '&') +
+                    newUrl += ((newUrl.indexOf('?') === -1) ? '?' : '&') +
                       encodeURIComponent(settings.searchField) +
                       '=' +
                       encodeURIComponent(input);
                   }
-                  else if (loaded) {
-                    return; // Skip if we've loaded before, to avoid multiple requests
+
+                  // Add the other filter.
+                  if (settings.filter) {
+                    var filter = $interpolate(settings.filter)({data: $scope.data});
+                    newUrl += ((newUrl.indexOf('?') === -1) ? '?' : '&') + filter;
                   }
-                  $http.get(url, options)
-                  .then(function (result) {
+
+                  $http.get(newUrl, options).then(function(result) {
                     $scope.selectItems = result.data;
-                    loaded = true;
                   });
                 };
                 $scope.refreshItems();
@@ -143,7 +242,7 @@ module.exports = function (app) {
             default:
               $scope.selectItems = [];
           }
-        },
+        }],
         settings: {
           input: true,
           tableView: true,
@@ -153,11 +252,15 @@ module.exports = function (app) {
           data: {
             values: [],
             json: '',
-            url: ''
+            url: '',
+            resource: ''
           },
           dataSrc: 'values',
           valueProperty: '',
           defaultValue: '',
+          refreshOn: '',
+          filter: '',
+          authenticate: false,
           template: '<span>{{ item.label }}</span>',
           multiple: false,
           protected: false,
@@ -172,7 +275,7 @@ module.exports = function (app) {
   ]);
   app.run([
     '$templateCache',
-    function ($templateCache) {
+    function($templateCache) {
       $templateCache.put('formio/components/select.html',
         fs.readFileSync(__dirname + '/../templates/components/select.html', 'utf8')
       );

@@ -1,8 +1,7 @@
-module.exports = function (app) {
-
+module.exports = function(app) {
   app.config([
     'formioComponentsProvider',
-    function (formioComponentsProvider) {
+    function(formioComponentsProvider) {
       formioComponentsProvider.register('phoneNumber', {
         title: 'Phone Number',
         template: 'formio/components/textfield.html',
@@ -20,6 +19,7 @@ module.exports = function (app) {
           protected: false,
           unique: false,
           persistent: true,
+          defaultValue: '',
           validate: {
             required: false
           }

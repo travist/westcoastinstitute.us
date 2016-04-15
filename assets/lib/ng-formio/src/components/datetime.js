@@ -1,16 +1,31 @@
 var fs = require('fs');
-module.exports = function (app) {
-
+module.exports = function(app) {
   app.config([
     'formioComponentsProvider',
     function(formioComponentsProvider) {
       formioComponentsProvider.register('datetime', {
         title: 'Date / Time',
         template: 'formio/components/datetime.html',
-        tableView: function(data) {
-          return '<span>{{ "' + data + '" | date: "' + this.settings.format + '" }}</span>';
+        tableView: function(data, component, $interpolate) {
+          return $interpolate('<span>{{ "' + data + '" | date: "' + component.format + '" }}</span>')();
         },
         group: 'advanced',
+        controller: ['$scope', '$timeout', function($scope, $timeout) {
+          if (!$scope.component.maxDate) {
+            delete $scope.component.maxDate;
+          }
+          if (!$scope.component.minDate) {
+            delete $scope.component.minDate;
+          }
+
+          $scope.autoOpen = true;
+          $scope.onClosed = function() {
+            $scope.autoOpen = false;
+            $timeout(function() {
+              $scope.autoOpen = true;
+            }, 250);
+          };
+        }],
         settings: {
           input: true,
           tableView: true,
