@@ -57,6 +57,7 @@
   <script src="../assets/lib/ui-select/dist/select.js"></script>
   <script src="../assets/lib/ng-formio/dist/formio.js"></script>
   <script src="../assets/lib/es6-promise/promise.js"></script>
+  <script src="../assets/lib/urijs/src/URI.js"></script>
   <!-- endbower -->
   
   <script src="/assets/js/main.js"></script>
