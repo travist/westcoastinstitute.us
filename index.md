@@ -23,23 +23,23 @@ weight: 0
   <img class="watermark" style="width:400px;margin-bottom: -150px;" src="/assets/img/sunlogo.png" />
 </div>
 <div class="row companies">
-  <div class="col-sm-2">
+  <div class="col-sm-2 text-center">
     <a href="http://www.gestalttherapy.org/" target="_blank"><img src="/assets/img/pgi.png" class="img-responsive" /></a>
   </div>
-  <div class="col-sm-2">
-    <a href="http://www.a4pt.org/ps.index.cfm" target="_blank"><img src="/assets/img/APT_logo_small.jpg" class="img-responsive" /></a>
-    <small class="text-centered">APT Approved Provider: (04-152)</small>
+  <div class="col-sm-2 text-center">
+    <a href="http://www.a4pt.org/ps.index.cfm" target="_blank"><img src="/assets/img/APT_logo_small.jpg" class="img-responsive" style="width: 60%; margin:auto;" /></a>
+    <strong><small>APT Approved Provider</small><br/><small>(04-152)</small></strong>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-2 text-center">
     <a href="http://www.vsof.org/" target="_blank"><img src="/assets/img/oaklander-foundation.png" class="img-responsive" /></a>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-2 text-center">
     <a href="http://sicgt.org/" target="_blank"><img src="/assets/img/gestalt_logo.png" class="img-responsive" /></a>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-2 text-center">
     <a href="http://gatla.org/" target="_blank"><img src="/assets/img/GATLA_Logo6.png" class="img-responsive" /></a>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-2 text-center">
     <a href="http://www.gestalt.org/news" class="btn btn-info btn-block" target="_blank"><h3>GN&N</h3></a>
   </div>
 </div>
