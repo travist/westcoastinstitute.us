@@ -38,6 +38,7 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,100,500,300' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700' rel='stylesheet' type='text/css'>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.17.1/URI.min.js"></script>
   <!-- bower:js -->
   <script src="../assets/lib/jquery/dist/jquery.js"></script>
   <script src="../assets/lib/anchor-js/anchor.js"></script>
@@ -55,7 +56,6 @@
   <script src="../assets/lib/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
   <script src="../assets/lib/ui-select/dist/select.js"></script>
   <script src="../assets/lib/ng-formio/dist/formio.js"></script>
-  <script src="../assets/lib/urijs/src/URI.js"></script>
   <script src="../assets/lib/es6-promise/promise.js"></script>
   <!-- endbower -->
   
