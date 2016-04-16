@@ -28,6 +28,7 @@ weight: 0
   </div>
   <div class="col-sm-2">
     <a href="http://www.a4pt.org/ps.index.cfm" target="_blank"><img src="/assets/img/APT_logo_small.jpg" class="img-responsive" /></a>
+    <small class="text-centered">APT Approved Provider: (04-152)</small>
   </div>
   <div class="col-sm-2">
     <a href="http://www.vsof.org/" target="_blank"><img src="/assets/img/oaklander-foundation.png" class="img-responsive" /></a>
@@ -49,7 +50,7 @@ weight: 0
   <div class="col-sm-8">
     <h2 class="header-title">Felicia Carroll, M.Ed., MA</h2>
     <h3 class="header-sm-title">Advanced Trainer</h3>
-    <p><strong>Felicia Carroll, Licensed Marriage, Family Therapist (MFC23315) and Registered Play Therapist –Supervisor</strong>, is an Approved Provider for the Association for Play Therapy (04-152) and the CA Board of Behavioral Sciences (PCE 3247) for Clinical Social Workers and Marriage, Family Therapists. She is also a California Association of Marriage, Family Therapists Certified Supervisor, a Certified Grief Recovery Specialist, and a Certified Gestalt Therapist by the Gestalt Therapy.</p>
+    <p><strong>Felicia Carroll, Licensed Marriage, Family Therapist (MFC23315) and Registered Play Therapist –Supervisor</strong>, is an Association for Play Therapy Approved Provider (04-152) and the CA Board of Behavioral Sciences (PCE 3247) for Clinical Social Workers and Marriage, Family Therapists. She is also a California Association of Marriage, Family Therapists Certified Supervisor, a Certified Grief Recovery Specialist, and a Certified Gestalt Therapist by the Gestalt Therapy.</p>
     <p>Felicia teaches at Gestalt institutes and Play Therapy training programs globally. Her travels have taken her to Germany, Greece, Morocco, Brazil, Singapore, Czech Republic, Mexico, Hong Kong, South Korea, Slovakia, Poland, and Belgium as well as being keynote speaker at Play Therapy Conferences. Please Contact Felicia if you would like to invite her to persent in your program.</p>
     <div class="row">
       <div class="col-sm-9">

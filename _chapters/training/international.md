@@ -1,7 +1,7 @@
 ---
 title: International Workshops
 book: training
-weight: 30
+weight: 40
 chapter: international
 ---
 <div class="row">

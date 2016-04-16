@@ -1,7 +1,7 @@
 ---
 title: Advanced Spring Intensive
 book: training
-weight: 20
+weight: 30
 chapter: advanced
 ---
 <div class="row">
@@ -27,7 +27,7 @@ chapter: advanced
             <div class="col-sm-12">
                 <ul>
                     <li><strong>Fee:</strong> $1600 USD</li>
-                    <li><strong>CEU's:</strong> 40 contact hours. Felicia is an approved provider for APT (04-152) and BBS (PCE 3247). CEU’s for APA are available through Sierra Institute for Gestalt Therapy. Additional fees will apply.</li>
+                    <li><strong>CEU's:</strong> 40 contact hours. Felicia is an APT Approved Provider (04-152) and BBS (PCE 3247). CEU’s for APA are available through Sierra Institute for Gestalt Therapy. Additional fees will apply.</li>
                 </ul>
             </div>
         </div>

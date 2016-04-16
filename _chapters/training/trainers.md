@@ -1,7 +1,7 @@
 ---
 title: Training for Trainers
 book: training
-weight: 40
+weight: 50
 chapter: trainers
 ---
 <div class="row">
@@ -18,11 +18,12 @@ chapter: trainers
             <ul class="list-group">
               <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
-                <h4><strong>November 6 - 13, 2016</strong></h4>
+                <h4><strong>May TBD, 2017</strong></h4>
               </li>
             </ul>
           </div>
         </div>
+        <p>The TRAINING FOR TRAINERS workshop will be rescheduled for May 2017. If you are interested, please complete the <a href="/register" target="_blank">Registration</a> without deposit.  You will receive more information about the schedule in 2017.</p>
         <p>This training is offered to those who have attended the two intensive trainings or a full International program, and want support to become trainers in their own community/country. Preference will be given to those who are working towards certification through WCI. Participants will develop training outlines, review curriculum materials, set goals, network with other trainers, and receive guidance on leading group dynamics.</p>
         <p>
         <ul>

@@ -58,11 +58,11 @@ chapter: summer
         <strong>Training Fee's</strong>
         <ul>
             <li>Week-long training: $2400</li>
-            <li>A deposit of $300 is necessary to reserve your space. After a deposit has been made, the remaining amount is due by July 1st, 2015. Please note that the program is limited to 12 people.</li>
+            <li>A deposit of $300 is necessary to reserve your space. After a deposit has been made, the remaining amount is due by July 1st, 2016. Please note that the program is limited to 12 people.</li>
         </ul>
         <strong>CEU's</strong>
         <ul>
-            <li>60 contact hours. Felicia is an approved provider for APT (04-152) and BBS (PCE 3247). CEU's for APA available through Sierra Institute for Gestalt Therapy. Additional fees will apply.</li>
+            <li>60 contact hours. Felicia is an APT Approved Provider (04-152) and BBS (PCE 3247). CEU's for APA available through Sierra Institute for Gestalt Therapy. Additional fees will apply.</li>
         </ul>
     </div>
 </div>

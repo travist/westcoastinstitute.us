@@ -16,6 +16,7 @@ weight: 5
                 <p>Click on one of the following links for information about our Training opportunities.</p>
             </div>
             <a href="#summer" class="btn btn-block btn-success">Summer Intensive Training</a>
+            <a href="#yearlong" class="btn btn-block btn-success">Year Long Basic Training</a>
             <a href="#advanced" class="btn btn-block btn-success">Advanced Spring Intensive Training</a>
             <a href="#international" class="btn btn-block btn-success">International Workshops</a>
             <a href="#trainers" class="btn btn-block btn-success">Training for Trainers</a>
