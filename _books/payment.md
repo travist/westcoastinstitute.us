@@ -58,7 +58,7 @@ weight: 8
                     <p><strong>To pay online</strong>, please use the following form to securely send a payment to West Coast Institute for Gestalt Therapy.</p>
                     <form action="https://www.paypal.com/cgi-bin/webscr" accept-charset="UTF-8" method="post" id="payment-form" _lpchecked="1" class="form-inline">
                         <div>
-                            <div class="form-group">
+                            <div class="form-group" style="margin-bottom:10px;">
                                 <label for="amount">Amount: <span class="form-required" title="This field is required.">*</span></label>
                                 <div class="input-group">
                                     <div class="input-group-addon">$</div>
@@ -66,6 +66,7 @@ weight: 8
                                     <div class="input-group-addon">USD</div>
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <input type="submit" name="submit" value="Pay using PayPal" class="btn btn-primary">
                             <input type="hidden" name="charset" value="utf-8">
                             <input type="hidden" name="currency_code" value="USD">

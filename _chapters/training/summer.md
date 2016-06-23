@@ -26,6 +26,10 @@ chapter: summer
               </li>
               <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
+                <h4><strong>June 24 - July 2, 2017</strong></h4>
+              </li>
+              <li class="list-group-item">
+                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>July 29 - August 6, 2017</strong></h4>
               </li>
             </ul>
@@ -62,7 +66,7 @@ chapter: summer
         </ul>
         <strong>CEU's</strong>
         <ul>
-            <li>60 contact hours. Felicia is an APT Approved Provider (04-152) and BBS (PCE 3247). CEU's for APA available through Sierra Institute for Gestalt Therapy. Additional fees will apply.</li>
+            <li>60 contact hours. Felicia is an APT Approved Provider (04-152). CEU's for APA available through Sierra Institute for Gestalt Therapy. Additional fees will apply.</li>
         </ul>
     </div>
 </div>

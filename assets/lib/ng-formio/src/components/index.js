@@ -19,17 +19,19 @@ require('./email')(app);
 require('./phonenumber')(app);
 require('./address')(app);
 require('./datetime')(app);
+require('./currency')(app);
 require('./hidden')(app);
 require('./resource')(app);
 require('./file')(app);
 require('./signature')(app);
 require('./custom')(app);
+require('./datagrid')(app);
+require('./survey')(app);
 
 // Layout
 require('./columns')(app);
 require('./fieldset')(app);
 require('./container')(app);
-require('./datagrid')(app);
 require('./page')(app);
 require('./panel')(app);
 require('./table')(app);

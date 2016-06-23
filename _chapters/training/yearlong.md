@@ -17,7 +17,7 @@ chapter: yearlong
             <ul class="list-group">
               <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
-                <h4>6 weekends in 2016 through 2017 starting in September</h4>
+                <h4>6 weekends starting in January 2017</h4>
               </li>
             </ul>
           </div>

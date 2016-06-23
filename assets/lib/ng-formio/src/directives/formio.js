@@ -11,7 +11,8 @@ module.exports = function() {
       hideComponents: '=?',
       requireComponents: '=?',
       disableComponents: '=?',
-      formioOptions: '=?'
+      formioOptions: '=?',
+      options: '=?'
     },
     controller: [
       '$scope',
@@ -49,18 +50,6 @@ module.exports = function() {
         };
 
         var updateComponents = function() {
-          // Change the visibility for the component with the given key
-          var updateVisiblity = function(key) {
-            var newClass = $scope.show[key] ? 'ng-show' : 'ng-hide';
-            if ($scope.hideComponents && $scope.hideComponents.indexOf(key) !== -1) {
-              newClass = 'ng-hide';
-            }
-            $element
-              .find('div#form-group-' + key)
-              .removeClass('ng-show ng-hide')
-              .addClass(newClass);
-          };
-
           $scope.form.components = $scope.form.components || [];
           FormioUtils.eachComponent($scope.form.components, function(component) {
             // Display every component by default
@@ -68,7 +57,7 @@ module.exports = function() {
               ? true
               : $scope.show[component.key];
 
-            // Only change display options of all require conditional properties are present.
+            // Only change display options if all required conditional properties are present.
             if (
               component.conditional
               && (component.conditional.show !== null && component.conditional.show !== '')
@@ -85,14 +74,20 @@ module.exports = function() {
               }
               var value = $scope.submission.data[cond.key];
 
-              if (value) {
+              if (typeof value !== 'undefined' && typeof value !== 'object') {
                 // Check if the conditional value is equal to the trigger value
                 $scope.show[component.key] = value.toString() === component.conditional.eq.toString()
                   ? boolean[component.conditional.show]
                   : !boolean[component.conditional.show];
               }
+              // Special check for check boxes component.
+              else if (typeof value !== 'undefined' && typeof value === 'object') {
+                $scope.show[component.key] = boolean.hasOwnProperty(value[component.conditional.eq])
+                  ? boolean[value[component.conditional.eq]]
+                  : true;
+              }
               // Check against the components default value, if present and the components hasnt been interacted with.
-              else if (!value && cond.defaultValue) {
+              else if (typeof value === 'undefined' && cond.hasOwnProperty('defaultValue')) {
                 $scope.show[component.key] = cond.defaultValue.toString() === component.conditional.eq.toString()
                   ? boolean[component.conditional.show]
                   : !boolean[component.conditional.show];
@@ -102,13 +97,30 @@ module.exports = function() {
                 $scope.show[component.key] = !boolean[component.conditional.show];
               }
 
+              // Update the visibility, if it's possible a change occurred.
+              component.hide = !$scope.show[component.key];
+            }
+            // Custom conditional logic.
+            else if (component.customConditional) {
+              try {
+                // Create a child block, and expose the submission data.
+                var data = $scope.submission.data; // eslint-disable-line no-unused-vars
+                // Eval the custom conditional and update the show value.
+                var show = eval('(function() { ' + component.customConditional.toString() + '; return show; })()');
+                // Show by default, if an invalid type is given.
+                $scope.show[component.key] = boolean.hasOwnProperty(show.toString()) ? boolean[show] : true;
+              }
+              catch (e) {
+                $scope.show[component.key] = true;
+              }
+
               // Update the visibility, if its possible a change occurred.
-              updateVisiblity(component.key);
+              component.hide = !$scope.show[component.key];
             }
 
             // Set hidden if specified
-            if ($scope.hideComponents && $scope.hideComponents.indexOf(component.key) !== -1) {
-              updateVisiblity(component.key);
+            if ($scope.hideComponents) {
+              component.hidden = $scope.hideComponents.indexOf(component.key) !== -1;
             }
 
             // Set required if specified
@@ -184,7 +196,7 @@ module.exports = function() {
             if (component.type === 'resource' && component.key && component.defaultPermission) {
               defaultPermissions[component.key] = component.defaultPermission;
             }
-            if ($scope.submission.data.hasOwnProperty(component.key)) {
+            if ($scope.submission.data.hasOwnProperty(component.key) && $scope.show[component.key]) {
               var value = $scope.submission.data[component.key];
               if (component.type === 'number') {
                 submissionData.data[component.key] = value ? parseFloat(value) : 0;
@@ -230,16 +242,38 @@ module.exports = function() {
             }
           });
 
-          // Called when a submission has been made.
-          var onSubmitDone = function(method, submission) {
+          // Show the submit message and say the form is no longer submitting.
+          var onSubmit = function(submission, message) {
             $scope.showAlerts({
               type: 'success',
-              message: 'Submission was ' + ((method === 'put') ? 'updated' : 'created') + '.'
+              message: message
             });
             form.submitting = false;
+          };
+
+          // Called when a submission has been made.
+          var onSubmitDone = function(method, submission) {
+            var message = '';
+            if ($scope.options && $scope.options.submitMessage) {
+              message = $scope.options.submitMessage;
+            }
+            else {
+              message = 'Submission was ' + ((method === 'put') ? 'updated' : 'created') + '.';
+            }
+            onSubmit(submission, message);
             // Trigger the form submission.
             $scope.$emit('formSubmission', submission);
           };
+
+          // Allow the form to be completed externally.
+          $scope.$on('submitDone', function(event, submission, message) {
+            onSubmit(submission, message);
+          });
+
+          // Allow an error to be thrown externally.
+          $scope.$on('submitError', function(event, error) {
+            FormioScope.onError($scope, $element)(error);
+          });
 
           var submitEvent = $scope.$emit('formSubmit', submissionData);
           if (submitEvent.defaultPrevented) {

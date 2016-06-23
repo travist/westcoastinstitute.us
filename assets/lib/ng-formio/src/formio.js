@@ -19,7 +19,7 @@ app.provider('Formio', require('./providers/Formio'));
 app.provider('FormioPlugins', require('./providers/FormioPlugins'));
 
 /**
- * Provides a way to regsiter the Formio scope.
+ * Provides a way to register the Formio scope.
  */
 app.factory('FormioScope', require('./factories/FormioScope'));
 
@@ -43,6 +43,8 @@ app.directive('formioSubmission', require('./directives/formioSubmission'));
 
 app.directive('formioComponent', require('./directives/formioComponent'));
 
+app.directive('formioComponentView', require('./directives/formioComponentView'));
+
 app.directive('formioElement', require('./directives/formioElement'));
 
 app.directive('formioWizard', require('./directives/formioWizard'));
@@ -55,6 +57,7 @@ app.filter('tableComponents', require('./filters/tableComponents'));
 app.filter('tableView', require('./filters/tableView'));
 app.filter('tableFieldView', require('./filters/tableFieldView'));
 app.filter('safehtml', require('./filters/safehtml'));
+app.filter('formioTranslate', require('./filters/translate'));
 
 app.config([
   '$httpProvider',
@@ -101,6 +104,14 @@ app.run([
     // A formio component template.
     $templateCache.put('formio/component.html',
       fs.readFileSync(__dirname + '/templates/component.html', 'utf8')
+    );
+
+    $templateCache.put('formio/component-view.html',
+      fs.readFileSync(__dirname + '/templates/component-view.html', 'utf8')
+    );
+
+    $templateCache.put('formio/element-view.html',
+      fs.readFileSync(__dirname + '/templates/element-view.html', 'utf8')
     );
 
     $templateCache.put('formio/errors.html',

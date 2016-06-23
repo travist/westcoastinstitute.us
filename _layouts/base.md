@@ -9,7 +9,7 @@
 
   <link rel="stylesheet" href="/assets/css/main.css">
   <!-- bower:css -->
-  <link rel='stylesheet' href='../assets/lib/ui-select/dist/select.css' />
+  <link rel='stylesheet' href='../assets/lib/angular-ui-select/dist/select.css' />
   <link rel='stylesheet' href='../assets/lib/ng-formio/css/formio.css' />
   <!-- endbower -->
   
@@ -53,7 +53,7 @@
   <script src="../assets/lib/blob-polyfill/Blob.js"></script>
   <script src="../assets/lib/file-saver.js/FileSaver.js"></script>
   <script src="../assets/lib/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
-  <script src="../assets/lib/ui-select/dist/select.js"></script>
+  <script src="../assets/lib/angular-ui-select/dist/select.js"></script>
   <script src="../assets/lib/ng-formio/dist/formio.js"></script>
   <script src="../assets/lib/es6-promise/promise.js"></script>
   <script src="../assets/lib/urijs/src/URI.js"></script>

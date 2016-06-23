@@ -18,7 +18,7 @@ chapter: trainers
             <ul class="list-group">
               <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
-                <h4><strong>May TBD, 2017</strong></h4>
+                <h4><strong>May 27 - June 4, 2017</strong></h4>
               </li>
             </ul>
           </div>

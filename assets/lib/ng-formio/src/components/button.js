@@ -21,7 +21,7 @@ module.exports = function(app) {
         },
         controller: ['$scope', function($scope) {
           var settings = $scope.component;
-          $scope.onClick = function() {
+          var onClick = function() {
             switch (settings.action) {
               case 'submit':
                 return;
@@ -29,26 +29,32 @@ module.exports = function(app) {
                 $scope.resetForm();
                 break;
               case 'oauth':
-                if ($scope.hasOwnProperty('form')) {
-                  if (!settings.oauth) {
-                    $scope.showAlerts({
-                      type: 'danger',
-                      message: 'You must assign this button to an OAuth action before it will work.'
-                    });
-                    break;
-                  }
-                  if (settings.oauth.error) {
-                    $scope.showAlerts({
-                      type: 'danger',
-                      message: settings.oauth.error
-                    });
-                    break;
-                  }
-                  $scope.openOAuth(settings.oauth);
+                if (!settings.oauth) {
+                  $scope.showAlerts({
+                    type: 'danger',
+                    message: 'You must assign this button to an OAuth action before it will work.'
+                  });
+                  break;
                 }
+                if (settings.oauth.error) {
+                  $scope.showAlerts({
+                    type: 'danger',
+                    message: settings.oauth.error
+                  });
+                  break;
+                }
+                $scope.openOAuth(settings.oauth);
                 break;
             }
           };
+
+          $scope.$on('buttonClick', function(event, component, componentId) {
+            // Ensure the componentId's match (even though they always should).
+            if (componentId !== $scope.componentId) {
+              return;
+            }
+            onClick();
+          });
 
           $scope.openOAuth = function(settings) {
             /*eslint-disable camelcase */
@@ -102,7 +108,7 @@ module.exports = function(app) {
                   var submission = {data: {}, oauth: {}};
                   submission.oauth[settings.provider] = params;
                   submission.oauth[settings.provider].redirectURI = window.location.origin || window.location.protocol + '//' + window.location.host;
-                  $scope.form.submitting = true;
+                  $scope.formioForm.submitting = true;
                   $scope.formio.saveSubmission(submission)
                   .then(function(submission) {
                     // Trigger the form submission.
@@ -115,7 +121,7 @@ module.exports = function(app) {
                     });
                   })
                   .finally(function() {
-                    $scope.form.submitting = false;
+                    $scope.formioForm.submitting = false;
                   });
                 }
               }
@@ -132,7 +138,8 @@ module.exports = function(app) {
               }
             }, 100);
           };
-        }]
+        }],
+        viewTemplate: 'formio/componentsView/button.html'
       });
     }
   ]);
@@ -141,6 +148,10 @@ module.exports = function(app) {
     function($templateCache) {
       $templateCache.put('formio/components/button.html',
         fs.readFileSync(__dirname + '/../templates/components/button.html', 'utf8')
+      );
+
+      $templateCache.put('formio/componentsView/button.html',
+        fs.readFileSync(__dirname + '/../templates/componentsView/button.html', 'utf8')
       );
     }
   ]);
