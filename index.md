@@ -8,7 +8,7 @@ weight: 0
     <h2 class="header-title header-title-red" style="margin-top:0">TRAINING - SUPERVISION - CERTIFICATION</h2>
     <h3 class="header-sm-title header-title-red">GESTALT THERAPY WITH CHILDREN AND ADOLESCENTS</h3>
   </div>
-  <p>The West Coast Institute for Gestalt Therapy was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
+  <p>The West Coast Institute for Gestalt Therapy with Children was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
   <div class="col-sm-6 col-sm-offset-6" style="margin-top:75px">
     <ul>
       <li>Small group interactive learning experiences</li>
@@ -50,8 +50,8 @@ weight: 0
   <div class="col-sm-8">
     <h2 class="header-title">Felicia Carroll, M.Ed., MA</h2>
     <h3 class="header-sm-title">Advanced Trainer</h3>
-    <p><strong>Felicia Carroll, Licensed Marriage, Family Therapist (MFC23315) and Registered Play Therapist –Supervisor</strong>, is an Association for Play Therapy Approved Provider (04-152) and the CA Board of Behavioral Sciences (PCE 3247) for Clinical Social Workers and Marriage, Family Therapists. She is also a California Association of Marriage, Family Therapists Certified Supervisor, a Certified Grief Recovery Specialist, and a Certified Gestalt Therapist by the Gestalt Therapy.</p>
-    <p>Felicia teaches at Gestalt institutes and Play Therapy training programs globally. Her travels have taken her to Germany, Greece, Morocco, Brazil, Singapore, Czech Republic, Mexico, Hong Kong, South Korea, Slovakia, Poland, and Belgium as well as being keynote speaker at Play Therapy Conferences. Please Contact Felicia if you would like to invite her to persent in your program.</p>
+    <p><strong>Felicia Carroll, Licensed Marriage, Family Therapist (MFC23315) and Registered Play Therapist –Supervisor</strong>, is an Association for Play Therapy Approved Provider (04-152). She is also a California Association of Marriage, Family Therapists Certified Supervisor, a Certified Grief Recovery Specialist, and a Certified Gestalt Therapist by the Gestalt Therapy.</p>
+    <p>Felicia teaches at Gestalt institutes and Play Therapy training programs globally. Her travels have taken her to Germany, Greece, Morocco, Brazil, Singapore, Czech Republic, Mexico, Hong Kong, South Korea, Slovakia, Poland, and Romania as well as being keynote speaker at Play Therapy Conferences. <a href="/contact">Please contact Felicia</a> if you would like to invite her to present in your program.</p>
     <div class="row">
       <div class="col-sm-9">
         <strong>International Gestalt Journal</strong>

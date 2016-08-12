@@ -1,5 +1,5 @@
 ---
-title: Location
+title: Location & Lodging
 layout: default
 link: location
 weight: 2

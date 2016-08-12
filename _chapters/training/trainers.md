@@ -1,7 +1,7 @@
 ---
 title: Training for Trainers
 book: training
-weight: 50
+weight: 40
 chapter: trainers
 ---
 <div class="row">

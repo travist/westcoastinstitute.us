@@ -3,7 +3,7 @@ title: Payments
 layout: book
 book: payment
 link: payment
-weight: 8
+weight: 10
 ---
 <div class="row">
     <div class="col col-sm-6">
@@ -20,8 +20,14 @@ weight: 8
                 </div>
                 <div class="checkbox">
                     <label>
+                      <input id="yearlong" type="checkbox" value="">
+                      Year Long Training - <strong>$<span id="yearlong-value">2400</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
                       <input id="advanced" type="checkbox" value="">
-                      Advanced Spring Intensive - <strong>$<span id="advanced-value">1600</span></strong>
+                      Advanced Fall Intensive - <strong>$<span id="advanced-value">1600</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">
@@ -45,6 +51,14 @@ weight: 8
             </form>
           </div>
           <div class="panel-footer">Total: <strong>$<span id="total">0</span></strong></div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Refund Policy</div>
+          <div class="panel-body">
+            <p>All refund requests must be made in writing and received 15 days prior the beginning of any training.  This allows others who are on a waiting list to make plans to attend.  If not received prior to the 15 days, no refund will be made.  No refunds will be made after the program begins.    WCI nor any of its trainers are responsible for loss of travel or lodging expenses for any cause.</p>
+            <p>Registration fees will not be refunded but will be applied toward a future training.  Any scholarship funds will be returned to the grantor.</p>
+            <p><strong>Please Note:</strong> International trainings are organized through local organizers.  Refunds or grievances  are not the responsibility of WCI or any WCI trainer. Please contact the organizer of the training in your respective location.</p>
+          </div>
         </div>
     </div>
     <div class="col col-sm-6">

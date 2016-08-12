@@ -3,7 +3,7 @@ title: Certification
 layout: default
 book: certification
 link: certification
-weight: 6
+weight: 8
 ---
 <div class="row">
    <div class="col col-sm-12">
@@ -50,18 +50,28 @@ weight: 6
 <div class="row">
    <div class="col col-sm-12">
        <div class="row" style="text-align:center;margin-bottom: 30px;">
-           <div class="header-title" style="margin-bottom: 0;">CONGRATULATONS TO OUR FIRST CERTIFIED GESTALT THERAPIST</div>
-           <div class="header-title" style="margin-bottom: 0;">WITH CHILDREN AND ADOELSCENTS!</div>
+           <div class="header-title" style="margin-bottom: 0;">CONGRATULATIONS TO OUR CERTIFIED GESTALT THERAPISTS</div>
+           <div class="header-title" style="margin-bottom: 0;">WITH CHILDREN AND ADOLESCENTS!</div>
        </div>
    </div>
 </div>
 <div class="row">
-   <div class="col col-sm-6">
-      <img src="/assets/img/Valente-full.jpg" class="img-responsive img-thumbnail" />
+   <div class="col col-sm-7">
+    <p>There are many candidates who are well on their way toward completion and certification. It is the hope of everyone involved with WCI that many more will follow so that this theoretical and clinical approach will continue to have a voice within the field of child psychotherapy wherever children and families need our help.</p>
+    <p>These professionals who are certified Gestalt Therapists with Children and Adolescents are available to supervise / consult and coach others through the certification process. You can contact each through email.</p>
+    <div class="col col-sm-offset-1">
+      <p class="well"><strong>Felicia Carroll, LMFT and RPT-S</strong> (see bio in faculty section) She can be reached through this website or fcarroll@west.net</p>
+      <p class="well"><strong>Valente Orozco, LCSW and RPT-S</strong> (see bio in faculty section) He can be reached at valenteorozco@yahoo.com</p>
+      <p class="well"><strong>Stephanie Pawlowicz, LMFT</strong> (see bio in faculty section) She can be reached at stephaniepawlowicz@yahoo.com</p>
+      <p class="well"><strong>Lee Weiser, Ph.D</strong> is a licensed clinical psychologist with a BS in Child Development and MA in Human Behavior and a Ph.D. degree in Clinical Psychology with an emphasis in Depth Psychology. She has specialized in training in expressive therapies and spent many years working with children, adolescents, and their families in school settings and private practice. She has been on the faculty and taught graduate level courses at major graduate institutions. She is a founding member of the VSOFoundation. She can be reached at: lweiser@me.com</p>
+      <p class="well"><strong>Lillian Freeman, LCSW</strong> is in private practice in West Los Angeles. She has work for over 30 years with children, adolescents, and families. She has taught as adjunct faculty at major graduate institutions teaching the Treatment of Children. She has been a supervisor for 15 years with private interns. She is a founding member of the VSOFoundation. She can be reached at: lillianfreemanlcsw@earthlink.net</p>
+      <p class="well"><strong>Patric White, Ph. D.</strong> is a Certified Gestalt Therapist in private practice in West Los Angeles He specializes in working with children, adolescents, and families. He provides supervision for interns and conducts training workshops on the Oaklander Approach to child therapy. He has been a consultant to numerous school districts in the mental health treatment of children within the school setting. He has worked with Violet Oaklander since 1979 and is a founding member of the VSOFoundation. He can be reached at Wpatricwhit@aol.com</p>
+    </div>
    </div>
-   <div class="col col-sm-6">
-     <p>On August 9, 2015, Valente Orozco, LCSW and RPT-S was given his certificate which acknowledged him as Certified Gestalt Therapist with Children and Adolescents through the West Coast Institute.   Valente completed all the requirements with honorable recognition.  He said upon completion, “I am extremely proud of this designation.  It means more to me than I can express at this time.”  Valente also wrote,  “The two year process has been invaluable in organizing and integrating so much theoretical and clinical information.  Time and effort well-spent.”</p>
-     <p>There are now four other candidates who are well on their way toward completion and certification.  It is the hope of everyone involved with WCI that many more will follow so that this theoretical and clinical approach will continue to have a voice within the field of child psychotherapy wherever children and families need our help.</p>
-     <p><strong>Join up!</strong></p>
+   <div class="col col-sm-4">
+       <blockquote>
+        <p>I am extremely proud of this designation. It means more to me than I can express at this time. The two year process has been invaluable in organizing and integrating so much theoretical and clinical information. Time and effort well-spent.</p> - Valente Orozco
+       </blockquote>
+       <img class="watermark" style="position:relative;width:400px;" src="/assets/img/sunlogo.png" />
    </div>
 </div>

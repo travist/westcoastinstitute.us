@@ -1,7 +1,7 @@
 ---
 title: Registration
 layout: default
-weight: 7
+weight: 9
 link: register
 controller: RegistrationController
 ---
@@ -34,9 +34,8 @@ controller: RegistrationController
             <h3 class="panel-title header-sm-title">Manual Registration</h3>
           </div>
           <div class="panel-body">
-            <p>To manually register, please download the following registration document</p>
-            <p><a href="/assets/registration_form.doc" class="btn btn-primary btn-block">Download the Registration Form</a></p>
-            <p>Fill out the form, and then send the filled out form to the following address</p>
+            <p>To manually register, please request a registration form using our <a href="/contact">Contact Form</a>.</p>
+            <p>Then send the filled out form to the following address.</p>
             <p style="margin-left: 40px">
                 <strong>West Coast Institute<br/>540 Alisal Rd. Ste. 1<br/>Solvang, CA 93463 USA</strong>
             </p>

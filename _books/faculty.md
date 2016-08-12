@@ -17,7 +17,7 @@ weight: 1
             </div>
             <div class="col-sm-4">
                 <img src="/assets/img/felicia-violet.jpg" class="img-responsive img-thumbnail" />
-                <strong>Felicia with Violet Oaklander</strong>
+                <strong><small>Felicia with Violet Oaklander (2014)</small></strong>
             </div>
         </div>
     </div>
@@ -26,11 +26,31 @@ weight: 1
 <h3>Core Faculty</h3>
 <div class="row">
     <div class="col-sm-3">
+        <img src="/assets/img/Valente-Orozco.jpeg" class="img-responsive img-thumbnail" />
+    </div>
+    <div class="col-sm-9">
+        <h3>Valente Orozco, LCSW, RPT-S, PPS</h3>
+        <p>Valente currently works in private practice in Clovis California and offers training, supervision, and consultation in Gestalt Therapy with Children and Adolescents. He has worked with children in a variety of settings including school-based mental health, child welfare, and outpatient mental health. Valente served as the 2015 President of the Central Valley Chapter of the California Association for Play Therapy. He has trained with the Pacific Gestalt Institute in Los Angeles and is a Certified Gestalt Therapist with Children and Adolescents.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <img src="/assets/img/stephanie.jpg" class="img-responsive img-thumbnail" />
+    </div>
+    <div class="col-sm-9">
+        <h3>Stephanie Pawlowicz</h3>
+        <p>Stephanie has a private practice in Santa Barbara, CA where she specializes with children, adolescents, and couples. She is adjunct faculty at Pacifica Graduate Institute where she teaches child psychotherapy from the Gestalt Oaklander Approach. She has led parent education / support groups and groups for single mothers living at St. Vincent DePaul, Santa Barbara. She is a Certified Gestalt Therapist with Children and Adolescents.</p>
+    </div>
+</div>
+<div class="row separator"></div>
+<h3>Adjunct Faculty</h3>
+<div class="row">
+    <div class="col-sm-3">
         <img src="/assets/img/Denise.jpg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
         <h3>Denise Richman, MS, LMFT</h3>
-        <p>Denise is a psychotherapist, workshop facilitator, university guess lecturer and mentor.  She has expertise in somatic/movement and dramatic therapies as a clinician and in business management, outreach and program development.  The Oaklander Model is the theoretical foundation that informs and supports her therapeutic work.  Her workshop “Movement as a Therapeutic Intervention and Contact Function in Gestalt Therapy” demonstrates her passion for the creative arts and her desire to enrich the lives of children.  Denise is a frequent presenter at Fox Studios Child Development Center.  She development and presented a workshop, “Fostering Creativity in Young Children,” to parents who work at the studio.</p>
+        <p>Denise has expertise in somatic / movements and dramatic therapies as clinician and business management outreach and program development. She is a frequent presenter at Fox Studios child development center. She developed and presented the workshop fostering creativity in young children for parents who work at the studio. She is in private practice and is a workshop facilitator and guest lecturer.</p>
     </div>
 </div>
 <div class="row">
@@ -39,25 +59,6 @@ weight: 1
     </div>
     <div class="col-sm-9">
         <h3>Christine Orpen, MA, LMFT</h3>
-        <p>Christine has a private practice in Santa Barbara working with children, adolescents, adults and families.  She was born and raised in Johannesburg, South Africa. She moved to Florence, Italy to study fine arts at the Academia Dei Belli Arte.  She then moved to New York and later to Santa Barbara where she practices as a Fine Artist.  In 1994 she graduated with a MA in Clinical Psychology from Antioch University.   She also completed a three year training program at the Santa Barbara Gestalt Training Center.  She has completed several trainings with Violet Oaklander and Felicia Carroll.  She incorporates her experience with the creative process when using projective modalities with clients.  She is a member of the Violet Solomon Oaklander Board of Directors.</p>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
-        <img src="/assets/img/Valente-Orozco.jpeg" class="img-responsive img-thumbnail" />
-    </div>
-    <div class="col-sm-9">
-        <h3>Valente Orozco, LCSW, RPT-S, PPS</h3>
-        <p>Valente currently works in private practice in Clovis California and offers training, supervision, and consultation in Gestalt Therapy with Children and Adolescents. He has worked with children in a variety of settings including school-based mental health, child welfare, and outpatient mental health. Valente served as the 2015 President of the Central Valley Chapter of the California Association for Play Therapy. He attended the 2012 and 2013 Summer Intensive trainings, the 2015 Advanced Spring Intensive, and has studied with the Pacific Gestalt Institute in Los Angeles.</p>
-    </div>
-</div>
-<div class="row separator"></div>
-<h3>Guest Faculty</h3>
-<div class="row">
-    <div class="col-sm-3">
-        
-    </div>
-    <div class="col-sm-9">
-        <p>For each summer intensive, a Guest Faculty member will be invited.</p>
+        <p>Christine has a private practice in Santa Barbara working with children, adolescents, adults and families. She was born and raised in Johannesburg, South Africa. She moved to Florence, Italy to study fine arts at the Academia Dei Belli Arte. She then moved to New York and later to Santa Barbara where she practices as a Fine Artist. She incorporates her experience with the creative process when using projective modalities with clients. She is a member of the Violet Solomon Oaklander Board of Directors.</p>
     </div>
 </div>

@@ -3,7 +3,7 @@ title: Contact
 layout: default
 book: contact
 link: contact
-weight: 9
+weight: 11
 controller: ContactController
 ---
 <div class="well">

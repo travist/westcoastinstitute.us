@@ -12,6 +12,19 @@ chapter: summer
         <strong>2015 Summer Training</strong></p>
         <p><img src="/assets/img/2015groupdinner.jpg" class="img-responsive img-thumbnail" />
         <strong>2015 Summer Group Dinner</strong></p>
+        <div class="row">
+            <div class="col-sm-12">
+                <strong>Training Fee's</strong>
+                <ul>
+                    <li>Summer Intensive Training: $2400</li>
+                    <li>A deposit of $300 is necessary to reserve your space. After a deposit has been made, the remaining amount is due on or before the beginning of the training. Please note that the program is limited to 10 people.</li>
+                </ul>
+                <strong>CEU's</strong>
+                <ul>
+                    <li>60 contact hours. Felicia is a WCI Approved Provider (04-152). Additional fees will apply.</li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="col col-sm-6">
         <div class="panel panel-default">
@@ -21,12 +34,8 @@ chapter: summer
           <div class="panel-body">
             <ul class="list-group">
               <li class="list-group-item">
-                <button class="btn btn-danger" style="float:right" disabled>FULL</button>
-                <h4 style="text-decoration: line-through;"><strong>July 16 - 24, 2016</strong></h4>
-              </li>
-              <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
-                <h4><strong>June 24 - July 2, 2017</strong></h4>
+                <h4><strong>July 8 - July 16, 2017</strong></h4>
               </li>
               <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
@@ -55,18 +64,5 @@ chapter: summer
         <blockquote>
           <p>I would recommend this course for any mental health professional working with change. This intensive course was a life changing experience for me.</p>
         </blockquote>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12">
-        <strong>Training Fee's</strong>
-        <ul>
-            <li>Week-long training: $2400</li>
-            <li>A deposit of $300 is necessary to reserve your space. After a deposit has been made, the remaining amount is due by July 1st, 2016. Please note that the program is limited to 12 people.</li>
-        </ul>
-        <strong>CEU's</strong>
-        <ul>
-            <li>60 contact hours. Felicia is an APT Approved Provider (04-152). CEU's for APA available through Sierra Institute for Gestalt Therapy. Additional fees will apply.</li>
-        </ul>
     </div>
 </div>
