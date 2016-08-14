@@ -48,7 +48,7 @@ chapter: international
         </ul>
     </div>
 </div>
-<hr></hr>
+<hr>
 <p></p>
 <div class="row">
   <div class="col col-sm-8 col-sm-offset-2">
