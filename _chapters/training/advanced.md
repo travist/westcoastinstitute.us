@@ -41,7 +41,7 @@ chapter: advanced
             <div class="col-sm-12">
                 <ul>
                     <li><strong>Fee:</strong> $1600 USD</li>
-                    <li><strong>CEU's:</strong> 40 contact hours. Felicia is a WCI Approved Provider (04-152). Additional fees will apply.</li>
+                    <li><strong>CEU's:</strong> 40 contact hours. WCI is an Association for Play Therapy Approved Provider (04-152).</li>
                 </ul>
             </div>
         </div>

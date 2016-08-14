@@ -15,19 +15,13 @@ weight: 5
             <div class="well">
                 <p>Click on one of the following links for information about our Training opportunities.</p>
             </div>
+            <a href="#conference" class="btn btn-block btn-success">Conference Presentations</a>
             <a href="#summer" class="btn btn-block btn-success">Summer Intensive Training</a>
             <a href="#yearlong" class="btn btn-block btn-success">Year Long Basic Training</a>
             <a href="#advanced" class="btn btn-block btn-success">Advanced Fall Intensive Training</a>
-            <a href="#international" class="btn btn-block btn-success">International Workshops</a>
+            <a href="#international" class="btn btn-block btn-success">International Training</a>
             <a href="#trainers" class="btn btn-block btn-success">Training for Trainers</a>
           </div>
-        </div>
-    </div>
-</div>
-<div class="row" style="margin-bottom: 60px;">
-    <div class="col-sm-10 col-sm-offset-1">
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Dpk5s9qoXR0"></iframe>
         </div>
     </div>
 </div>

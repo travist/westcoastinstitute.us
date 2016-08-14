@@ -17,7 +17,7 @@ chapter: yearlong
                 </ul>
                 <strong>CEU's</strong>
                 <ul>
-                    <li>60 contact hours. Felicia is a WCI Approved Provider (04-152). Additional fees will apply.</li>
+                    <li>60 contact hours. WCI is an Association for Play Therapy Approved Provider (04-152).</li>
                 </ul>
             </div>
         </div>
@@ -30,30 +30,27 @@ chapter: yearlong
           <div class="panel-body">
             <ul class="list-group">
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>January 28 - 29, 2017</strong></h4>
               </li>
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>March 4 - 5, 2017</strong></h4>
               </li>
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>April 29 - 30, 2017</strong></h4>
               </li>
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>July 1 - 2, 2017</strong></h4>
               </li>
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>August 26 - 27, 2017</strong></h4>
               </li>
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>October 21 - 22, 2017</strong></h4>
               </li>
             </ul>
+          </div>
+          <div class="panel-footer">
+            <a href="/register" class="btn btn-primary btn-block">Register Now</a>
           </div>
         </div>
     </div>

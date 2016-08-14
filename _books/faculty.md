@@ -38,7 +38,7 @@ weight: 1
         <img src="/assets/img/stephanie.jpg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
-        <h3>Stephanie Pawlowicz</h3>
+        <h3>Stephanie Pawlowicz, LMFT</h3>
         <p>Stephanie has a private practice in Santa Barbara, CA where she specializes with children, adolescents, and couples. She is adjunct faculty at Pacifica Graduate Institute where she teaches child psychotherapy from the Gestalt Oaklander Approach. She has led parent education / support groups and groups for single mothers living at St. Vincent DePaul, Santa Barbara. She is a Certified Gestalt Therapist with Children and Adolescents.</p>
     </div>
 </div>

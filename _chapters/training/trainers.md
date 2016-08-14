@@ -28,7 +28,7 @@ chapter: trainers
         <p>
         <ul>
             <li><strong>Fee:</strong> $1600 USD</li>
-            <li><strong>40 contact hours.</strong></li>
+            <li><strong>CEU's:</strong> 40 contact hours. WCI is an Association for Play Therapy Approved Provider (04-152).</li>
         </ul>
         </p>
         <p><img src="/assets/img/training-puppet.jpg" class="img-responsive img-thumbnail" /></p>

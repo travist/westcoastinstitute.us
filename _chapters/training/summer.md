@@ -6,12 +6,12 @@ chapter: summer
 ---
 <div class="row">
     <div class="col col-sm-6">
+        <p><img src="/assets/img/2016training.jpg" class="img-responsive img-thumbnail" />
+        <strong>2016 Summer Intensive</strong></p>
         <p><img src="/assets/img/2015SummerIntensive.jpg" class="img-responsive img-thumbnail" />
         <strong>2015 Summer Intensive</strong></p>
         <p><img src="/assets/img/2015summertraining.jpg" class="img-responsive img-thumbnail" />
         <strong>2015 Summer Training</strong></p>
-        <p><img src="/assets/img/2015groupdinner.jpg" class="img-responsive img-thumbnail" />
-        <strong>2015 Summer Group Dinner</strong></p>
         <div class="row">
             <div class="col-sm-12">
                 <strong>Training Fee's</strong>
@@ -21,7 +21,7 @@ chapter: summer
                 </ul>
                 <strong>CEU's</strong>
                 <ul>
-                    <li>60 contact hours. Felicia is a WCI Approved Provider (04-152). Additional fees will apply.</li>
+                    <li>60 contact hours. WCI is an Association for Play Therapy Approved Provider (04-152).</li>
                 </ul>
             </div>
         </div>
