@@ -32,6 +32,7 @@ chapter: international
         <ul>
             <li>Prague, Czech Republic - January 17 - 23, 2017</li>
             <li>Prague, Czech Republic - May 9 - 14, 2017</li>
+            <li>Singapore City, Singapore - March 13 - 16, 2017</li>
             <li>Warsaw, Poland - March 24 - April 3, 2017</li>
             <li>Bucharest, Romania - May 15 - 22, 2017</li>
             <li>Prague, Czech Republic - September 6 - 12, 2017</li>
@@ -53,7 +54,7 @@ chapter: international
 <div class="row">
   <div class="col col-sm-8 col-sm-offset-2">
     <h4 style="text-align: center;"><strong>Non-Discrimination Statement</strong></h4>
-    <p>All trainees are welcome without regard to gender, race, national or ethnic origin, sexual orientation, religion, or disability.  If you have special needs please indicate this on your registration form.</p>
+    <p>All trainees are welcome without regard to gender, race, national or ethnic origin, sexual orientation, religion, or disability. The West Coast Institute complies with all local, state, and federal regulations including the American’s with Disabilities Act. Please indicate on your registration or <a href="/contact">contact Felicia Carroll</a> if you have questions regarding special accommodations.</p>
   </div>
 </div>
 <div class="row">
@@ -67,5 +68,11 @@ chapter: international
   <div class="col col-sm-8 col-sm-offset-2">
     <h4 style="text-align: center;"><strong>Grievance Policy</strong></h4>
     <p>The West Coast Institute for Gestalt Therapy with Children and Adolescents (WCI) is fully committed to conducting all activities in strict compliance with all legal and ethical responsibilities to be non-discriminatory in promotional activities, program content and in treatment of program participants. If any registrant has special needs, please make those clear at the time of registration.   WCI will do its best to anticipate problems and, if they present themselves, will work to alleviate or resolve complaints as quickly as possible.  Direct communication of any difficulties to the workshop leader or the WCI assistant is requested and will be respectfully attended to.</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col col-sm-8 col-sm-offset-2">
+    <h4 style="text-align: center;"><strong>Additional Information</strong></h4>
+    <p>Information regarding financial assistance, schedule of trainings, lodging, and transportation to and from airports will be provided to all registrants with confirmation of registration.</p>
   </div>
 </div>

@@ -29,6 +29,8 @@ chapter: trainers
         <ul>
             <li><strong>Fee:</strong> $1600 USD</li>
             <li><strong>CEU's:</strong> 40 contact hours. WCI is an Association for Play Therapy Approved Provider (04-152).</li>
+            <li>Application is in committee review with the California Association of Marriage and Family therapists to sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs.</li>
+            <li>A Certificate of Completion will be given upon receipt of the evaluation for the program. No partial credit can be provided. See Refund Policy below.</li>
         </ul>
         </p>
         <p><img src="/assets/img/training-puppet.jpg" class="img-responsive img-thumbnail" /></p>

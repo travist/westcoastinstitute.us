@@ -65,12 +65,20 @@ module.exports = function() {
           session = angular.fromJson(session);
         }
 
+        var getForm = function() {
+          var element = $element.find('#formio-wizard-form');
+          if (!element.length) {
+            return {};
+          }
+          return element.children().scope().formioForm;
+        };
+
         $scope.formio = null;
         $scope.page = {};
         $scope.pages = [];
         $scope.hasTitles = false;
         $scope.colclass = '';
-        if (!$scope.submission || !Object.keys($scope.submission.data).length) {
+        if (!$scope.submission || !Object.keys($scope.submission).length) {
           $scope.submission = session ? {data: session.data} : {data: {}};
         }
         $scope.currentPage = session ? session.page : 0;
@@ -133,10 +141,10 @@ module.exports = function() {
                 fieldForm[elementScope.component.key].$pristine = false;
               }
             });
-            $scope.formioAlerts.push({
+            $scope.formioAlerts = [{
               type: 'danger',
               message: 'Please fix the following errors before proceeding.'
-            });
+            }];
             return true;
           }
           return false;
@@ -147,44 +155,125 @@ module.exports = function() {
           if ($scope.checkErrors()) {
             return;
           }
-          var sub = angular.copy($scope.submission);
+
+          // Create a sanitized submission object.
+          var submissionData = {data: {}};
+          if ($scope.submission._id) {
+            submissionData._id = $scope.submission._id;
+          }
+          if ($scope.submission.data._id) {
+            submissionData._id = $scope.submission.data._id;
+          }
+
+          var grabIds = function(input) {
+            if (!input) {
+              return [];
+            }
+
+            if (!(input instanceof Array)) {
+              input = [input];
+            }
+
+            var final = [];
+            input.forEach(function(element) {
+              if (element && element._id) {
+                final.push(element._id);
+              }
+            });
+
+            return final;
+          };
+
+          var defaultPermissions = {};
           FormioUtils.eachComponent($scope.form.components, function(component) {
-            if (sub.data.hasOwnProperty(component.key) && (component.type === 'number')) {
-              if (sub.data[component.key]) {
-                sub.data[component.key] = parseFloat(sub.data[component.key]);
+            if (component.type === 'resource' && component.key && component.defaultPermission) {
+              defaultPermissions[component.key] = component.defaultPermission;
+            }
+            if (submissionData.data.hasOwnProperty(component.key) && (component.type === 'number')) {
+              var value = $scope.submission.data[component.key];
+              if (component.type === 'number') {
+                submissionData.data[component.key] = value ? parseFloat(value) : 0;
               }
               else {
-                sub.data[component.key] = 0;
+                submissionData.data[component.key] = value;
+              }
+            }
+          }, true);
+
+          angular.forEach($scope.submission.data, function(value, key) {
+            if (value && !value.hasOwnProperty('_id')) {
+              submissionData.data[key] = value;
+            }
+
+            // Setup the submission access.
+            var perm = defaultPermissions[key];
+            if (perm) {
+              submissionData.access = submissionData.access || [];
+
+              // Coerce value into an array for plucking.
+              if (!(value instanceof Array)) {
+                value = [value];
+              }
+
+              // Try to find and update an existing permission.
+              var found = false;
+              submissionData.access.forEach(function(permission) {
+                if (permission.type === perm) {
+                  found = true;
+                  permission.resources = permission.resources || [];
+                  permission.resources.concat(grabIds(value));
+                }
+              });
+
+              // Add a permission, because one was not found.
+              if (!found) {
+                submissionData.access.push({
+                  type: perm,
+                  resources: grabIds(value)
+                });
               }
             }
           });
+          // Strip out any angular keys.
+          submissionData = angular.copy(submissionData);
+
+          var submitEvent = $scope.$emit('formSubmit', submissionData);
+          if (submitEvent.defaultPrevented) {
+              // Listener wants to cancel the form submission
+              return;
+          }
 
           var onDone = function(submission) {
             if ($scope.storage && !$scope.readOnly) {
               localStorage.setItem($scope.storage, '');
             }
+            $scope.showAlerts({
+              type: 'success',
+              message: 'Submission Complete!'
+            });
             $scope.$emit('formSubmission', submission);
           };
 
           // Save to specified action.
           if ($scope.action) {
-            var method = sub._id ? 'put' : 'post';
-            $http[method]($scope.action, sub).success(function(submission) {
+            var method = submissionData._id ? 'put' : 'post';
+            $http[method]($scope.action, submissionData).success(function(submission) {
               Formio.clearCache();
               onDone(submission);
             }).error(FormioScope.onError($scope, $element));
           }
-          else if ($scope.formio) {
-            $scope.formio.saveSubmission(sub).then(onDone).catch(FormioScope.onError($scope, $element));
+          else if ($scope.formio && !$scope.formio.noSubmit) {
+            $scope.formio.saveSubmission(submissionData).then(onDone).catch(FormioScope.onError($scope, $element));
           }
           else {
-            onDone(sub);
+            onDone(submissionData);
           }
         };
 
         $scope.cancel = function() {
           $scope.clear();
           showPage(true);
+          $scope.$emit('cancel');
         };
 
         // Move onto the next page.
@@ -222,12 +311,7 @@ module.exports = function() {
         };
 
         $scope.isValid = function() {
-          var element = $element.find('#formio-wizard-form');
-          if (!element.length) {
-            return false;
-          }
-          var formioForm = element.children().scope().formioForm;
-          return formioForm.$valid;
+          return getForm().$valid;
         };
 
         $scope.$on('wizardGoToPage', function(event, page) {

@@ -1,2057 +1,5 @@
-/*! ng-formio v1.8.12 | https://npmcdn.com/ng-formio@1.8.12/LICENSE.txt */
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (process){
-// vim:ts=4:sts=4:sw=4:
-/*!
- *
- * Copyright 2009-2012 Kris Kowal under the terms of the MIT
- * license found at http://github.com/kriskowal/q/raw/master/LICENSE
- *
- * With parts by Tyler Close
- * Copyright 2007-2009 Tyler Close under the terms of the MIT X license found
- * at http://www.opensource.org/licenses/mit-license.html
- * Forked at ref_send.js version: 2009-05-11
- *
- * With parts by Mark Miller
- * Copyright (C) 2011 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
-(function (definition) {
-    "use strict";
-
-    // This file will function properly as a <script> tag, or a module
-    // using CommonJS and NodeJS or RequireJS module formats.  In
-    // Common/Node/RequireJS, the module exports the Q API and when
-    // executed as a simple <script>, it creates a Q global instead.
-
-    // Montage Require
-    if (typeof bootstrap === "function") {
-        bootstrap("promise", definition);
-
-    // CommonJS
-    } else if (typeof exports === "object" && typeof module === "object") {
-        module.exports = definition();
-
-    // RequireJS
-    } else if (typeof define === "function" && define.amd) {
-        define(definition);
-
-    // SES (Secure EcmaScript)
-    } else if (typeof ses !== "undefined") {
-        if (!ses.ok()) {
-            return;
-        } else {
-            ses.makeQ = definition;
-        }
-
-    // <script>
-    } else if (typeof window !== "undefined" || typeof self !== "undefined") {
-        // Prefer window over self for add-on scripts. Use self for
-        // non-windowed contexts.
-        var global = typeof window !== "undefined" ? window : self;
-
-        // Get the `window` object, save the previous Q global
-        // and initialize Q as a global.
-        var previousQ = global.Q;
-        global.Q = definition();
-
-        // Add a noConflict function so Q can be removed from the
-        // global namespace.
-        global.Q.noConflict = function () {
-            global.Q = previousQ;
-            return this;
-        };
-
-    } else {
-        throw new Error("This environment was not anticipated by Q. Please file a bug.");
-    }
-
-})(function () {
-"use strict";
-
-var hasStacks = false;
-try {
-    throw new Error();
-} catch (e) {
-    hasStacks = !!e.stack;
-}
-
-// All code after this point will be filtered from stack traces reported
-// by Q.
-var qStartingLine = captureLine();
-var qFileName;
-
-// shims
-
-// used for fallback in "allResolved"
-var noop = function () {};
-
-// Use the fastest possible means to execute a task in a future turn
-// of the event loop.
-var nextTick =(function () {
-    // linked list of tasks (single, with head node)
-    var head = {task: void 0, next: null};
-    var tail = head;
-    var flushing = false;
-    var requestTick = void 0;
-    var isNodeJS = false;
-    // queue for late tasks, used by unhandled rejection tracking
-    var laterQueue = [];
-
-    function flush() {
-        /* jshint loopfunc: true */
-        var task, domain;
-
-        while (head.next) {
-            head = head.next;
-            task = head.task;
-            head.task = void 0;
-            domain = head.domain;
-
-            if (domain) {
-                head.domain = void 0;
-                domain.enter();
-            }
-            runSingle(task, domain);
-
-        }
-        while (laterQueue.length) {
-            task = laterQueue.pop();
-            runSingle(task);
-        }
-        flushing = false;
-    }
-    // runs a single function in the async queue
-    function runSingle(task, domain) {
-        try {
-            task();
-
-        } catch (e) {
-            if (isNodeJS) {
-                // In node, uncaught exceptions are considered fatal errors.
-                // Re-throw them synchronously to interrupt flushing!
-
-                // Ensure continuation if the uncaught exception is suppressed
-                // listening "uncaughtException" events (as domains does).
-                // Continue in next event to avoid tick recursion.
-                if (domain) {
-                    domain.exit();
-                }
-                setTimeout(flush, 0);
-                if (domain) {
-                    domain.enter();
-                }
-
-                throw e;
-
-            } else {
-                // In browsers, uncaught exceptions are not fatal.
-                // Re-throw them asynchronously to avoid slow-downs.
-                setTimeout(function () {
-                    throw e;
-                }, 0);
-            }
-        }
-
-        if (domain) {
-            domain.exit();
-        }
-    }
-
-    nextTick = function (task) {
-        tail = tail.next = {
-            task: task,
-            domain: isNodeJS && process.domain,
-            next: null
-        };
-
-        if (!flushing) {
-            flushing = true;
-            requestTick();
-        }
-    };
-
-    if (typeof process === "object" &&
-        process.toString() === "[object process]" && process.nextTick) {
-        // Ensure Q is in a real Node environment, with a `process.nextTick`.
-        // To see through fake Node environments:
-        // * Mocha test runner - exposes a `process` global without a `nextTick`
-        // * Browserify - exposes a `process.nexTick` function that uses
-        //   `setTimeout`. In this case `setImmediate` is preferred because
-        //    it is faster. Browserify's `process.toString()` yields
-        //   "[object Object]", while in a real Node environment
-        //   `process.nextTick()` yields "[object process]".
-        isNodeJS = true;
-
-        requestTick = function () {
-            process.nextTick(flush);
-        };
-
-    } else if (typeof setImmediate === "function") {
-        // In IE10, Node.js 0.9+, or https://github.com/NobleJS/setImmediate
-        if (typeof window !== "undefined") {
-            requestTick = setImmediate.bind(window, flush);
-        } else {
-            requestTick = function () {
-                setImmediate(flush);
-            };
-        }
-
-    } else if (typeof MessageChannel !== "undefined") {
-        // modern browsers
-        // http://www.nonblocking.io/2011/06/windownexttick.html
-        var channel = new MessageChannel();
-        // At least Safari Version 6.0.5 (8536.30.1) intermittently cannot create
-        // working message ports the first time a page loads.
-        channel.port1.onmessage = function () {
-            requestTick = requestPortTick;
-            channel.port1.onmessage = flush;
-            flush();
-        };
-        var requestPortTick = function () {
-            // Opera requires us to provide a message payload, regardless of
-            // whether we use it.
-            channel.port2.postMessage(0);
-        };
-        requestTick = function () {
-            setTimeout(flush, 0);
-            requestPortTick();
-        };
-
-    } else {
-        // old browsers
-        requestTick = function () {
-            setTimeout(flush, 0);
-        };
-    }
-    // runs a task after all other tasks have been run
-    // this is useful for unhandled rejection tracking that needs to happen
-    // after all `then`d tasks have been run.
-    nextTick.runAfter = function (task) {
-        laterQueue.push(task);
-        if (!flushing) {
-            flushing = true;
-            requestTick();
-        }
-    };
-    return nextTick;
-})();
-
-// Attempt to make generics safe in the face of downstream
-// modifications.
-// There is no situation where this is necessary.
-// If you need a security guarantee, these primordials need to be
-// deeply frozen anyway, and if you don’t need a security guarantee,
-// this is just plain paranoid.
-// However, this **might** have the nice side-effect of reducing the size of
-// the minified code by reducing x.call() to merely x()
-// See Mark Miller’s explanation of what this does.
-// http://wiki.ecmascript.org/doku.php?id=conventions:safe_meta_programming
-var call = Function.call;
-function uncurryThis(f) {
-    return function () {
-        return call.apply(f, arguments);
-    };
-}
-// This is equivalent, but slower:
-// uncurryThis = Function_bind.bind(Function_bind.call);
-// http://jsperf.com/uncurrythis
-
-var array_slice = uncurryThis(Array.prototype.slice);
-
-var array_reduce = uncurryThis(
-    Array.prototype.reduce || function (callback, basis) {
-        var index = 0,
-            length = this.length;
-        // concerning the initial value, if one is not provided
-        if (arguments.length === 1) {
-            // seek to the first value in the array, accounting
-            // for the possibility that is is a sparse array
-            do {
-                if (index in this) {
-                    basis = this[index++];
-                    break;
-                }
-                if (++index >= length) {
-                    throw new TypeError();
-                }
-            } while (1);
-        }
-        // reduce
-        for (; index < length; index++) {
-            // account for the possibility that the array is sparse
-            if (index in this) {
-                basis = callback(basis, this[index], index);
-            }
-        }
-        return basis;
-    }
-);
-
-var array_indexOf = uncurryThis(
-    Array.prototype.indexOf || function (value) {
-        // not a very good shim, but good enough for our one use of it
-        for (var i = 0; i < this.length; i++) {
-            if (this[i] === value) {
-                return i;
-            }
-        }
-        return -1;
-    }
-);
-
-var array_map = uncurryThis(
-    Array.prototype.map || function (callback, thisp) {
-        var self = this;
-        var collect = [];
-        array_reduce(self, function (undefined, value, index) {
-            collect.push(callback.call(thisp, value, index, self));
-        }, void 0);
-        return collect;
-    }
-);
-
-var object_create = Object.create || function (prototype) {
-    function Type() { }
-    Type.prototype = prototype;
-    return new Type();
-};
-
-var object_hasOwnProperty = uncurryThis(Object.prototype.hasOwnProperty);
-
-var object_keys = Object.keys || function (object) {
-    var keys = [];
-    for (var key in object) {
-        if (object_hasOwnProperty(object, key)) {
-            keys.push(key);
-        }
-    }
-    return keys;
-};
-
-var object_toString = uncurryThis(Object.prototype.toString);
-
-function isObject(value) {
-    return value === Object(value);
-}
-
-// generator related shims
-
-// FIXME: Remove this function once ES6 generators are in SpiderMonkey.
-function isStopIteration(exception) {
-    return (
-        object_toString(exception) === "[object StopIteration]" ||
-        exception instanceof QReturnValue
-    );
-}
-
-// FIXME: Remove this helper and Q.return once ES6 generators are in
-// SpiderMonkey.
-var QReturnValue;
-if (typeof ReturnValue !== "undefined") {
-    QReturnValue = ReturnValue;
-} else {
-    QReturnValue = function (value) {
-        this.value = value;
-    };
-}
-
-// long stack traces
-
-var STACK_JUMP_SEPARATOR = "From previous event:";
-
-function makeStackTraceLong(error, promise) {
-    // If possible, transform the error stack trace by removing Node and Q
-    // cruft, then concatenating with the stack trace of `promise`. See #57.
-    if (hasStacks &&
-        promise.stack &&
-        typeof error === "object" &&
-        error !== null &&
-        error.stack &&
-        error.stack.indexOf(STACK_JUMP_SEPARATOR) === -1
-    ) {
-        var stacks = [];
-        for (var p = promise; !!p; p = p.source) {
-            if (p.stack) {
-                stacks.unshift(p.stack);
-            }
-        }
-        stacks.unshift(error.stack);
-
-        var concatedStacks = stacks.join("\n" + STACK_JUMP_SEPARATOR + "\n");
-        error.stack = filterStackString(concatedStacks);
-    }
-}
-
-function filterStackString(stackString) {
-    var lines = stackString.split("\n");
-    var desiredLines = [];
-    for (var i = 0; i < lines.length; ++i) {
-        var line = lines[i];
-
-        if (!isInternalFrame(line) && !isNodeFrame(line) && line) {
-            desiredLines.push(line);
-        }
-    }
-    return desiredLines.join("\n");
-}
-
-function isNodeFrame(stackLine) {
-    return stackLine.indexOf("(module.js:") !== -1 ||
-           stackLine.indexOf("(node.js:") !== -1;
-}
-
-function getFileNameAndLineNumber(stackLine) {
-    // Named functions: "at functionName (filename:lineNumber:columnNumber)"
-    // In IE10 function name can have spaces ("Anonymous function") O_o
-    var attempt1 = /at .+ \((.+):(\d+):(?:\d+)\)$/.exec(stackLine);
-    if (attempt1) {
-        return [attempt1[1], Number(attempt1[2])];
-    }
-
-    // Anonymous functions: "at filename:lineNumber:columnNumber"
-    var attempt2 = /at ([^ ]+):(\d+):(?:\d+)$/.exec(stackLine);
-    if (attempt2) {
-        return [attempt2[1], Number(attempt2[2])];
-    }
-
-    // Firefox style: "function@filename:lineNumber or @filename:lineNumber"
-    var attempt3 = /.*@(.+):(\d+)$/.exec(stackLine);
-    if (attempt3) {
-        return [attempt3[1], Number(attempt3[2])];
-    }
-}
-
-function isInternalFrame(stackLine) {
-    var fileNameAndLineNumber = getFileNameAndLineNumber(stackLine);
-
-    if (!fileNameAndLineNumber) {
-        return false;
-    }
-
-    var fileName = fileNameAndLineNumber[0];
-    var lineNumber = fileNameAndLineNumber[1];
-
-    return fileName === qFileName &&
-        lineNumber >= qStartingLine &&
-        lineNumber <= qEndingLine;
-}
-
-// discover own file name and line number range for filtering stack
-// traces
-function captureLine() {
-    if (!hasStacks) {
-        return;
-    }
-
-    try {
-        throw new Error();
-    } catch (e) {
-        var lines = e.stack.split("\n");
-        var firstLine = lines[0].indexOf("@") > 0 ? lines[1] : lines[2];
-        var fileNameAndLineNumber = getFileNameAndLineNumber(firstLine);
-        if (!fileNameAndLineNumber) {
-            return;
-        }
-
-        qFileName = fileNameAndLineNumber[0];
-        return fileNameAndLineNumber[1];
-    }
-}
-
-function deprecate(callback, name, alternative) {
-    return function () {
-        if (typeof console !== "undefined" &&
-            typeof console.warn === "function") {
-            console.warn(name + " is deprecated, use " + alternative +
-                         " instead.", new Error("").stack);
-        }
-        return callback.apply(callback, arguments);
-    };
-}
-
-// end of shims
-// beginning of real work
-
-/**
- * Constructs a promise for an immediate reference, passes promises through, or
- * coerces promises from different systems.
- * @param value immediate reference or promise
- */
-function Q(value) {
-    // If the object is already a Promise, return it directly.  This enables
-    // the resolve function to both be used to created references from objects,
-    // but to tolerably coerce non-promises to promises.
-    if (value instanceof Promise) {
-        return value;
-    }
-
-    // assimilate thenables
-    if (isPromiseAlike(value)) {
-        return coerce(value);
-    } else {
-        return fulfill(value);
-    }
-}
-Q.resolve = Q;
-
-/**
- * Performs a task in a future turn of the event loop.
- * @param {Function} task
- */
-Q.nextTick = nextTick;
-
-/**
- * Controls whether or not long stack traces will be on
- */
-Q.longStackSupport = false;
-
-// enable long stacks if Q_DEBUG is set
-if (typeof process === "object" && process && process.env && process.env.Q_DEBUG) {
-    Q.longStackSupport = true;
-}
-
-/**
- * Constructs a {promise, resolve, reject} object.
- *
- * `resolve` is a callback to invoke with a more resolved value for the
- * promise. To fulfill the promise, invoke `resolve` with any value that is
- * not a thenable. To reject the promise, invoke `resolve` with a rejected
- * thenable, or invoke `reject` with the reason directly. To resolve the
- * promise to another thenable, thus putting it in the same state, invoke
- * `resolve` with that other thenable.
- */
-Q.defer = defer;
-function defer() {
-    // if "messages" is an "Array", that indicates that the promise has not yet
-    // been resolved.  If it is "undefined", it has been resolved.  Each
-    // element of the messages array is itself an array of complete arguments to
-    // forward to the resolved promise.  We coerce the resolution value to a
-    // promise using the `resolve` function because it handles both fully
-    // non-thenable values and other thenables gracefully.
-    var messages = [], progressListeners = [], resolvedPromise;
-
-    var deferred = object_create(defer.prototype);
-    var promise = object_create(Promise.prototype);
-
-    promise.promiseDispatch = function (resolve, op, operands) {
-        var args = array_slice(arguments);
-        if (messages) {
-            messages.push(args);
-            if (op === "when" && operands[1]) { // progress operand
-                progressListeners.push(operands[1]);
-            }
-        } else {
-            Q.nextTick(function () {
-                resolvedPromise.promiseDispatch.apply(resolvedPromise, args);
-            });
-        }
-    };
-
-    // XXX deprecated
-    promise.valueOf = function () {
-        if (messages) {
-            return promise;
-        }
-        var nearerValue = nearer(resolvedPromise);
-        if (isPromise(nearerValue)) {
-            resolvedPromise = nearerValue; // shorten chain
-        }
-        return nearerValue;
-    };
-
-    promise.inspect = function () {
-        if (!resolvedPromise) {
-            return { state: "pending" };
-        }
-        return resolvedPromise.inspect();
-    };
-
-    if (Q.longStackSupport && hasStacks) {
-        try {
-            throw new Error();
-        } catch (e) {
-            // NOTE: don't try to use `Error.captureStackTrace` or transfer the
-            // accessor around; that causes memory leaks as per GH-111. Just
-            // reify the stack trace as a string ASAP.
-            //
-            // At the same time, cut off the first line; it's always just
-            // "[object Promise]\n", as per the `toString`.
-            promise.stack = e.stack.substring(e.stack.indexOf("\n") + 1);
-        }
-    }
-
-    // NOTE: we do the checks for `resolvedPromise` in each method, instead of
-    // consolidating them into `become`, since otherwise we'd create new
-    // promises with the lines `become(whatever(value))`. See e.g. GH-252.
-
-    function become(newPromise) {
-        resolvedPromise = newPromise;
-        promise.source = newPromise;
-
-        array_reduce(messages, function (undefined, message) {
-            Q.nextTick(function () {
-                newPromise.promiseDispatch.apply(newPromise, message);
-            });
-        }, void 0);
-
-        messages = void 0;
-        progressListeners = void 0;
-    }
-
-    deferred.promise = promise;
-    deferred.resolve = function (value) {
-        if (resolvedPromise) {
-            return;
-        }
-
-        become(Q(value));
-    };
-
-    deferred.fulfill = function (value) {
-        if (resolvedPromise) {
-            return;
-        }
-
-        become(fulfill(value));
-    };
-    deferred.reject = function (reason) {
-        if (resolvedPromise) {
-            return;
-        }
-
-        become(reject(reason));
-    };
-    deferred.notify = function (progress) {
-        if (resolvedPromise) {
-            return;
-        }
-
-        array_reduce(progressListeners, function (undefined, progressListener) {
-            Q.nextTick(function () {
-                progressListener(progress);
-            });
-        }, void 0);
-    };
-
-    return deferred;
-}
-
-/**
- * Creates a Node-style callback that will resolve or reject the deferred
- * promise.
- * @returns a nodeback
- */
-defer.prototype.makeNodeResolver = function () {
-    var self = this;
-    return function (error, value) {
-        if (error) {
-            self.reject(error);
-        } else if (arguments.length > 2) {
-            self.resolve(array_slice(arguments, 1));
-        } else {
-            self.resolve(value);
-        }
-    };
-};
-
-/**
- * @param resolver {Function} a function that returns nothing and accepts
- * the resolve, reject, and notify functions for a deferred.
- * @returns a promise that may be resolved with the given resolve and reject
- * functions, or rejected by a thrown exception in resolver
- */
-Q.Promise = promise; // ES6
-Q.promise = promise;
-function promise(resolver) {
-    if (typeof resolver !== "function") {
-        throw new TypeError("resolver must be a function.");
-    }
-    var deferred = defer();
-    try {
-        resolver(deferred.resolve, deferred.reject, deferred.notify);
-    } catch (reason) {
-        deferred.reject(reason);
-    }
-    return deferred.promise;
-}
-
-promise.race = race; // ES6
-promise.all = all; // ES6
-promise.reject = reject; // ES6
-promise.resolve = Q; // ES6
-
-// XXX experimental.  This method is a way to denote that a local value is
-// serializable and should be immediately dispatched to a remote upon request,
-// instead of passing a reference.
-Q.passByCopy = function (object) {
-    //freeze(object);
-    //passByCopies.set(object, true);
-    return object;
-};
-
-Promise.prototype.passByCopy = function () {
-    //freeze(object);
-    //passByCopies.set(object, true);
-    return this;
-};
-
-/**
- * If two promises eventually fulfill to the same value, promises that value,
- * but otherwise rejects.
- * @param x {Any*}
- * @param y {Any*}
- * @returns {Any*} a promise for x and y if they are the same, but a rejection
- * otherwise.
- *
- */
-Q.join = function (x, y) {
-    return Q(x).join(y);
-};
-
-Promise.prototype.join = function (that) {
-    return Q([this, that]).spread(function (x, y) {
-        if (x === y) {
-            // TODO: "===" should be Object.is or equiv
-            return x;
-        } else {
-            throw new Error("Can't join: not the same: " + x + " " + y);
-        }
-    });
-};
-
-/**
- * Returns a promise for the first of an array of promises to become settled.
- * @param answers {Array[Any*]} promises to race
- * @returns {Any*} the first promise to be settled
- */
-Q.race = race;
-function race(answerPs) {
-    return promise(function (resolve, reject) {
-        // Switch to this once we can assume at least ES5
-        // answerPs.forEach(function (answerP) {
-        //     Q(answerP).then(resolve, reject);
-        // });
-        // Use this in the meantime
-        for (var i = 0, len = answerPs.length; i < len; i++) {
-            Q(answerPs[i]).then(resolve, reject);
-        }
-    });
-}
-
-Promise.prototype.race = function () {
-    return this.then(Q.race);
-};
-
-/**
- * Constructs a Promise with a promise descriptor object and optional fallback
- * function.  The descriptor contains methods like when(rejected), get(name),
- * set(name, value), post(name, args), and delete(name), which all
- * return either a value, a promise for a value, or a rejection.  The fallback
- * accepts the operation name, a resolver, and any further arguments that would
- * have been forwarded to the appropriate method above had a method been
- * provided with the proper name.  The API makes no guarantees about the nature
- * of the returned object, apart from that it is usable whereever promises are
- * bought and sold.
- */
-Q.makePromise = Promise;
-function Promise(descriptor, fallback, inspect) {
-    if (fallback === void 0) {
-        fallback = function (op) {
-            return reject(new Error(
-                "Promise does not support operation: " + op
-            ));
-        };
-    }
-    if (inspect === void 0) {
-        inspect = function () {
-            return {state: "unknown"};
-        };
-    }
-
-    var promise = object_create(Promise.prototype);
-
-    promise.promiseDispatch = function (resolve, op, args) {
-        var result;
-        try {
-            if (descriptor[op]) {
-                result = descriptor[op].apply(promise, args);
-            } else {
-                result = fallback.call(promise, op, args);
-            }
-        } catch (exception) {
-            result = reject(exception);
-        }
-        if (resolve) {
-            resolve(result);
-        }
-    };
-
-    promise.inspect = inspect;
-
-    // XXX deprecated `valueOf` and `exception` support
-    if (inspect) {
-        var inspected = inspect();
-        if (inspected.state === "rejected") {
-            promise.exception = inspected.reason;
-        }
-
-        promise.valueOf = function () {
-            var inspected = inspect();
-            if (inspected.state === "pending" ||
-                inspected.state === "rejected") {
-                return promise;
-            }
-            return inspected.value;
-        };
-    }
-
-    return promise;
-}
-
-Promise.prototype.toString = function () {
-    return "[object Promise]";
-};
-
-Promise.prototype.then = function (fulfilled, rejected, progressed) {
-    var self = this;
-    var deferred = defer();
-    var done = false;   // ensure the untrusted promise makes at most a
-                        // single call to one of the callbacks
-
-    function _fulfilled(value) {
-        try {
-            return typeof fulfilled === "function" ? fulfilled(value) : value;
-        } catch (exception) {
-            return reject(exception);
-        }
-    }
-
-    function _rejected(exception) {
-        if (typeof rejected === "function") {
-            makeStackTraceLong(exception, self);
-            try {
-                return rejected(exception);
-            } catch (newException) {
-                return reject(newException);
-            }
-        }
-        return reject(exception);
-    }
-
-    function _progressed(value) {
-        return typeof progressed === "function" ? progressed(value) : value;
-    }
-
-    Q.nextTick(function () {
-        self.promiseDispatch(function (value) {
-            if (done) {
-                return;
-            }
-            done = true;
-
-            deferred.resolve(_fulfilled(value));
-        }, "when", [function (exception) {
-            if (done) {
-                return;
-            }
-            done = true;
-
-            deferred.resolve(_rejected(exception));
-        }]);
-    });
-
-    // Progress propagator need to be attached in the current tick.
-    self.promiseDispatch(void 0, "when", [void 0, function (value) {
-        var newValue;
-        var threw = false;
-        try {
-            newValue = _progressed(value);
-        } catch (e) {
-            threw = true;
-            if (Q.onerror) {
-                Q.onerror(e);
-            } else {
-                throw e;
-            }
-        }
-
-        if (!threw) {
-            deferred.notify(newValue);
-        }
-    }]);
-
-    return deferred.promise;
-};
-
-Q.tap = function (promise, callback) {
-    return Q(promise).tap(callback);
-};
-
-/**
- * Works almost like "finally", but not called for rejections.
- * Original resolution value is passed through callback unaffected.
- * Callback may return a promise that will be awaited for.
- * @param {Function} callback
- * @returns {Q.Promise}
- * @example
- * doSomething()
- *   .then(...)
- *   .tap(console.log)
- *   .then(...);
- */
-Promise.prototype.tap = function (callback) {
-    callback = Q(callback);
-
-    return this.then(function (value) {
-        return callback.fcall(value).thenResolve(value);
-    });
-};
-
-/**
- * Registers an observer on a promise.
- *
- * Guarantees:
- *
- * 1. that fulfilled and rejected will be called only once.
- * 2. that either the fulfilled callback or the rejected callback will be
- *    called, but not both.
- * 3. that fulfilled and rejected will not be called in this turn.
- *
- * @param value      promise or immediate reference to observe
- * @param fulfilled  function to be called with the fulfilled value
- * @param rejected   function to be called with the rejection exception
- * @param progressed function to be called on any progress notifications
- * @return promise for the return value from the invoked callback
- */
-Q.when = when;
-function when(value, fulfilled, rejected, progressed) {
-    return Q(value).then(fulfilled, rejected, progressed);
-}
-
-Promise.prototype.thenResolve = function (value) {
-    return this.then(function () { return value; });
-};
-
-Q.thenResolve = function (promise, value) {
-    return Q(promise).thenResolve(value);
-};
-
-Promise.prototype.thenReject = function (reason) {
-    return this.then(function () { throw reason; });
-};
-
-Q.thenReject = function (promise, reason) {
-    return Q(promise).thenReject(reason);
-};
-
-/**
- * If an object is not a promise, it is as "near" as possible.
- * If a promise is rejected, it is as "near" as possible too.
- * If it’s a fulfilled promise, the fulfillment value is nearer.
- * If it’s a deferred promise and the deferred has been resolved, the
- * resolution is "nearer".
- * @param object
- * @returns most resolved (nearest) form of the object
- */
-
-// XXX should we re-do this?
-Q.nearer = nearer;
-function nearer(value) {
-    if (isPromise(value)) {
-        var inspected = value.inspect();
-        if (inspected.state === "fulfilled") {
-            return inspected.value;
-        }
-    }
-    return value;
-}
-
-/**
- * @returns whether the given object is a promise.
- * Otherwise it is a fulfilled value.
- */
-Q.isPromise = isPromise;
-function isPromise(object) {
-    return object instanceof Promise;
-}
-
-Q.isPromiseAlike = isPromiseAlike;
-function isPromiseAlike(object) {
-    return isObject(object) && typeof object.then === "function";
-}
-
-/**
- * @returns whether the given object is a pending promise, meaning not
- * fulfilled or rejected.
- */
-Q.isPending = isPending;
-function isPending(object) {
-    return isPromise(object) && object.inspect().state === "pending";
-}
-
-Promise.prototype.isPending = function () {
-    return this.inspect().state === "pending";
-};
-
-/**
- * @returns whether the given object is a value or fulfilled
- * promise.
- */
-Q.isFulfilled = isFulfilled;
-function isFulfilled(object) {
-    return !isPromise(object) || object.inspect().state === "fulfilled";
-}
-
-Promise.prototype.isFulfilled = function () {
-    return this.inspect().state === "fulfilled";
-};
-
-/**
- * @returns whether the given object is a rejected promise.
- */
-Q.isRejected = isRejected;
-function isRejected(object) {
-    return isPromise(object) && object.inspect().state === "rejected";
-}
-
-Promise.prototype.isRejected = function () {
-    return this.inspect().state === "rejected";
-};
-
-//// BEGIN UNHANDLED REJECTION TRACKING
-
-// This promise library consumes exceptions thrown in handlers so they can be
-// handled by a subsequent promise.  The exceptions get added to this array when
-// they are created, and removed when they are handled.  Note that in ES6 or
-// shimmed environments, this would naturally be a `Set`.
-var unhandledReasons = [];
-var unhandledRejections = [];
-var reportedUnhandledRejections = [];
-var trackUnhandledRejections = true;
-
-function resetUnhandledRejections() {
-    unhandledReasons.length = 0;
-    unhandledRejections.length = 0;
-
-    if (!trackUnhandledRejections) {
-        trackUnhandledRejections = true;
-    }
-}
-
-function trackRejection(promise, reason) {
-    if (!trackUnhandledRejections) {
-        return;
-    }
-    if (typeof process === "object" && typeof process.emit === "function") {
-        Q.nextTick.runAfter(function () {
-            if (array_indexOf(unhandledRejections, promise) !== -1) {
-                process.emit("unhandledRejection", reason, promise);
-                reportedUnhandledRejections.push(promise);
-            }
-        });
-    }
-
-    unhandledRejections.push(promise);
-    if (reason && typeof reason.stack !== "undefined") {
-        unhandledReasons.push(reason.stack);
-    } else {
-        unhandledReasons.push("(no stack) " + reason);
-    }
-}
-
-function untrackRejection(promise) {
-    if (!trackUnhandledRejections) {
-        return;
-    }
-
-    var at = array_indexOf(unhandledRejections, promise);
-    if (at !== -1) {
-        if (typeof process === "object" && typeof process.emit === "function") {
-            Q.nextTick.runAfter(function () {
-                var atReport = array_indexOf(reportedUnhandledRejections, promise);
-                if (atReport !== -1) {
-                    process.emit("rejectionHandled", unhandledReasons[at], promise);
-                    reportedUnhandledRejections.splice(atReport, 1);
-                }
-            });
-        }
-        unhandledRejections.splice(at, 1);
-        unhandledReasons.splice(at, 1);
-    }
-}
-
-Q.resetUnhandledRejections = resetUnhandledRejections;
-
-Q.getUnhandledReasons = function () {
-    // Make a copy so that consumers can't interfere with our internal state.
-    return unhandledReasons.slice();
-};
-
-Q.stopUnhandledRejectionTracking = function () {
-    resetUnhandledRejections();
-    trackUnhandledRejections = false;
-};
-
-resetUnhandledRejections();
-
-//// END UNHANDLED REJECTION TRACKING
-
-/**
- * Constructs a rejected promise.
- * @param reason value describing the failure
- */
-Q.reject = reject;
-function reject(reason) {
-    var rejection = Promise({
-        "when": function (rejected) {
-            // note that the error has been handled
-            if (rejected) {
-                untrackRejection(this);
-            }
-            return rejected ? rejected(reason) : this;
-        }
-    }, function fallback() {
-        return this;
-    }, function inspect() {
-        return { state: "rejected", reason: reason };
-    });
-
-    // Note that the reason has not been handled.
-    trackRejection(rejection, reason);
-
-    return rejection;
-}
-
-/**
- * Constructs a fulfilled promise for an immediate reference.
- * @param value immediate reference
- */
-Q.fulfill = fulfill;
-function fulfill(value) {
-    return Promise({
-        "when": function () {
-            return value;
-        },
-        "get": function (name) {
-            return value[name];
-        },
-        "set": function (name, rhs) {
-            value[name] = rhs;
-        },
-        "delete": function (name) {
-            delete value[name];
-        },
-        "post": function (name, args) {
-            // Mark Miller proposes that post with no name should apply a
-            // promised function.
-            if (name === null || name === void 0) {
-                return value.apply(void 0, args);
-            } else {
-                return value[name].apply(value, args);
-            }
-        },
-        "apply": function (thisp, args) {
-            return value.apply(thisp, args);
-        },
-        "keys": function () {
-            return object_keys(value);
-        }
-    }, void 0, function inspect() {
-        return { state: "fulfilled", value: value };
-    });
-}
-
-/**
- * Converts thenables to Q promises.
- * @param promise thenable promise
- * @returns a Q promise
- */
-function coerce(promise) {
-    var deferred = defer();
-    Q.nextTick(function () {
-        try {
-            promise.then(deferred.resolve, deferred.reject, deferred.notify);
-        } catch (exception) {
-            deferred.reject(exception);
-        }
-    });
-    return deferred.promise;
-}
-
-/**
- * Annotates an object such that it will never be
- * transferred away from this process over any promise
- * communication channel.
- * @param object
- * @returns promise a wrapping of that object that
- * additionally responds to the "isDef" message
- * without a rejection.
- */
-Q.master = master;
-function master(object) {
-    return Promise({
-        "isDef": function () {}
-    }, function fallback(op, args) {
-        return dispatch(object, op, args);
-    }, function () {
-        return Q(object).inspect();
-    });
-}
-
-/**
- * Spreads the values of a promised array of arguments into the
- * fulfillment callback.
- * @param fulfilled callback that receives variadic arguments from the
- * promised array
- * @param rejected callback that receives the exception if the promise
- * is rejected.
- * @returns a promise for the return value or thrown exception of
- * either callback.
- */
-Q.spread = spread;
-function spread(value, fulfilled, rejected) {
-    return Q(value).spread(fulfilled, rejected);
-}
-
-Promise.prototype.spread = function (fulfilled, rejected) {
-    return this.all().then(function (array) {
-        return fulfilled.apply(void 0, array);
-    }, rejected);
-};
-
-/**
- * The async function is a decorator for generator functions, turning
- * them into asynchronous generators.  Although generators are only part
- * of the newest ECMAScript 6 drafts, this code does not cause syntax
- * errors in older engines.  This code should continue to work and will
- * in fact improve over time as the language improves.
- *
- * ES6 generators are currently part of V8 version 3.19 with the
- * --harmony-generators runtime flag enabled.  SpiderMonkey has had them
- * for longer, but under an older Python-inspired form.  This function
- * works on both kinds of generators.
- *
- * Decorates a generator function such that:
- *  - it may yield promises
- *  - execution will continue when that promise is fulfilled
- *  - the value of the yield expression will be the fulfilled value
- *  - it returns a promise for the return value (when the generator
- *    stops iterating)
- *  - the decorated function returns a promise for the return value
- *    of the generator or the first rejected promise among those
- *    yielded.
- *  - if an error is thrown in the generator, it propagates through
- *    every following yield until it is caught, or until it escapes
- *    the generator function altogether, and is translated into a
- *    rejection for the promise returned by the decorated generator.
- */
-Q.async = async;
-function async(makeGenerator) {
-    return function () {
-        // when verb is "send", arg is a value
-        // when verb is "throw", arg is an exception
-        function continuer(verb, arg) {
-            var result;
-
-            // Until V8 3.19 / Chromium 29 is released, SpiderMonkey is the only
-            // engine that has a deployed base of browsers that support generators.
-            // However, SM's generators use the Python-inspired semantics of
-            // outdated ES6 drafts.  We would like to support ES6, but we'd also
-            // like to make it possible to use generators in deployed browsers, so
-            // we also support Python-style generators.  At some point we can remove
-            // this block.
-
-            if (typeof StopIteration === "undefined") {
-                // ES6 Generators
-                try {
-                    result = generator[verb](arg);
-                } catch (exception) {
-                    return reject(exception);
-                }
-                if (result.done) {
-                    return Q(result.value);
-                } else {
-                    return when(result.value, callback, errback);
-                }
-            } else {
-                // SpiderMonkey Generators
-                // FIXME: Remove this case when SM does ES6 generators.
-                try {
-                    result = generator[verb](arg);
-                } catch (exception) {
-                    if (isStopIteration(exception)) {
-                        return Q(exception.value);
-                    } else {
-                        return reject(exception);
-                    }
-                }
-                return when(result, callback, errback);
-            }
-        }
-        var generator = makeGenerator.apply(this, arguments);
-        var callback = continuer.bind(continuer, "next");
-        var errback = continuer.bind(continuer, "throw");
-        return callback();
-    };
-}
-
-/**
- * The spawn function is a small wrapper around async that immediately
- * calls the generator and also ends the promise chain, so that any
- * unhandled errors are thrown instead of forwarded to the error
- * handler. This is useful because it's extremely common to run
- * generators at the top-level to work with libraries.
- */
-Q.spawn = spawn;
-function spawn(makeGenerator) {
-    Q.done(Q.async(makeGenerator)());
-}
-
-// FIXME: Remove this interface once ES6 generators are in SpiderMonkey.
-/**
- * Throws a ReturnValue exception to stop an asynchronous generator.
- *
- * This interface is a stop-gap measure to support generator return
- * values in older Firefox/SpiderMonkey.  In browsers that support ES6
- * generators like Chromium 29, just use "return" in your generator
- * functions.
- *
- * @param value the return value for the surrounding generator
- * @throws ReturnValue exception with the value.
- * @example
- * // ES6 style
- * Q.async(function* () {
- *      var foo = yield getFooPromise();
- *      var bar = yield getBarPromise();
- *      return foo + bar;
- * })
- * // Older SpiderMonkey style
- * Q.async(function () {
- *      var foo = yield getFooPromise();
- *      var bar = yield getBarPromise();
- *      Q.return(foo + bar);
- * })
- */
-Q["return"] = _return;
-function _return(value) {
-    throw new QReturnValue(value);
-}
-
-/**
- * The promised function decorator ensures that any promise arguments
- * are settled and passed as values (`this` is also settled and passed
- * as a value).  It will also ensure that the result of a function is
- * always a promise.
- *
- * @example
- * var add = Q.promised(function (a, b) {
- *     return a + b;
- * });
- * add(Q(a), Q(B));
- *
- * @param {function} callback The function to decorate
- * @returns {function} a function that has been decorated.
- */
-Q.promised = promised;
-function promised(callback) {
-    return function () {
-        return spread([this, all(arguments)], function (self, args) {
-            return callback.apply(self, args);
-        });
-    };
-}
-
-/**
- * sends a message to a value in a future turn
- * @param object* the recipient
- * @param op the name of the message operation, e.g., "when",
- * @param args further arguments to be forwarded to the operation
- * @returns result {Promise} a promise for the result of the operation
- */
-Q.dispatch = dispatch;
-function dispatch(object, op, args) {
-    return Q(object).dispatch(op, args);
-}
-
-Promise.prototype.dispatch = function (op, args) {
-    var self = this;
-    var deferred = defer();
-    Q.nextTick(function () {
-        self.promiseDispatch(deferred.resolve, op, args);
-    });
-    return deferred.promise;
-};
-
-/**
- * Gets the value of a property in a future turn.
- * @param object    promise or immediate reference for target object
- * @param name      name of property to get
- * @return promise for the property value
- */
-Q.get = function (object, key) {
-    return Q(object).dispatch("get", [key]);
-};
-
-Promise.prototype.get = function (key) {
-    return this.dispatch("get", [key]);
-};
-
-/**
- * Sets the value of a property in a future turn.
- * @param object    promise or immediate reference for object object
- * @param name      name of property to set
- * @param value     new value of property
- * @return promise for the return value
- */
-Q.set = function (object, key, value) {
-    return Q(object).dispatch("set", [key, value]);
-};
-
-Promise.prototype.set = function (key, value) {
-    return this.dispatch("set", [key, value]);
-};
-
-/**
- * Deletes a property in a future turn.
- * @param object    promise or immediate reference for target object
- * @param name      name of property to delete
- * @return promise for the return value
- */
-Q.del = // XXX legacy
-Q["delete"] = function (object, key) {
-    return Q(object).dispatch("delete", [key]);
-};
-
-Promise.prototype.del = // XXX legacy
-Promise.prototype["delete"] = function (key) {
-    return this.dispatch("delete", [key]);
-};
-
-/**
- * Invokes a method in a future turn.
- * @param object    promise or immediate reference for target object
- * @param name      name of method to invoke
- * @param value     a value to post, typically an array of
- *                  invocation arguments for promises that
- *                  are ultimately backed with `resolve` values,
- *                  as opposed to those backed with URLs
- *                  wherein the posted value can be any
- *                  JSON serializable object.
- * @return promise for the return value
- */
-// bound locally because it is used by other methods
-Q.mapply = // XXX As proposed by "Redsandro"
-Q.post = function (object, name, args) {
-    return Q(object).dispatch("post", [name, args]);
-};
-
-Promise.prototype.mapply = // XXX As proposed by "Redsandro"
-Promise.prototype.post = function (name, args) {
-    return this.dispatch("post", [name, args]);
-};
-
-/**
- * Invokes a method in a future turn.
- * @param object    promise or immediate reference for target object
- * @param name      name of method to invoke
- * @param ...args   array of invocation arguments
- * @return promise for the return value
- */
-Q.send = // XXX Mark Miller's proposed parlance
-Q.mcall = // XXX As proposed by "Redsandro"
-Q.invoke = function (object, name /*...args*/) {
-    return Q(object).dispatch("post", [name, array_slice(arguments, 2)]);
-};
-
-Promise.prototype.send = // XXX Mark Miller's proposed parlance
-Promise.prototype.mcall = // XXX As proposed by "Redsandro"
-Promise.prototype.invoke = function (name /*...args*/) {
-    return this.dispatch("post", [name, array_slice(arguments, 1)]);
-};
-
-/**
- * Applies the promised function in a future turn.
- * @param object    promise or immediate reference for target function
- * @param args      array of application arguments
- */
-Q.fapply = function (object, args) {
-    return Q(object).dispatch("apply", [void 0, args]);
-};
-
-Promise.prototype.fapply = function (args) {
-    return this.dispatch("apply", [void 0, args]);
-};
-
-/**
- * Calls the promised function in a future turn.
- * @param object    promise or immediate reference for target function
- * @param ...args   array of application arguments
- */
-Q["try"] =
-Q.fcall = function (object /* ...args*/) {
-    return Q(object).dispatch("apply", [void 0, array_slice(arguments, 1)]);
-};
-
-Promise.prototype.fcall = function (/*...args*/) {
-    return this.dispatch("apply", [void 0, array_slice(arguments)]);
-};
-
-/**
- * Binds the promised function, transforming return values into a fulfilled
- * promise and thrown errors into a rejected one.
- * @param object    promise or immediate reference for target function
- * @param ...args   array of application arguments
- */
-Q.fbind = function (object /*...args*/) {
-    var promise = Q(object);
-    var args = array_slice(arguments, 1);
-    return function fbound() {
-        return promise.dispatch("apply", [
-            this,
-            args.concat(array_slice(arguments))
-        ]);
-    };
-};
-Promise.prototype.fbind = function (/*...args*/) {
-    var promise = this;
-    var args = array_slice(arguments);
-    return function fbound() {
-        return promise.dispatch("apply", [
-            this,
-            args.concat(array_slice(arguments))
-        ]);
-    };
-};
-
-/**
- * Requests the names of the owned properties of a promised
- * object in a future turn.
- * @param object    promise or immediate reference for target object
- * @return promise for the keys of the eventually settled object
- */
-Q.keys = function (object) {
-    return Q(object).dispatch("keys", []);
-};
-
-Promise.prototype.keys = function () {
-    return this.dispatch("keys", []);
-};
-
-/**
- * Turns an array of promises into a promise for an array.  If any of
- * the promises gets rejected, the whole array is rejected immediately.
- * @param {Array*} an array (or promise for an array) of values (or
- * promises for values)
- * @returns a promise for an array of the corresponding values
- */
-// By Mark Miller
-// http://wiki.ecmascript.org/doku.php?id=strawman:concurrency&rev=1308776521#allfulfilled
-Q.all = all;
-function all(promises) {
-    return when(promises, function (promises) {
-        var pendingCount = 0;
-        var deferred = defer();
-        array_reduce(promises, function (undefined, promise, index) {
-            var snapshot;
-            if (
-                isPromise(promise) &&
-                (snapshot = promise.inspect()).state === "fulfilled"
-            ) {
-                promises[index] = snapshot.value;
-            } else {
-                ++pendingCount;
-                when(
-                    promise,
-                    function (value) {
-                        promises[index] = value;
-                        if (--pendingCount === 0) {
-                            deferred.resolve(promises);
-                        }
-                    },
-                    deferred.reject,
-                    function (progress) {
-                        deferred.notify({ index: index, value: progress });
-                    }
-                );
-            }
-        }, void 0);
-        if (pendingCount === 0) {
-            deferred.resolve(promises);
-        }
-        return deferred.promise;
-    });
-}
-
-Promise.prototype.all = function () {
-    return all(this);
-};
-
-/**
- * Returns the first resolved promise of an array. Prior rejected promises are
- * ignored.  Rejects only if all promises are rejected.
- * @param {Array*} an array containing values or promises for values
- * @returns a promise fulfilled with the value of the first resolved promise,
- * or a rejected promise if all promises are rejected.
- */
-Q.any = any;
-
-function any(promises) {
-    if (promises.length === 0) {
-        return Q.resolve();
-    }
-
-    var deferred = Q.defer();
-    var pendingCount = 0;
-    array_reduce(promises, function (prev, current, index) {
-        var promise = promises[index];
-
-        pendingCount++;
-
-        when(promise, onFulfilled, onRejected, onProgress);
-        function onFulfilled(result) {
-            deferred.resolve(result);
-        }
-        function onRejected() {
-            pendingCount--;
-            if (pendingCount === 0) {
-                deferred.reject(new Error(
-                    "Can't get fulfillment value from any promise, all " +
-                    "promises were rejected."
-                ));
-            }
-        }
-        function onProgress(progress) {
-            deferred.notify({
-                index: index,
-                value: progress
-            });
-        }
-    }, undefined);
-
-    return deferred.promise;
-}
-
-Promise.prototype.any = function () {
-    return any(this);
-};
-
-/**
- * Waits for all promises to be settled, either fulfilled or
- * rejected.  This is distinct from `all` since that would stop
- * waiting at the first rejection.  The promise returned by
- * `allResolved` will never be rejected.
- * @param promises a promise for an array (or an array) of promises
- * (or values)
- * @return a promise for an array of promises
- */
-Q.allResolved = deprecate(allResolved, "allResolved", "allSettled");
-function allResolved(promises) {
-    return when(promises, function (promises) {
-        promises = array_map(promises, Q);
-        return when(all(array_map(promises, function (promise) {
-            return when(promise, noop, noop);
-        })), function () {
-            return promises;
-        });
-    });
-}
-
-Promise.prototype.allResolved = function () {
-    return allResolved(this);
-};
-
-/**
- * @see Promise#allSettled
- */
-Q.allSettled = allSettled;
-function allSettled(promises) {
-    return Q(promises).allSettled();
-}
-
-/**
- * Turns an array of promises into a promise for an array of their states (as
- * returned by `inspect`) when they have all settled.
- * @param {Array[Any*]} values an array (or promise for an array) of values (or
- * promises for values)
- * @returns {Array[State]} an array of states for the respective values.
- */
-Promise.prototype.allSettled = function () {
-    return this.then(function (promises) {
-        return all(array_map(promises, function (promise) {
-            promise = Q(promise);
-            function regardless() {
-                return promise.inspect();
-            }
-            return promise.then(regardless, regardless);
-        }));
-    });
-};
-
-/**
- * Captures the failure of a promise, giving an oportunity to recover
- * with a callback.  If the given promise is fulfilled, the returned
- * promise is fulfilled.
- * @param {Any*} promise for something
- * @param {Function} callback to fulfill the returned promise if the
- * given promise is rejected
- * @returns a promise for the return value of the callback
- */
-Q.fail = // XXX legacy
-Q["catch"] = function (object, rejected) {
-    return Q(object).then(void 0, rejected);
-};
-
-Promise.prototype.fail = // XXX legacy
-Promise.prototype["catch"] = function (rejected) {
-    return this.then(void 0, rejected);
-};
-
-/**
- * Attaches a listener that can respond to progress notifications from a
- * promise's originating deferred. This listener receives the exact arguments
- * passed to ``deferred.notify``.
- * @param {Any*} promise for something
- * @param {Function} callback to receive any progress notifications
- * @returns the given promise, unchanged
- */
-Q.progress = progress;
-function progress(object, progressed) {
-    return Q(object).then(void 0, void 0, progressed);
-}
-
-Promise.prototype.progress = function (progressed) {
-    return this.then(void 0, void 0, progressed);
-};
-
-/**
- * Provides an opportunity to observe the settling of a promise,
- * regardless of whether the promise is fulfilled or rejected.  Forwards
- * the resolution to the returned promise when the callback is done.
- * The callback can return a promise to defer completion.
- * @param {Any*} promise
- * @param {Function} callback to observe the resolution of the given
- * promise, takes no arguments.
- * @returns a promise for the resolution of the given promise when
- * ``fin`` is done.
- */
-Q.fin = // XXX legacy
-Q["finally"] = function (object, callback) {
-    return Q(object)["finally"](callback);
-};
-
-Promise.prototype.fin = // XXX legacy
-Promise.prototype["finally"] = function (callback) {
-    callback = Q(callback);
-    return this.then(function (value) {
-        return callback.fcall().then(function () {
-            return value;
-        });
-    }, function (reason) {
-        // TODO attempt to recycle the rejection with "this".
-        return callback.fcall().then(function () {
-            throw reason;
-        });
-    });
-};
-
-/**
- * Terminates a chain of promises, forcing rejections to be
- * thrown as exceptions.
- * @param {Any*} promise at the end of a chain of promises
- * @returns nothing
- */
-Q.done = function (object, fulfilled, rejected, progress) {
-    return Q(object).done(fulfilled, rejected, progress);
-};
-
-Promise.prototype.done = function (fulfilled, rejected, progress) {
-    var onUnhandledError = function (error) {
-        // forward to a future turn so that ``when``
-        // does not catch it and turn it into a rejection.
-        Q.nextTick(function () {
-            makeStackTraceLong(error, promise);
-            if (Q.onerror) {
-                Q.onerror(error);
-            } else {
-                throw error;
-            }
-        });
-    };
-
-    // Avoid unnecessary `nextTick`ing via an unnecessary `when`.
-    var promise = fulfilled || rejected || progress ?
-        this.then(fulfilled, rejected, progress) :
-        this;
-
-    if (typeof process === "object" && process && process.domain) {
-        onUnhandledError = process.domain.bind(onUnhandledError);
-    }
-
-    promise.then(void 0, onUnhandledError);
-};
-
-/**
- * Causes a promise to be rejected if it does not get fulfilled before
- * some milliseconds time out.
- * @param {Any*} promise
- * @param {Number} milliseconds timeout
- * @param {Any*} custom error message or Error object (optional)
- * @returns a promise for the resolution of the given promise if it is
- * fulfilled before the timeout, otherwise rejected.
- */
-Q.timeout = function (object, ms, error) {
-    return Q(object).timeout(ms, error);
-};
-
-Promise.prototype.timeout = function (ms, error) {
-    var deferred = defer();
-    var timeoutId = setTimeout(function () {
-        if (!error || "string" === typeof error) {
-            error = new Error(error || "Timed out after " + ms + " ms");
-            error.code = "ETIMEDOUT";
-        }
-        deferred.reject(error);
-    }, ms);
-
-    this.then(function (value) {
-        clearTimeout(timeoutId);
-        deferred.resolve(value);
-    }, function (exception) {
-        clearTimeout(timeoutId);
-        deferred.reject(exception);
-    }, deferred.notify);
-
-    return deferred.promise;
-};
-
-/**
- * Returns a promise for the given value (or promised value), some
- * milliseconds after it resolved. Passes rejections immediately.
- * @param {Any*} promise
- * @param {Number} milliseconds
- * @returns a promise for the resolution of the given promise after milliseconds
- * time has elapsed since the resolution of the given promise.
- * If the given promise rejects, that is passed immediately.
- */
-Q.delay = function (object, timeout) {
-    if (timeout === void 0) {
-        timeout = object;
-        object = void 0;
-    }
-    return Q(object).delay(timeout);
-};
-
-Promise.prototype.delay = function (timeout) {
-    return this.then(function (value) {
-        var deferred = defer();
-        setTimeout(function () {
-            deferred.resolve(value);
-        }, timeout);
-        return deferred.promise;
-    });
-};
-
-/**
- * Passes a continuation to a Node function, which is called with the given
- * arguments provided as an array, and returns a promise.
- *
- *      Q.nfapply(FS.readFile, [__filename])
- *      .then(function (content) {
- *      })
- *
- */
-Q.nfapply = function (callback, args) {
-    return Q(callback).nfapply(args);
-};
-
-Promise.prototype.nfapply = function (args) {
-    var deferred = defer();
-    var nodeArgs = array_slice(args);
-    nodeArgs.push(deferred.makeNodeResolver());
-    this.fapply(nodeArgs).fail(deferred.reject);
-    return deferred.promise;
-};
-
-/**
- * Passes a continuation to a Node function, which is called with the given
- * arguments provided individually, and returns a promise.
- * @example
- * Q.nfcall(FS.readFile, __filename)
- * .then(function (content) {
- * })
- *
- */
-Q.nfcall = function (callback /*...args*/) {
-    var args = array_slice(arguments, 1);
-    return Q(callback).nfapply(args);
-};
-
-Promise.prototype.nfcall = function (/*...args*/) {
-    var nodeArgs = array_slice(arguments);
-    var deferred = defer();
-    nodeArgs.push(deferred.makeNodeResolver());
-    this.fapply(nodeArgs).fail(deferred.reject);
-    return deferred.promise;
-};
-
-/**
- * Wraps a NodeJS continuation passing function and returns an equivalent
- * version that returns a promise.
- * @example
- * Q.nfbind(FS.readFile, __filename)("utf-8")
- * .then(console.log)
- * .done()
- */
-Q.nfbind =
-Q.denodeify = function (callback /*...args*/) {
-    var baseArgs = array_slice(arguments, 1);
-    return function () {
-        var nodeArgs = baseArgs.concat(array_slice(arguments));
-        var deferred = defer();
-        nodeArgs.push(deferred.makeNodeResolver());
-        Q(callback).fapply(nodeArgs).fail(deferred.reject);
-        return deferred.promise;
-    };
-};
-
-Promise.prototype.nfbind =
-Promise.prototype.denodeify = function (/*...args*/) {
-    var args = array_slice(arguments);
-    args.unshift(this);
-    return Q.denodeify.apply(void 0, args);
-};
-
-Q.nbind = function (callback, thisp /*...args*/) {
-    var baseArgs = array_slice(arguments, 2);
-    return function () {
-        var nodeArgs = baseArgs.concat(array_slice(arguments));
-        var deferred = defer();
-        nodeArgs.push(deferred.makeNodeResolver());
-        function bound() {
-            return callback.apply(thisp, arguments);
-        }
-        Q(bound).fapply(nodeArgs).fail(deferred.reject);
-        return deferred.promise;
-    };
-};
-
-Promise.prototype.nbind = function (/*thisp, ...args*/) {
-    var args = array_slice(arguments, 0);
-    args.unshift(this);
-    return Q.nbind.apply(void 0, args);
-};
-
-/**
- * Calls a method of a Node-style object that accepts a Node-style
- * callback with a given array of arguments, plus a provided callback.
- * @param object an object that has the named method
- * @param {String} name name of the method of object
- * @param {Array} args arguments to pass to the method; the callback
- * will be provided by Q and appended to these arguments.
- * @returns a promise for the value or error
- */
-Q.nmapply = // XXX As proposed by "Redsandro"
-Q.npost = function (object, name, args) {
-    return Q(object).npost(name, args);
-};
-
-Promise.prototype.nmapply = // XXX As proposed by "Redsandro"
-Promise.prototype.npost = function (name, args) {
-    var nodeArgs = array_slice(args || []);
-    var deferred = defer();
-    nodeArgs.push(deferred.makeNodeResolver());
-    this.dispatch("post", [name, nodeArgs]).fail(deferred.reject);
-    return deferred.promise;
-};
-
-/**
- * Calls a method of a Node-style object that accepts a Node-style
- * callback, forwarding the given variadic arguments, plus a provided
- * callback argument.
- * @param object an object that has the named method
- * @param {String} name name of the method of object
- * @param ...args arguments to pass to the method; the callback will
- * be provided by Q and appended to these arguments.
- * @returns a promise for the value or error
- */
-Q.nsend = // XXX Based on Mark Miller's proposed "send"
-Q.nmcall = // XXX Based on "Redsandro's" proposal
-Q.ninvoke = function (object, name /*...args*/) {
-    var nodeArgs = array_slice(arguments, 2);
-    var deferred = defer();
-    nodeArgs.push(deferred.makeNodeResolver());
-    Q(object).dispatch("post", [name, nodeArgs]).fail(deferred.reject);
-    return deferred.promise;
-};
-
-Promise.prototype.nsend = // XXX Based on Mark Miller's proposed "send"
-Promise.prototype.nmcall = // XXX Based on "Redsandro's" proposal
-Promise.prototype.ninvoke = function (name /*...args*/) {
-    var nodeArgs = array_slice(arguments, 1);
-    var deferred = defer();
-    nodeArgs.push(deferred.makeNodeResolver());
-    this.dispatch("post", [name, nodeArgs]).fail(deferred.reject);
-    return deferred.promise;
-};
-
-/**
- * If a function would like to support both Node continuation-passing-style and
- * promise-returning-style, it can end its internal promise chain with
- * `nodeify(nodeback)`, forwarding the optional nodeback argument.  If the user
- * elects to use a nodeback, the result will be sent there.  If they do not
- * pass a nodeback, they will receive the result promise.
- * @param object a result (or a promise for a result)
- * @param {Function} nodeback a Node.js-style callback
- * @returns either the promise or nothing
- */
-Q.nodeify = nodeify;
-function nodeify(object, nodeback) {
-    return Q(object).nodeify(nodeback);
-}
-
-Promise.prototype.nodeify = function (nodeback) {
-    if (nodeback) {
-        this.then(function (value) {
-            Q.nextTick(function () {
-                nodeback(null, value);
-            });
-        }, function (error) {
-            Q.nextTick(function () {
-                nodeback(error);
-            });
-        });
-    } else {
-        return this;
-    }
-};
-
-Q.noConflict = function() {
-    throw new Error("Q.noConflict only works when Q is used as a global");
-};
-
-// All code before this point will be filtered from stack traces.
-var qEndingLine = captureLine();
-
-return Q;
-
-});
-
-}).call(this,require('_process'))
-},{"_process":5}],2:[function(require,module,exports){
+/*! ng-formio v2.3.1 | https://unpkg.com/ng-formio@2.3.1/LICENSE.txt */
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.formio = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 /*!
  * EventEmitter2
  * https://github.com/hij1nx/EventEmitter2
@@ -2075,17 +23,29 @@ return Q;
 
   function configure(conf) {
     if (conf) {
-
       this._conf = conf;
 
       conf.delimiter && (this.delimiter = conf.delimiter);
-      conf.maxListeners && (this._events.maxListeners = conf.maxListeners);
+      this._events.maxListeners = conf.maxListeners !== undefined ? conf.maxListeners : defaultMaxListeners;
       conf.wildcard && (this.wildcard = conf.wildcard);
       conf.newListener && (this.newListener = conf.newListener);
 
       if (this.wildcard) {
         this.listenerTree = {};
       }
+    } else {
+      this._events.maxListeners = defaultMaxListeners;
+    }
+  }
+
+  function logPossibleMemoryLeak(count) {
+    console.error('(node) warning: possible EventEmitter memory ' +
+      'leak detected. %d listeners added. ' +
+      'Use emitter.setMaxListeners() to increase limit.',
+      count);
+
+    if (console.trace){
+      console.trace();
     }
   }
 
@@ -2094,6 +54,7 @@ return Q;
     this.newListener = false;
     configure.call(this, conf);
   }
+  EventEmitter.EventEmitter2 = EventEmitter; // backwards compatibility for exporting EventEmitter property
 
   //
   // Attention, function return type now is array, always !
@@ -2222,7 +183,7 @@ return Q;
     var tree = this.listenerTree;
     var name = type.shift();
 
-    while (name) {
+    while (name !== undefined) {
 
       if (!tree[name]) {
         tree[name] = {};
@@ -2235,30 +196,20 @@ return Q;
         if (!tree._listeners) {
           tree._listeners = listener;
         }
-        else if(typeof tree._listeners === 'function') {
-          tree._listeners = [tree._listeners, listener];
-        }
-        else if (isArray(tree._listeners)) {
+        else {
+          if (typeof tree._listeners === 'function') {
+            tree._listeners = [tree._listeners];
+          }
 
           tree._listeners.push(listener);
 
-          if (!tree._listeners.warned) {
-
-            var m = defaultMaxListeners;
-
-            if (typeof this._events.maxListeners !== 'undefined') {
-              m = this._events.maxListeners;
-            }
-
-            if (m > 0 && tree._listeners.length > m) {
-
-              tree._listeners.warned = true;
-              console.error('(node) warning: possible EventEmitter memory ' +
-                            'leak detected. %d listeners added. ' +
-                            'Use emitter.setMaxListeners() to increase limit.',
-                            tree._listeners.length);
-              console.trace();
-            }
+          if (
+            !tree._listeners.warned &&
+            this._events.maxListeners > 0 &&
+            tree._listeners.length > this._events.maxListeners
+          ) {
+            tree._listeners.warned = true;
+            logPossibleMemoryLeak(tree._listeners.length);
           }
         }
         return true;
@@ -2278,10 +229,12 @@ return Q;
   EventEmitter.prototype.delimiter = '.';
 
   EventEmitter.prototype.setMaxListeners = function(n) {
-    this._events || init.call(this);
-    this._events.maxListeners = n;
-    if (!this._conf) this._conf = {};
-    this._conf.maxListeners = n;
+    if (n !== undefined) {
+      this._events || init.call(this);
+      this._events.maxListeners = n;
+      if (!this._conf) this._conf = {};
+      this._conf.maxListeners = n;
+    }
   };
 
   EventEmitter.prototype.event = '';
@@ -2319,89 +272,202 @@ return Q;
     var type = arguments[0];
 
     if (type === 'newListener' && !this.newListener) {
-      if (!this._events.newListener) { return false; }
-    }
-
-    // Loop through the *_all* functions and invoke them.
-    if (this._all) {
-      var l = arguments.length;
-      var args = new Array(l - 1);
-      for (var i = 1; i < l; i++) args[i - 1] = arguments[i];
-      for (i = 0, l = this._all.length; i < l; i++) {
-        this.event = type;
-        this._all[i].apply(this, args);
-      }
-    }
-
-    // If there is no 'error' event listener then throw.
-    if (type === 'error') {
-
-      if (!this._all &&
-        !this._events.error &&
-        !(this.wildcard && this.listenerTree.error)) {
-
-        if (arguments[1] instanceof Error) {
-          throw arguments[1]; // Unhandled 'error' event
-        } else {
-          throw new Error("Uncaught, unspecified 'error' event.");
-        }
+      if (!this._events.newListener) {
         return false;
       }
     }
 
+    var al = arguments.length;
+    var args,l,i,j;
     var handler;
 
-    if(this.wildcard) {
+    if (this._all && this._all.length) {
+      handler = this._all.slice();
+      if (al > 3) {
+        args = new Array(al);
+        for (j = 0; j < al; j++) args[j] = arguments[j];
+      }
+
+      for (i = 0, l = handler.length; i < l; i++) {
+        this.event = type;
+        switch (al) {
+        case 1:
+          handler[i].call(this, type);
+          break;
+        case 2:
+          handler[i].call(this, type, arguments[1]);
+          break;
+        case 3:
+          handler[i].call(this, type, arguments[1], arguments[2]);
+          break;
+        default:
+          handler[i].apply(this, args);
+        }
+      }
+    }
+
+    if (this.wildcard) {
       handler = [];
       var ns = typeof type === 'string' ? type.split(this.delimiter) : type.slice();
       searchListenerTree.call(this, handler, ns, this.listenerTree, 0);
+    } else {
+      handler = this._events[type];
+      if (typeof handler === 'function') {
+        this.event = type;
+        switch (al) {
+        case 1:
+          handler.call(this);
+          break;
+        case 2:
+          handler.call(this, arguments[1]);
+          break;
+        case 3:
+          handler.call(this, arguments[1], arguments[2]);
+          break;
+        default:
+          args = new Array(al - 1);
+          for (j = 1; j < al; j++) args[j - 1] = arguments[j];
+          handler.apply(this, args);
+        }
+        return true;
+      } else if (handler) {
+        // need to make copy of handlers because list can change in the middle
+        // of emit call
+        handler = handler.slice();
+      }
     }
-    else {
+
+    if (handler && handler.length) {
+      if (al > 3) {
+        args = new Array(al - 1);
+        for (j = 1; j < al; j++) args[j - 1] = arguments[j];
+      }
+      for (i = 0, l = handler.length; i < l; i++) {
+        this.event = type;
+        switch (al) {
+        case 1:
+          handler[i].call(this);
+          break;
+        case 2:
+          handler[i].call(this, arguments[1]);
+          break;
+        case 3:
+          handler[i].call(this, arguments[1], arguments[2]);
+          break;
+        default:
+          handler[i].apply(this, args);
+        }
+      }
+      return true;
+    } else if (!this._all && type === 'error') {
+      if (arguments[1] instanceof Error) {
+        throw arguments[1]; // Unhandled 'error' event
+      } else {
+        throw new Error("Uncaught, unspecified 'error' event.");
+      }
+      return false;
+    }
+
+    return !!this._all;
+  };
+
+  EventEmitter.prototype.emitAsync = function() {
+
+    this._events || init.call(this);
+
+    var type = arguments[0];
+
+    if (type === 'newListener' && !this.newListener) {
+        if (!this._events.newListener) { return Promise.resolve([false]); }
+    }
+
+    var promises= [];
+
+    var al = arguments.length;
+    var args,l,i,j;
+    var handler;
+
+    if (this._all) {
+      if (al > 3) {
+        args = new Array(al);
+        for (j = 1; j < al; j++) args[j] = arguments[j];
+      }
+      for (i = 0, l = this._all.length; i < l; i++) {
+        this.event = type;
+        switch (al) {
+        case 1:
+          promises.push(this._all[i].call(this, type));
+          break;
+        case 2:
+          promises.push(this._all[i].call(this, type, arguments[1]));
+          break;
+        case 3:
+          promises.push(this._all[i].call(this, type, arguments[1], arguments[2]));
+          break;
+        default:
+          promises.push(this._all[i].apply(this, args));
+        }
+      }
+    }
+
+    if (this.wildcard) {
+      handler = [];
+      var ns = typeof type === 'string' ? type.split(this.delimiter) : type.slice();
+      searchListenerTree.call(this, handler, ns, this.listenerTree, 0);
+    } else {
       handler = this._events[type];
     }
 
     if (typeof handler === 'function') {
       this.event = type;
-      if (arguments.length === 1) {
-        handler.call(this);
+      switch (al) {
+      case 1:
+        promises.push(handler.call(this));
+        break;
+      case 2:
+        promises.push(handler.call(this, arguments[1]));
+        break;
+      case 3:
+        promises.push(handler.call(this, arguments[1], arguments[2]));
+        break;
+      default:
+        args = new Array(al - 1);
+        for (j = 1; j < al; j++) args[j - 1] = arguments[j];
+        promises.push(handler.apply(this, args));
       }
-      else if (arguments.length > 1)
-        switch (arguments.length) {
-          case 2:
-            handler.call(this, arguments[1]);
-            break;
-          case 3:
-            handler.call(this, arguments[1], arguments[2]);
-            break;
-          // slower
-          default:
-            var l = arguments.length;
-            var args = new Array(l - 1);
-            for (var i = 1; i < l; i++) args[i - 1] = arguments[i];
-            handler.apply(this, args);
-        }
-      return true;
-    }
-    else if (handler) {
-      var l = arguments.length;
-      var args = new Array(l - 1);
-      for (var i = 1; i < l; i++) args[i - 1] = arguments[i];
-
-      var listeners = handler.slice();
-      for (var i = 0, l = listeners.length; i < l; i++) {
+    } else if (handler && handler.length) {
+      if (al > 3) {
+        args = new Array(al - 1);
+        for (j = 1; j < al; j++) args[j - 1] = arguments[j];
+      }
+      for (i = 0, l = handler.length; i < l; i++) {
         this.event = type;
-        listeners[i].apply(this, args);
+        switch (al) {
+        case 1:
+          promises.push(handler[i].call(this));
+          break;
+        case 2:
+          promises.push(handler[i].call(this, arguments[1]));
+          break;
+        case 3:
+          promises.push(handler[i].call(this, arguments[1], arguments[2]));
+          break;
+        default:
+          promises.push(handler[i].apply(this, args));
+        }
       }
-      return (listeners.length > 0) || !!this._all;
-    }
-    else {
-      return !!this._all;
+    } else if (!this._all && type === 'error') {
+      if (arguments[1] instanceof Error) {
+        return Promise.reject(arguments[1]); // Unhandled 'error' event
+      } else {
+        return Promise.reject("Uncaught, unspecified 'error' event.");
+      }
     }
 
+    return Promise.all(promises);
   };
 
   EventEmitter.prototype.on = function(type, listener) {
-
     if (typeof type === 'function') {
       this.onAny(type);
       return this;
@@ -2416,7 +482,7 @@ return Q;
     // adding it to the listeners, first emit "newListeners".
     this.emit('newListener', type, listener);
 
-    if(this.wildcard) {
+    if (this.wildcard) {
       growListenerTree.call(this, type, listener);
       return this;
     }
@@ -2425,44 +491,35 @@ return Q;
       // Optimize the case of one listener. Don't need the extra array object.
       this._events[type] = listener;
     }
-    else if(typeof this._events[type] === 'function') {
-      // Adding the second element, need to change to array.
-      this._events[type] = [this._events[type], listener];
-    }
-    else if (isArray(this._events[type])) {
+    else {
+      if (typeof this._events[type] === 'function') {
+        // Change to array.
+        this._events[type] = [this._events[type]];
+      }
+
       // If we've already got an array, just append.
       this._events[type].push(listener);
 
       // Check for listener leak
-      if (!this._events[type].warned) {
-
-        var m = defaultMaxListeners;
-
-        if (typeof this._events.maxListeners !== 'undefined') {
-          m = this._events.maxListeners;
-        }
-
-        if (m > 0 && this._events[type].length > m) {
-
-          this._events[type].warned = true;
-          console.error('(node) warning: possible EventEmitter memory ' +
-                        'leak detected. %d listeners added. ' +
-                        'Use emitter.setMaxListeners() to increase limit.',
-                        this._events[type].length);
-          console.trace();
-        }
+      if (
+        !this._events[type].warned &&
+        this._events.maxListeners > 0 &&
+        this._events[type].length > this._events.maxListeners
+      ) {
+        this._events[type].warned = true;
+        logPossibleMemoryLeak(this._events[type].length);
       }
     }
+
     return this;
   };
 
   EventEmitter.prototype.onAny = function(fn) {
-
     if (typeof fn !== 'function') {
       throw new Error('onAny only accepts instances of Function');
     }
 
-    if(!this._all) {
+    if (!this._all) {
       this._all = [];
     }
 
@@ -2526,6 +583,9 @@ return Q;
             delete this._events[type];
           }
         }
+
+        this.emit("removeListener", type, listener);
+
         return this;
       }
       else if (handlers === listener ||
@@ -2537,8 +597,30 @@ return Q;
         else {
           delete this._events[type];
         }
+
+        this.emit("removeListener", type, listener);
       }
     }
+
+    function recursivelyGarbageCollect(root) {
+      if (root === undefined) {
+        return;
+      }
+      var keys = Object.keys(root);
+      for (var i in keys) {
+        var key = keys[i];
+        var obj = root[key];
+        if ((obj instanceof Function) || (typeof obj !== "object") || (obj === null))
+          continue;
+        if (Object.keys(obj).length > 0) {
+          recursivelyGarbageCollect(root[key]);
+        }
+        if (Object.keys(obj).length === 0) {
+          delete root[key];
+        }
+      }
+    }
+    recursivelyGarbageCollect(this.listenerTree);
 
     return this;
   };
@@ -2550,10 +632,14 @@ return Q;
       for(i = 0, l = fns.length; i < l; i++) {
         if(fn === fns[i]) {
           fns.splice(i, 1);
+          this.emit("removeListenerAny", fn);
           return this;
         }
       }
     } else {
+      fns = this._all;
+      for(i = 0, l = fns.length; i < l; i++)
+        this.emit("removeListenerAny", fns[i]);
       this._all = [];
     }
     return this;
@@ -2567,7 +653,7 @@ return Q;
       return this;
     }
 
-    if(this.wildcard) {
+    if (this.wildcard) {
       var ns = typeof type === 'string' ? type.split(this.delimiter) : type.slice();
       var leafs = searchListenerTree.call(this, null, ns, this.listenerTree, 0);
 
@@ -2576,15 +662,14 @@ return Q;
         leaf._listeners = null;
       }
     }
-    else {
-      if (!this._events[type]) return this;
+    else if (this._events) {
       this._events[type] = null;
     }
     return this;
   };
 
   EventEmitter.prototype.listeners = function(type) {
-    if(this.wildcard) {
+    if (this.wildcard) {
       var handlers = [];
       var ns = typeof type === 'string' ? type.split(this.delimiter) : type.slice();
       searchListenerTree.call(this, handlers, ns, this.listenerTree, 0);
@@ -2598,6 +683,10 @@ return Q;
       this._events[type] = [this._events[type]];
     }
     return this._events[type];
+  };
+
+  EventEmitter.prototype.listenerCount = function(type) {
+    return this.listeners(type).length;
   };
 
   EventEmitter.prototype.listenersAny = function() {
@@ -2618,7 +707,7 @@ return Q;
     });
   } else if (typeof exports === 'object') {
     // CommonJS
-    exports.EventEmitter2 = EventEmitter;
+    module.exports = EventEmitter;
   }
   else {
     // Browser global.
@@ -2626,8 +715,19 @@ return Q;
   }
 }();
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(_dereq_,module,exports){
+'use strict';
+
 module.exports = {
+  /**
+   * Determine if a component is a layout component or not.
+   *
+   * @param {Object} component
+   *   The component to check.
+   *
+   * @returns {Boolean}
+   *   Whether or not the component is a layout component.
+   */
   isLayoutComponent: function isLayoutComponent(component) {
     return (
       (component.columns && Array.isArray(component.columns)) ||
@@ -2638,8 +738,15 @@ module.exports = {
 
   /**
    * Iterate through each component within a form.
-   * @param components
-   * @param fn
+   *
+   * @param {Object} components
+   *   The components to iterate.
+   * @param {Function} fn
+   *   The iteration function to invoke for each component.
+   * @param {Boolean} includeAll
+   *   Whether or not to include layout components.
+   * @param {String} path
+   *   The current data path of the element. Example: data.user.firstName
    */
   eachComponent: function eachComponent(components, fn, includeAll, path) {
     if (!components) return;
@@ -2684,9 +791,14 @@ module.exports = {
 
   /**
    * Get a component by its key
-   * @param components
-   * @param key The key of the component to get
-   * @returns The component that matches the given key, or undefined if not found.
+   *
+   * @param {Object} components
+   *   The components to iterate.
+   * @param {String} key
+   *   The key of the component to get.
+   *
+   * @returns {Object}
+   *   The component that matches the given key, or undefined if not found.
    */
   getComponent: function getComponent(components, key) {
     var result;
@@ -2700,9 +812,14 @@ module.exports = {
 
   /**
    * Flatten the form components for data manipulation.
-   * @param components
-   * @param flattened
-   * @returns {*|{}}
+   *
+   * @param {Object} components
+   *   The components to iterate.
+   * @param {Boolean} includeAll
+   *   Whether or not to include layout components.
+   *
+   * @returns {Object}
+   *   The flattened components map.
    */
   flattenComponents: function flattenComponents(components, includeAll) {
     var flattened = {};
@@ -2710,16 +827,69 @@ module.exports = {
       flattened[path] = component;
     }, includeAll);
     return flattened;
+  },
+
+  /**
+   * Get the value for a component key, in the given submission.
+   *
+   * @param {Object} submission
+   *   A submission object to search.
+   * @param {String} key
+   *   A for components API key to search for.
+   */
+  getValue: function getValue(submission, key) {
+    var data = submission.data || {};
+
+    var search = function search(data) {
+      var i;
+      var value;
+
+      if (data instanceof Array) {
+        for (i = 0; i < data.length; i++) {
+          if (typeof data[i] === 'object') {
+            value = search(data[i]);
+          }
+
+          if (value) {
+            return value;
+          }
+        }
+      }
+      else if (typeof data === 'object') {
+        if (data.hasOwnProperty(key)) {
+          return data[key];
+        }
+
+        var keys = Object.keys(data);
+        for (i = 0; i < keys.length; i++) {
+          if (typeof data[keys[i]] === 'object') {
+            value = search(data[keys[i]]);
+          }
+
+          if (value) {
+            return value;
+          }
+        }
+      }
+    };
+
+    return search(data);
   }
 };
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(_dereq_,module,exports){
 'use strict';
 
-require('whatwg-fetch');
-var Q = require('Q');
-var EventEmitter = require('eventemitter2').EventEmitter2;
-var copy = require('shallow-copy');
+// Intentionally use native-promise-only here... Other promise libraries (es6-promise)
+// duck-punch the global Promise definition which messes up Angular 2 since it
+// also duck-punches the global Promise definition. For now, keep native-promise-only.
+var Promise = _dereq_("native-promise-only");
+
+// Require other libraries.
+_dereq_('whatwg-fetch');
+var EventEmitter = _dereq_('eventemitter2').EventEmitter2;
+var copy = _dereq_('shallow-copy');
+var providers = _dereq_('./providers');
 
 // The default base url.
 var baseUrl = 'https://api.form.io';
@@ -2741,7 +911,7 @@ var identity = function(value) { return value; };
 // but don't want any data returned.
 var pluginWait = function(pluginFn) {
   var args = [].slice.call(arguments, 1);
-  return Q.all(plugins.map(function(plugin) {
+  return Promise.all(plugins.map(function(plugin) {
     return (plugin[pluginFn] || noop).apply(plugin, args);
   }));
 };
@@ -2754,8 +924,8 @@ var pluginGet = function(pluginFn) {
   var args = [].slice.call(arguments, 0);
   var callPlugin = function(index, pluginFn) {
     var plugin = plugins[index];
-    if (!plugin) return Q(null);
-    return Q((plugin && plugin[pluginFn] || noop).apply(plugin, [].slice.call(arguments, 2)))
+    if (!plugin) return Promise.resolve(null);
+    return Promise.resolve((plugin && plugin[pluginFn] || noop).apply(plugin, [].slice.call(arguments, 2)))
     .then(function(result) {
       if (result !== null && result !== undefined) return result;
       return callPlugin.apply(null, [index + 1].concat(args));
@@ -2947,7 +1117,7 @@ var _load = function(type) {
     else {
       query = this.query;
     }
-    if (!this[_id]) { return Q.reject('Missing ' + _id); }
+    if (!this[_id]) { return Promise.reject('Missing ' + _id); }
     return this.makeRequest(type, this[_url] + query, 'get', null, opts);
   };
 };
@@ -2981,7 +1151,7 @@ var _delete = function(type) {
   var _id = type + 'Id';
   var _url = type + 'Url';
   return function(opts) {
-    if (!this[_id]) { Q.reject('Nothing to delete'); }
+    if (!this[_id]) { Promise.reject('Nothing to delete'); }
     cache = {};
     return this.makeRequest(type, this[_url], 'delete', null, opts);
   };
@@ -3055,8 +1225,61 @@ Formio.prototype.loadActions = _index('actions');
 Formio.prototype.availableActions = function() { return this.makeRequest('availableActions', this.formUrl + '/actions'); };
 Formio.prototype.actionInfo = function(name) { return this.makeRequest('actionInfo', this.formUrl + '/actions/' + name); };
 
+Formio.prototype.uploadFile = function(storage, file, fileName, dir, progressCallback, url) {
+  var requestArgs = {
+    provider: storage,
+    method: 'upload',
+    file: file,
+    fileName: fileName,
+    dir: dir
+  }
+  var request = pluginWait('preRequest', requestArgs)
+    .then(function() {
+      return pluginGet('fileRequest', requestArgs)
+        .then(function(result) {
+          if (storage && (result === null || result === undefined)) {
+            if (providers.storage.hasOwnProperty(storage)) {
+              var provider = new providers.storage[storage](this);
+              return provider.uploadFile(file, fileName, dir, progressCallback, url);
+            }
+            else {
+              throw('Storage provider not found');
+            }
+          }
+          return result || {url: ''};
+        }.bind(this));
+    }.bind(this));
+
+  return pluginAlter('wrapFileRequestPromise', request, requestArgs);
+}
+
+Formio.prototype.downloadFile = function(file) {
+  var requestArgs = {
+    method: 'download',
+    file: file
+  };
+
+  var request = pluginWait('preRequest', requestArgs)
+    .then(function() {
+      return pluginGet('fileRequest', requestArgs)
+        .then(function(result) {
+          if (file.storage && (result === null || result === undefined)) {
+            if (providers.storage.hasOwnProperty(file.storage)) {
+              var provider = new providers.storage[file.storage](this);
+              return provider.downloadFile(file);
+            }
+            else {
+              throw('Storage provider not found');
+            }
+          }
+          return result || {url: ''};
+        }.bind(this));
+    }.bind(this));
+
+  return pluginAlter('wrapFileRequestPromise', request, requestArgs);
+}
+
 Formio.makeStaticRequest = function(url, method, data) {
-  var self = this;
   method = (method || 'GET').toUpperCase();
 
   var requestArgs = {
@@ -3065,7 +1288,7 @@ Formio.makeStaticRequest = function(url, method, data) {
     data: data
   };
 
-  var request = pluginWait('preStaticRequest', requestArgs)
+  var request = pluginWait('preRequest', requestArgs)
   .then(function() {
     return pluginGet('staticRequest', requestArgs)
     .then(function(result) {
@@ -3087,21 +1310,23 @@ Formio.loadProjects = function(query) {
   }
   return this.makeStaticRequest(baseUrl + '/project' + query);
 };
-Formio.request = function(url, method, data) {
-  if (!url) { return Q.reject('No url provided'); }
+
+Formio.request = function(url, method, data, header) {
+  if (!url) {
+    return Promise.reject('No url provided');
+  }
   method = (method || 'GET').toUpperCase();
   var cacheKey = btoa(url);
 
-  return Q().then(function() {
+  return new Promise(function(resolve, reject) {
     // Get the cached promise to save multiple loads.
     if (method === 'GET' && cache.hasOwnProperty(cacheKey)) {
-      return cache[cacheKey];
+      resolve(cache[cacheKey]);
     }
     else {
-      return Q()
-      .then(function() {
+      resolve(new Promise(function(resolve, reject) {
         // Set up and fetch request
-        var headers = new Headers({
+        var headers = header || new Headers({
           'Accept': 'application/json',
           'Content-type': 'application/json; charset=UTF-8'
         });
@@ -3119,7 +1344,7 @@ Formio.request = function(url, method, data) {
           options.body = JSON.stringify(data);
         }
 
-        return fetch(url, options);
+        resolve(fetch(url, options));
       })
       .catch(function(err) {
         err.message = 'Could not connect to API server (' + err.message + ')';
@@ -3157,6 +1382,10 @@ Formio.request = function(url, method, data) {
         else {
           if (response.status === 440) {
             Formio.setToken(null);
+            Formio.events.emit('formio.sessionExpired', response.body);
+          }
+          else if (response.status === 401) {
+            Formio.events.emit('formio.unauthorized', response.body);
           }
           // Parse and return the error as a rejected promise to reject this promise
           return (response.headers.get('content-type').indexOf('application/json') !== -1 ?
@@ -3167,17 +1396,21 @@ Formio.request = function(url, method, data) {
         }
       })
       .catch(function(err) {
+        if (err === 'Bad Token') {
+          Formio.setToken(null);
+          Formio.events.emit('formio.badToken', err);
+        }
         // Remove failed promises from cache
         delete cache[cacheKey];
         // Propagate error so client can handle accordingly
         throw err;
-      });
+      }));
     }
   })
   .then(function(result) {
     // Save the cache
     if (method === 'GET') {
-      cache[cacheKey] = Q(result);
+      cache[cacheKey] = Promise.resolve(result);
     }
 
     // Shallow copy result so modifications don't end up in cache
@@ -3215,12 +1448,19 @@ Formio.setToken = function(token) {
   }
   Formio.currentUser(); // Run this so user is updated if null
 };
+
 Formio.getToken = function() {
   if (this.token) { return this.token; }
-  var token = localStorage.getItem('formioToken') || '';
-  this.token = token;
-  return token;
+  try {
+    var token = localStorage.getItem('formioToken') || '';
+    this.token = token;
+    return token;
+  }
+  catch (e) {
+    return '';
+  }
 };
+
 Formio.setUser = function(user) {
   if (!user) {
     this.setToken(null);
@@ -3240,8 +1480,14 @@ Formio.setUser = function(user) {
     // Do nothing.
   }
 };
+
 Formio.getUser = function() {
-  return JSON.parse(localStorage.getItem('formioUser') || null);
+  try {
+    return JSON.parse(localStorage.getItem('formioUser') || null);
+  }
+  catch (e) {
+    return;
+  }
 };
 
 Formio.setBaseUrl = function(url) {
@@ -3250,30 +1496,34 @@ Formio.setBaseUrl = function(url) {
     appUrl = url;
   }
 };
+
 Formio.getBaseUrl = function() {
   return baseUrl;
 };
+
 Formio.setAppUrl = function(url) {
   appUrl = url;
   appUrlSet = true;
 };
+
 Formio.getAppUrl = function() {
   return appUrl;
 };
+
 Formio.clearCache = function() { cache = {}; };
 
 Formio.currentUser = function() {
   var url = baseUrl + '/current';
   var user = this.getUser();
   if (user) {
-    return pluginAlter('wrapStaticRequestPromise', Q(user), {
+    return pluginAlter('wrapStaticRequestPromise', Promise.resolve(user), {
       url: url,
       method: 'GET'
     })
   }
   var token = this.getToken();
   if (!token) {
-    return pluginAlter('wrapStaticRequestPromise', Q(null), {
+    return pluginAlter('wrapStaticRequestPromise', Promise.resolve(null), {
       url: url,
       method: 'GET'
     })
@@ -3287,12 +1537,15 @@ Formio.currentUser = function() {
 
 // Keep track of their logout callback.
 Formio.logout = function() {
-  return this.makeStaticRequest(baseUrl + '/logout').finally(function() {
+  var onLogout = function(result) {
     this.setToken(null);
     this.setUser(null);
     Formio.clearCache();
-  }.bind(this));
+    return result;
+  }.bind(this);
+  return this.makeStaticRequest(baseUrl + '/logout').then(onLogout).catch(onLogout);
 };
+
 Formio.fieldData = function(data, component) {
   if (!data) { return ''; }
   if (!component || !component.key) { return data; }
@@ -3331,6 +1584,8 @@ Formio.fieldData = function(data, component) {
     return data[component.key];
   }
 };
+
+Formio.providers = providers;
 
 /**
  * EventEmitter for Formio events.
@@ -3382,103 +1637,647 @@ Formio.deregisterPlugin = function(plugin) {
 
 module.exports = Formio;
 
-},{"Q":1,"eventemitter2":2,"shallow-copy":6,"whatwg-fetch":7}],5:[function(require,module,exports){
-// shim for using process in browser
+},{"./providers":4,"eventemitter2":1,"native-promise-only":9,"shallow-copy":10,"whatwg-fetch":11}],4:[function(_dereq_,module,exports){
+module.exports = {
+  storage: _dereq_('./storage')
+};
 
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
+},{"./storage":6}],5:[function(_dereq_,module,exports){
+var Promise = _dereq_("native-promise-only");
+var dropbox = function(formio) {
+  return {
+    uploadFile: function(file, fileName, dir, progressCallback) {
+      return new Promise(function(resolve, reject) {
+        // Send the file with data.
+        var xhr = new XMLHttpRequest();
 
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
+        if (typeof progressCallback === 'function') {
+          xhr.upload.onprogress = progressCallback;
+        }
 
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = setTimeout(cleanUpNextTick);
-    draining = true;
+        var fd = new FormData();
+        fd.append('name', fileName);
+        fd.append('dir', dir);
+        fd.append('file', file);
 
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
+        // Fire on network error.
+        xhr.onerror = function(err) {
+          err.networkError = true;
+          reject(err);
+        }
+
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var response = JSON.parse(xhr.response);
+            response.storage = 'dropbox';
+            response.size = file.size;
+            response.type = file.type;
+            response.url = response.path_lower;
+            resolve(response);
+          }
+          else {
+            reject(xhr.response || 'Unable to upload file');
+          }
+        };
+
+        xhr.onabort = function(err) {
+          reject(err);
+        }
+
+        xhr.open('POST', formio.formUrl + '/storage/dropbox');
+        try {
+          var token = localStorage.getItem('formioToken');
+        }
+        catch (e) {
+          // Swallow error.
+        }
+        if (token) {
+          xhr.setRequestHeader('x-jwt-token', token);
+        }
+        xhr.send(fd);
+      });
+    },
+    downloadFile: function(file) {
+      file.url = formio.formUrl + '/storage/dropbox?path_lower=' + file.path_lower + (token ? '&x-jwt-token=' + token : '');
+      return Promise.resolve(file);
+    }
+  };
+};
+
+dropbox.title = 'Dropbox';
+dropbox.name = 'dropbox';
+module.exports = dropbox;
+
+
+
+},{"native-promise-only":9}],6:[function(_dereq_,module,exports){
+module.exports = {
+  dropbox: _dereq_('./dropbox.js'),
+  s3: _dereq_('./s3.js'),
+  url: _dereq_('./url.js'),
+};
+
+},{"./dropbox.js":5,"./s3.js":7,"./url.js":8}],7:[function(_dereq_,module,exports){
+var Promise = _dereq_("native-promise-only");
+var s3 = function(formio) {
+  return {
+    uploadFile: function(file, fileName, dir, progressCallback) {
+      return new Promise(function(resolve, reject) {
+        // Send the pre response to sign the upload.
+        var pre = new XMLHttpRequest();
+
+        var prefd = new FormData();
+        prefd.append('name', fileName);
+        prefd.append('size', file.size);
+        prefd.append('type', file.type);
+
+        // This only fires on a network error.
+        pre.onerror = function(err) {
+          err.networkError = true;
+          reject(err);
+        }
+
+        pre.onabort = function(err) {
+          reject(err);
+        }
+
+        pre.onload = function() {
+          if (pre.status >= 200 && pre.status < 300) {
+            var response = JSON.parse(pre.response);
+
+            // Send the file with data.
+            var xhr = new XMLHttpRequest();
+
+            if (typeof progressCallback === 'function') {
+              xhr.upload.onprogress = progressCallback;
             }
+
+            response.data.fileName = fileName;
+            response.data.key += dir + fileName;
+
+            var fd = new FormData();
+            for(var key in response.data) {
+              fd.append(key, response.data[key]);
+            }
+            fd.append('file', file);
+
+            // Fire on network error.
+            xhr.onerror = function(err) {
+              err.networkError = true;
+              reject(err);
+            }
+
+            xhr.onload = function() {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                resolve({
+                  storage: 's3',
+                  name: fileName,
+                  bucket: response.bucket,
+                  key: response.data.key,
+                  url: response.url + response.data.key,
+                  acl: response.data.acl,
+                  size: file.size,
+                  type: file.type
+                });
+              }
+              else {
+                reject(xhr.response || 'Unable to upload file');
+              }
+            };
+
+            xhr.onabort = function(err) {
+              reject(err);
+            }
+
+            xhr.open('POST', response.url);
+
+            xhr.send(fd);
+          }
+          else {
+            reject(pre.response || 'Unable to sign file');
+          }
+        };
+
+        pre.open('POST', formio.formUrl + '/storage/s3');
+
+        pre.setRequestHeader('Accept', 'application/json');
+        pre.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+        try {
+          var token = localStorage.getItem('formioToken');
         }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    clearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
+        catch (e) {
+          // swallow error.
         }
+        if (token) {
+          pre.setRequestHeader('x-jwt-token', token);
+        }
+
+        pre.send(JSON.stringify({
+          name: fileName,
+          size: file.size,
+          type: file.type
+        }));
+      });
+    },
+    downloadFile: function(file) {
+      if (file.acl !== 'public-read') {
+        return formio.makeRequest('file', formio.formUrl + '/storage/s3?bucket=' + file.bucket + '&key=' + file.key, 'GET');
+      }
+      else {
+        return Promise.resolve(file);
+      }
     }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        setTimeout(drainQueue, 0);
+  };
+};
+
+s3.title = 'S3';
+s3.name = 's3';
+module.exports = s3;
+
+},{"native-promise-only":9}],8:[function(_dereq_,module,exports){
+var Promise = _dereq_("native-promise-only");
+var url = function(formio) {
+  return {
+    title: 'Url',
+    name: 'url',
+    uploadFile: function(file, fileName, dir, progressCallback, url) {
+      return new Promise(function(resolve, reject) {
+        var data = {
+          dir: dir,
+          name: fileName,
+          file: file
+        };
+
+        // Send the file with data.
+        var xhr = new XMLHttpRequest();
+
+        if (typeof progressCallback === 'function') {
+          xhr.upload.onprogress = progressCallback;
+        }
+
+        fd = new FormData();
+        for(var key in data) {
+          fd.append(key, data[key]);
+        }
+
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            // Need to test if xhr.response is decoded or not.
+            resolve({
+              storage: 'url',
+              name: fileName,
+              url: xhr.response.url,
+              size: file.size,
+              type: file.type
+            });
+          }
+          else {
+            reject(xhr.response || 'Unable to upload file');
+          }
+        };
+
+        // Fire on network error.
+        xhr.onerror = function() {
+          reject(xhr);
+        }
+
+        xhr.onabort = function() {
+          reject(xhr);
+        }
+
+        xhr.open('POST', url);
+        xhr.send(fd);
+      });
+    },
+    downloadFile: function(file) {
+      // Return the original as there is nothing to do.
+      return Promise.resolve(file);
     }
+  };
 };
 
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
+url.name = 'url';
+url.title = 'Url';
+module.exports = url;
 
-function noop() {}
+},{"native-promise-only":9}],9:[function(_dereq_,module,exports){
+(function (global){
+/*! Native Promise Only
+    v0.8.1 (c) Kyle Simpson
+    MIT License: http://getify.mit-license.org
+*/
 
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
+(function UMD(name,context,definition){
+	// special form of UMD for polyfilling across evironments
+	context[name] = context[name] || definition();
+	if (typeof module != "undefined" && module.exports) { module.exports = context[name]; }
+	else if (typeof define == "function" && define.amd) { define(function $AMD$(){ return context[name]; }); }
+})("Promise",typeof global != "undefined" ? global : this,function DEF(){
+	/*jshint validthis:true */
+	"use strict";
 
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
+	var builtInProp, cycle, scheduling_queue,
+		ToString = Object.prototype.toString,
+		timer = (typeof setImmediate != "undefined") ?
+			function timer(fn) { return setImmediate(fn); } :
+			setTimeout
+	;
 
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
+	// dammit, IE8.
+	try {
+		Object.defineProperty({},"x",{});
+		builtInProp = function builtInProp(obj,name,val,config) {
+			return Object.defineProperty(obj,name,{
+				value: val,
+				writable: true,
+				configurable: config !== false
+			});
+		};
+	}
+	catch (err) {
+		builtInProp = function builtInProp(obj,name,val) {
+			obj[name] = val;
+			return obj;
+		};
+	}
 
-},{}],6:[function(require,module,exports){
+	// Note: using a queue instead of array for efficiency
+	scheduling_queue = (function Queue() {
+		var first, last, item;
+
+		function Item(fn,self) {
+			this.fn = fn;
+			this.self = self;
+			this.next = void 0;
+		}
+
+		return {
+			add: function add(fn,self) {
+				item = new Item(fn,self);
+				if (last) {
+					last.next = item;
+				}
+				else {
+					first = item;
+				}
+				last = item;
+				item = void 0;
+			},
+			drain: function drain() {
+				var f = first;
+				first = last = cycle = void 0;
+
+				while (f) {
+					f.fn.call(f.self);
+					f = f.next;
+				}
+			}
+		};
+	})();
+
+	function schedule(fn,self) {
+		scheduling_queue.add(fn,self);
+		if (!cycle) {
+			cycle = timer(scheduling_queue.drain);
+		}
+	}
+
+	// promise duck typing
+	function isThenable(o) {
+		var _then, o_type = typeof o;
+
+		if (o != null &&
+			(
+				o_type == "object" || o_type == "function"
+			)
+		) {
+			_then = o.then;
+		}
+		return typeof _then == "function" ? _then : false;
+	}
+
+	function notify() {
+		for (var i=0; i<this.chain.length; i++) {
+			notifyIsolated(
+				this,
+				(this.state === 1) ? this.chain[i].success : this.chain[i].failure,
+				this.chain[i]
+			);
+		}
+		this.chain.length = 0;
+	}
+
+	// NOTE: This is a separate function to isolate
+	// the `try..catch` so that other code can be
+	// optimized better
+	function notifyIsolated(self,cb,chain) {
+		var ret, _then;
+		try {
+			if (cb === false) {
+				chain.reject(self.msg);
+			}
+			else {
+				if (cb === true) {
+					ret = self.msg;
+				}
+				else {
+					ret = cb.call(void 0,self.msg);
+				}
+
+				if (ret === chain.promise) {
+					chain.reject(TypeError("Promise-chain cycle"));
+				}
+				else if (_then = isThenable(ret)) {
+					_then.call(ret,chain.resolve,chain.reject);
+				}
+				else {
+					chain.resolve(ret);
+				}
+			}
+		}
+		catch (err) {
+			chain.reject(err);
+		}
+	}
+
+	function resolve(msg) {
+		var _then, self = this;
+
+		// already triggered?
+		if (self.triggered) { return; }
+
+		self.triggered = true;
+
+		// unwrap
+		if (self.def) {
+			self = self.def;
+		}
+
+		try {
+			if (_then = isThenable(msg)) {
+				schedule(function(){
+					var def_wrapper = new MakeDefWrapper(self);
+					try {
+						_then.call(msg,
+							function $resolve$(){ resolve.apply(def_wrapper,arguments); },
+							function $reject$(){ reject.apply(def_wrapper,arguments); }
+						);
+					}
+					catch (err) {
+						reject.call(def_wrapper,err);
+					}
+				})
+			}
+			else {
+				self.msg = msg;
+				self.state = 1;
+				if (self.chain.length > 0) {
+					schedule(notify,self);
+				}
+			}
+		}
+		catch (err) {
+			reject.call(new MakeDefWrapper(self),err);
+		}
+	}
+
+	function reject(msg) {
+		var self = this;
+
+		// already triggered?
+		if (self.triggered) { return; }
+
+		self.triggered = true;
+
+		// unwrap
+		if (self.def) {
+			self = self.def;
+		}
+
+		self.msg = msg;
+		self.state = 2;
+		if (self.chain.length > 0) {
+			schedule(notify,self);
+		}
+	}
+
+	function iteratePromises(Constructor,arr,resolver,rejecter) {
+		for (var idx=0; idx<arr.length; idx++) {
+			(function IIFE(idx){
+				Constructor.resolve(arr[idx])
+				.then(
+					function $resolver$(msg){
+						resolver(idx,msg);
+					},
+					rejecter
+				);
+			})(idx);
+		}
+	}
+
+	function MakeDefWrapper(self) {
+		this.def = self;
+		this.triggered = false;
+	}
+
+	function MakeDef(self) {
+		this.promise = self;
+		this.state = 0;
+		this.triggered = false;
+		this.chain = [];
+		this.msg = void 0;
+	}
+
+	function Promise(executor) {
+		if (typeof executor != "function") {
+			throw TypeError("Not a function");
+		}
+
+		if (this.__NPO__ !== 0) {
+			throw TypeError("Not a promise");
+		}
+
+		// instance shadowing the inherited "brand"
+		// to signal an already "initialized" promise
+		this.__NPO__ = 1;
+
+		var def = new MakeDef(this);
+
+		this["then"] = function then(success,failure) {
+			var o = {
+				success: typeof success == "function" ? success : true,
+				failure: typeof failure == "function" ? failure : false
+			};
+			// Note: `then(..)` itself can be borrowed to be used against
+			// a different promise constructor for making the chained promise,
+			// by substituting a different `this` binding.
+			o.promise = new this.constructor(function extractChain(resolve,reject) {
+				if (typeof resolve != "function" || typeof reject != "function") {
+					throw TypeError("Not a function");
+				}
+
+				o.resolve = resolve;
+				o.reject = reject;
+			});
+			def.chain.push(o);
+
+			if (def.state !== 0) {
+				schedule(notify,def);
+			}
+
+			return o.promise;
+		};
+		this["catch"] = function $catch$(failure) {
+			return this.then(void 0,failure);
+		};
+
+		try {
+			executor.call(
+				void 0,
+				function publicResolve(msg){
+					resolve.call(def,msg);
+				},
+				function publicReject(msg) {
+					reject.call(def,msg);
+				}
+			);
+		}
+		catch (err) {
+			reject.call(def,err);
+		}
+	}
+
+	var PromisePrototype = builtInProp({},"constructor",Promise,
+		/*configurable=*/false
+	);
+
+	// Note: Android 4 cannot use `Object.defineProperty(..)` here
+	Promise.prototype = PromisePrototype;
+
+	// built-in "brand" to signal an "uninitialized" promise
+	builtInProp(PromisePrototype,"__NPO__",0,
+		/*configurable=*/false
+	);
+
+	builtInProp(Promise,"resolve",function Promise$resolve(msg) {
+		var Constructor = this;
+
+		// spec mandated checks
+		// note: best "isPromise" check that's practical for now
+		if (msg && typeof msg == "object" && msg.__NPO__ === 1) {
+			return msg;
+		}
+
+		return new Constructor(function executor(resolve,reject){
+			if (typeof resolve != "function" || typeof reject != "function") {
+				throw TypeError("Not a function");
+			}
+
+			resolve(msg);
+		});
+	});
+
+	builtInProp(Promise,"reject",function Promise$reject(msg) {
+		return new this(function executor(resolve,reject){
+			if (typeof resolve != "function" || typeof reject != "function") {
+				throw TypeError("Not a function");
+			}
+
+			reject(msg);
+		});
+	});
+
+	builtInProp(Promise,"all",function Promise$all(arr) {
+		var Constructor = this;
+
+		// spec mandated checks
+		if (ToString.call(arr) != "[object Array]") {
+			return Constructor.reject(TypeError("Not an array"));
+		}
+		if (arr.length === 0) {
+			return Constructor.resolve([]);
+		}
+
+		return new Constructor(function executor(resolve,reject){
+			if (typeof resolve != "function" || typeof reject != "function") {
+				throw TypeError("Not a function");
+			}
+
+			var len = arr.length, msgs = Array(len), count = 0;
+
+			iteratePromises(Constructor,arr,function resolver(idx,msg) {
+				msgs[idx] = msg;
+				if (++count === len) {
+					resolve(msgs);
+				}
+			},reject);
+		});
+	});
+
+	builtInProp(Promise,"race",function Promise$race(arr) {
+		var Constructor = this;
+
+		// spec mandated checks
+		if (ToString.call(arr) != "[object Array]") {
+			return Constructor.reject(TypeError("Not an array"));
+		}
+
+		return new Constructor(function executor(resolve,reject){
+			if (typeof resolve != "function" || typeof reject != "function") {
+				throw TypeError("Not a function");
+			}
+
+			iteratePromises(Constructor,arr,function resolver(idx,msg){
+				resolve(msg);
+			},reject);
+		});
+	});
+
+	return Promise;
+});
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],10:[function(_dereq_,module,exports){
 module.exports = function (obj) {
     if (!obj || typeof obj !== 'object') return obj;
     
@@ -3515,8 +2314,8 @@ var isArray = Array.isArray || function (xs) {
     return {}.toString.call(xs) === '[object Array]';
 };
 
-},{}],7:[function(require,module,exports){
-(function() {
+},{}],11:[function(_dereq_,module,exports){
+(function(self) {
   'use strict';
 
   if (self.fetch) {
@@ -3525,7 +2324,7 @@ var isArray = Array.isArray || function (xs) {
 
   function normalizeName(name) {
     if (typeof name !== 'string') {
-      name = name.toString();
+      name = String(name)
     }
     if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
       throw new TypeError('Invalid character in header field name')
@@ -3535,7 +2334,7 @@ var isArray = Array.isArray || function (xs) {
 
   function normalizeValue(value) {
     if (typeof value !== 'string') {
-      value = value.toString();
+      value = String(value)
     }
     return value
   }
@@ -3628,13 +2427,14 @@ var isArray = Array.isArray || function (xs) {
   var support = {
     blob: 'FileReader' in self && 'Blob' in self && (function() {
       try {
-        new Blob();
+        new Blob()
         return true
       } catch(e) {
         return false
       }
     })(),
-    formData: 'FormData' in self
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
   }
 
   function Body() {
@@ -3651,8 +2451,19 @@ var isArray = Array.isArray || function (xs) {
         this._bodyFormData = body
       } else if (!body) {
         this._bodyText = ''
+      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+        // Only support ArrayBuffers for POST method.
+        // Receiving ArrayBuffers happens via Blobs, instead.
       } else {
         throw new Error('unsupported BodyInit type')
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type)
+        }
       }
     }
 
@@ -3718,20 +2529,44 @@ var isArray = Array.isArray || function (xs) {
     return (methods.indexOf(upcased) > -1) ? upcased : method
   }
 
-  function Request(url, options) {
+  function Request(input, options) {
     options = options || {}
-    this.url = url
+    var body = options.body
+    if (Request.prototype.isPrototypeOf(input)) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read')
+      }
+      this.url = input.url
+      this.credentials = input.credentials
+      if (!options.headers) {
+        this.headers = new Headers(input.headers)
+      }
+      this.method = input.method
+      this.mode = input.mode
+      if (!body) {
+        body = input._bodyInit
+        input.bodyUsed = true
+      }
+    } else {
+      this.url = input
+    }
 
-    this.credentials = options.credentials || 'omit'
-    this.headers = new Headers(options.headers)
-    this.method = normalizeMethod(options.method || 'GET')
-    this.mode = options.mode || null
+    this.credentials = options.credentials || this.credentials || 'omit'
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers)
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET')
+    this.mode = options.mode || this.mode || null
     this.referrer = null
 
-    if ((this.method === 'GET' || this.method === 'HEAD') && options.body) {
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
       throw new TypeError('Body not allowed for GET or HEAD requests')
     }
-    this._initBody(options.body)
+    this._initBody(body)
+  }
+
+  Request.prototype.clone = function() {
+    return new Request(this)
   }
 
   function decode(body) {
@@ -3749,7 +2584,7 @@ var isArray = Array.isArray || function (xs) {
 
   function headers(xhr) {
     var head = new Headers()
-    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+    var pairs = (xhr.getAllResponseHeaders() || '').trim().split('\n')
     pairs.forEach(function(header) {
       var split = header.trim().split(':')
       var key = split.shift().trim()
@@ -3766,32 +2601,55 @@ var isArray = Array.isArray || function (xs) {
       options = {}
     }
 
-    this._initBody(bodyInit)
     this.type = 'default'
-    this.url = null
     this.status = options.status
     this.ok = this.status >= 200 && this.status < 300
     this.statusText = options.statusText
     this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
     this.url = options.url || ''
+    this._initBody(bodyInit)
   }
 
   Body.call(Response.prototype)
 
-  self.Headers = Headers;
-  self.Request = Request;
-  self.Response = Response;
+  Response.prototype.clone = function() {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    })
+  }
 
-  self.fetch = function(input, init) {
-    // TODO: Request constructor should accept input, init
-    var request
-    if (Request.prototype.isPrototypeOf(input) && !init) {
-      request = input
-    } else {
-      request = new Request(input, init)
+  Response.error = function() {
+    var response = new Response(null, {status: 0, statusText: ''})
+    response.type = 'error'
+    return response
+  }
+
+  var redirectStatuses = [301, 302, 303, 307, 308]
+
+  Response.redirect = function(url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code')
     }
 
+    return new Response(null, {status: status, headers: {location: url}})
+  }
+
+  self.Headers = Headers
+  self.Request = Request
+  self.Response = Response
+
+  self.fetch = function(input, init) {
     return new Promise(function(resolve, reject) {
+      var request
+      if (Request.prototype.isPrototypeOf(input) && !init) {
+        request = input
+      } else {
+        request = new Request(input, init)
+      }
+
       var xhr = new XMLHttpRequest()
 
       function responseURL() {
@@ -3804,7 +2662,7 @@ var isArray = Array.isArray || function (xs) {
           return xhr.getResponseHeader('X-Request-URL')
         }
 
-        return;
+        return
       }
 
       xhr.onload = function() {
@@ -3819,11 +2677,15 @@ var isArray = Array.isArray || function (xs) {
           headers: headers(xhr),
           url: responseURL()
         }
-        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+        var body = 'response' in xhr ? xhr.response : xhr.responseText
         resolve(new Response(body, options))
       }
 
       xhr.onerror = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.ontimeout = function() {
         reject(new TypeError('Network request failed'))
       }
 
@@ -3845,9 +2707,9 @@ var isArray = Array.isArray || function (xs) {
     })
   }
   self.fetch.polyfill = true
-})();
+})(typeof self !== 'undefined' ? self : this);
 
-},{}],8:[function(require,module,exports){
+},{}],12:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -3864,7 +2726,19 @@ module.exports = function(app) {
           $scope.address = {};
           $scope.addresses = [];
           $scope.refreshAddress = function(address) {
-            var params = {address: address, sensor: false};
+            var params = {
+              address: address,
+              sensor: false
+            };
+            if (!address) {
+              return;
+            }
+            if ($scope.component.map && $scope.component.map.region) {
+              params.region = $scope.component.map.region;
+            }
+            if ($scope.component.map && $scope.component.map.key) {
+              params.key = $scope.component.map.key;
+            }
             return $http.get(
               'https://maps.googleapis.com/maps/api/geocode/json',
               {
@@ -3877,8 +2751,8 @@ module.exports = function(app) {
                 }
               }
             ).then(function(response) {
-                $scope.addresses = response.data.results;
-              });
+              $scope.addresses = response.data.results;
+            });
           };
         }],
         tableView: function(data) {
@@ -3895,6 +2769,10 @@ module.exports = function(app) {
           protected: false,
           unique: false,
           persistent: true,
+          map: {
+            region: '',
+            key: ''
+          },
           validate: {
             required: false
           }
@@ -3906,7 +2784,7 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/address.html',
-        "<label ng-if=\"component.label && !component.hideLabel\" for=\"{{ componentId }}\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<span ng-if=\"!component.label && component.validate.required\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select ng-model=\"data[component.key]\" safe-multiple-to-single ng-disabled=\"readOnly\" ng-required=\"component.validate.required\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" tabindex=\"{{ component.tabindex || 0 }}\" theme=\"bootstrap\">\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate }}\">{{$item.formatted_address || $select.selected.formatted_address}}</ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"address in addresses\" refresh=\"refreshAddress($select.search)\" refresh-delay=\"500\">\n    <div ng-bind-html=\"address.formatted_address | highlight: $select.search\"></div>\n  </ui-select-choices>\n</ui-select>\n"
+        "<label ng-if=\"component.label && !component.hideLabel\" for=\"{{ componentId }}\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<span ng-if=\"!component.label && component.validate.required\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select ng-model=\"data[component.key]\" safe-multiple-to-single ng-disabled=\"readOnly\" ng-required=\"component.validate.required\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" tabindex=\"{{ component.tabindex || 0 }}\" theme=\"bootstrap\">\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate }}\">{{$item.formatted_address || $select.selected.formatted_address}}</ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"address in addresses\" refresh=\"refreshAddress($select.search)\" refresh-delay=\"500\">\n    <div ng-bind-html=\"address.formatted_address | highlight: $select.search\"></div>\n  </ui-select-choices>\n</ui-select>\n<formio-errors></formio-errors>\n"
       );
 
       // Change the ui-select to ui-select multiple.
@@ -3917,7 +2795,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],9:[function(require,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -3937,7 +2815,7 @@ module.exports = function(app) {
           rightIcon: '',
           block: false,
           action: 'submit',
-          disableOnInvalid: true,
+          disableOnInvalid: false,
           theme: 'primary'
         },
         controller: ['$scope', function($scope) {
@@ -4078,7 +2956,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],10:[function(require,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4088,6 +2966,9 @@ module.exports = function(app) {
       formioComponentsProvider.register('checkbox', {
         title: 'Check Box',
         template: 'formio/components/checkbox.html',
+        tableView: function(data) {
+          return data ? 'Yes' : 'No';
+        },
         controller: ['$scope', function($scope) {
           // FA-850 - Ensure the checked value is always a boolen object when loaded, then unbind the watch.
           var loadComplete = $scope.$watch('data.' + $scope.component.key, function() {
@@ -4129,7 +3010,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],11:[function(require,module,exports){
+},{}],15:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4152,17 +3033,17 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/columns.html',
-        "<div class=\"row\" ng-if=\"!component.hide\">\n  <div class=\"col-sm-6\" ng-repeat=\"column in component.columns track by $index\">\n    <formio-component ng-repeat=\"component in column.components track by $index\" component=\"component\" data=\"data\" formio=\"formio\" formio-form=\"formioForm\" read-only=\"readOnly\" grid-row=\"gridRow\" grid-col=\"gridCol\"></formio-component>\n  </div>\n</div>\n"
+        "<div class=\"row\">\n  <div class=\"col-sm-6\" ng-repeat=\"column in component.columns track by $index\">\n    <formio-component\n      ng-repeat=\"component in column.components track by $index\"\n      component=\"component\"\n      data=\"data\"\n      formio=\"formio\"\n      formio-form=\"formioForm\"\n      read-only=\"readOnly\"\n      grid-row=\"gridRow\"\n      grid-col=\"gridCol\"\n      ng-if=\"show[column.key || ''] && show[component.key || '']\"\n      show=\"show\"\n    ></formio-component>\n  </div>\n</div>\n"
       );
 
       $templateCache.put('formio/componentsView/columns.html',
-        "<div class=\"row\">\n  <div class=\"col-sm-6\" ng-repeat=\"column in component.columns track by $index\">\n    <formio-component-view ng-repeat=\"component in column.components track by $index\" component=\"component\" data=\"data\" form=\"form\"></formio-component-view>\n  </div>\n</div>\n"
+        "<div class=\"row\">\n  <div class=\"col-sm-6\" ng-repeat=\"column in component.columns track by $index\">\n    <formio-component-view ng-repeat=\"component in column.components track by $index\" component=\"component\" data=\"data\" form=\"form\" ignore=\"ignore\"></formio-component-view>\n  </div>\n</div>\n"
       );
     }
   ]);
 };
 
-},{}],12:[function(require,module,exports){
+},{}],16:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.provider('formioComponents', function() {
@@ -4222,7 +3103,7 @@ module.exports = function(app) {
   }]);
 };
 
-},{}],13:[function(require,module,exports){
+},{}],17:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4232,6 +3113,7 @@ module.exports = function(app) {
       formioComponentsProvider.register('container', {
         title: 'Container',
         template: 'formio/components/container.html',
+        viewTemplate: 'formio/componentsView/container.html',
         group: 'layout',
         icon: 'fa fa-folder-open',
         settings: {
@@ -4259,13 +3141,13 @@ module.exports = function(app) {
     'FormioUtils',
     function($templateCache, FormioUtils) {
       $templateCache.put('formio/components/container.html', FormioUtils.fieldWrap(
-        "<div ng-controller=\"formioContainerComponent\" class=\"formio-container-component\" ng-if=\"!component.hide\">\n  <formio-component ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data[parentKey]\" formio=\"formio\" formio-form=\"formioForm\" read-only=\"readOnly\" grid-row=\"gridRow\" grid-col=\"gridCol\"></formio-component>\n</div>\n"
+        "<div ng-controller=\"formioContainerComponent\" class=\"formio-container-component\">\n  <formio-component\n    ng-repeat=\"_component in component.components track by $index\"\n    component=\"_component\"\n    data=\"data[parentKey]\"\n    formio=\"formio\"\n    formio-form=\"formioForm\"\n    read-only=\"readOnly\"\n    grid-row=\"gridRow\"\n    grid-col=\"gridCol\"\n    ng-if=\"show[component.key || ''] && show[_component.key || '']\"\n    show=\"show\"\n  ></formio-component>\n</div>\n"
       ));
     }
   ]);
 };
 
-},{}],14:[function(require,module,exports){
+},{}],18:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4293,7 +3175,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],15:[function(require,module,exports){
+},{}],19:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -4401,7 +3283,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],16:[function(require,module,exports){
+},{}],20:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4426,7 +3308,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],17:[function(require,module,exports){
+},{}],21:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4491,6 +3373,9 @@ module.exports = function(app) {
       // Pull out the rows and cols for easy iteration.
       $scope.rows = $scope.data[$scope.component.key];
       $scope.cols = $scope.component.components;
+      $scope.localKeys = $scope.component.components.map(function(component) {
+        return component.key;
+      });
 
       // Add a row the to grid.
       $scope.addRow = function() {
@@ -4511,13 +3396,13 @@ module.exports = function(app) {
     'FormioUtils',
     function($templateCache, FormioUtils) {
       $templateCache.put('formio/components/datagrid.html', FormioUtils.fieldWrap(
-        "<div class=\"formio-data-grid\" ng-controller=\"formioDataGrid\" ng-if=\"!component.hide\">\n  <table ng-class=\"{'table-striped': component.striped, 'table-bordered': component.bordered, 'table-hover': component.hover, 'table-condensed': component.condensed}\" class=\"table datagrid-table\">\n    <tr>\n      <th ng-repeat=\"col in cols track by $index\" ng-class=\"{'field-required': col.validate.required}\">{{ col.label | formioTranslate }}</th>\n    </tr>\n    <tr ng-repeat=\"row in rows track by $index\" ng-init=\"rowIndex = $index\">\n      <td ng-repeat=\"col in cols track by $index\" ng-init=\"col.hideLabel = true; colIndex = $index\" class=\"formio-data-grid-row\">\n        <formio-component component=\"col\" data=\"rows[rowIndex]\" formio-form=\"formioForm\" formio=\"formio\" read-only=\"readOnly || col.disabled\" grid-row=\"rowIndex\" grid-col=\"colIndex\"></formio-component>\n      </td>\n      <td>\n        <a ng-click=\"removeRow(rowIndex)\" class=\"btn btn-default\">\n          <span class=\"glyphicon glyphicon-remove-circle\"></span>\n        </a>\n      </td>\n    </tr>\n  </table>\n  <div class=\"datagrid-add\">\n    <a ng-click=\"addRow()\" class=\"btn btn-primary\">\n      <span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span> {{ component.addAnother || \"Add Another\" | formioTranslate}}\n    </a>\n  </div>\n</div>\n"
+        "<div class=\"formio-data-grid\" ng-controller=\"formioDataGrid\" ng-if=\"show[component.key || '']\">\n  <table ng-class=\"{'table-striped': component.striped, 'table-bordered': component.bordered, 'table-hover': component.hover, 'table-condensed': component.condensed}\" class=\"table datagrid-table\">\n    <tr>\n      <th ng-repeat=\"col in cols track by $index\" ng-if=\"show[col.key || ''] || localKeys.indexOf(col.conditional.when) !== -1\" ng-class=\"{'field-required': col.validate.required}\">{{ col.label | formioTranslate }}</th>\n    </tr>\n    <tr ng-repeat=\"row in rows track by $index\" ng-init=\"rowIndex = $index\">\n      <td ng-repeat=\"col in cols track by $index\" ng-init=\"col.hideLabel = true; colIndex = $index\" class=\"formio-data-grid-row\">\n        <formio-component\n          ng-if=\"(localKeys.indexOf(col.conditional.when) === -1 && show[col.key || '']) || checkConditional(col.key, row)\"\n          component=\"col\"\n          data=\"rows[rowIndex]\"\n          formio-form=\"formioForm\"\n          formio=\"formio\"\n          read-only=\"readOnly || col.disabled\"\n          grid-row=\"rowIndex\"\n          grid-col=\"colIndex\"\n          show=\"show\"\n        ></formio-component>\n      </td>\n      <td>\n        <a ng-click=\"removeRow(rowIndex)\" class=\"btn btn-default\">\n          <span class=\"glyphicon glyphicon-remove-circle\"></span>\n        </a>\n      </td>\n    </tr>\n  </table>\n  <div class=\"datagrid-add\">\n    <a ng-click=\"addRow()\" class=\"btn btn-primary\">\n      <span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span> {{ component.addAnother || \"Add Another\" | formioTranslate}}\n    </a>\n  </div>\n</div>\n"
       ));
     }
   ]);
 };
 
-},{}],18:[function(require,module,exports){
+},{}],22:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4539,6 +3424,28 @@ module.exports = function(app) {
               loadComplete();
             }
           });
+
+          if ($scope.component.defaultDate.length === 0) {
+            $scope.component.defaultDate = '';
+          }
+          else {
+            var dateVal = new Date($scope.component.defaultDate);
+            if (isNaN(dateVal.getDate())) {
+              try {
+                dateVal = new Date(eval($scope.component.defaultDate));
+              }
+              catch (e) {
+                dateVal = '';
+              }
+            }
+
+            if (isNaN(dateVal)) {
+              dateVal = '';
+            }
+
+            $scope.component.defaultDate = dateVal;
+            $scope.data[$scope.component.key] = dateVal;
+          }
 
           if (!$scope.component.maxDate) {
             delete $scope.component.maxDate;
@@ -4564,6 +3471,7 @@ module.exports = function(app) {
           format: 'yyyy-MM-dd HH:mm',
           enableDate: true,
           enableTime: true,
+          defaultDate: '',
           minDate: null,
           maxDate: null,
           datepickerMode: 'day',
@@ -4598,13 +3506,13 @@ module.exports = function(app) {
     'FormioUtils',
     function($templateCache, FormioUtils) {
       $templateCache.put('formio/components/datetime.html', FormioUtils.fieldWrap(
-        "<div class=\"input-group\">\n  <input type=\"text\" class=\"form-control\"\n  name=\"{{ componentId }}\"\n  id=\"{{ componentId }}\"\n  ng-focus=\"calendarOpen = autoOpen\"\n  ng-click=\"calendarOpen = true\"\n  ng-init=\"calendarOpen = false\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"component.validate.required\"\n  is-open=\"calendarOpen\"\n  datetime-picker=\"{{ component.format }}\"\n  min-date=\"component.minDate\"\n  max-date=\"component.maxDate\"\n  datepicker-mode=\"component.datepickerMode\"\n  when-closed=\"onClosed()\"\n  enable-date=\"component.enableDate\"\n  enable-time=\"component.enableTime\"\n  ng-model=\"data[component.key]\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n  placeholder=\"{{ component.placeholder | formioTranslate }}\"\n  datepicker-options=\"component.datePicker\"\n  timepicker-options=\"component.timePicker\" />\n  <span class=\"input-group-btn\">\n    <button type=\"button\" ng-disabled=\"readOnly\" class=\"btn btn-default\" ng-click=\"calendarOpen = true\">\n      <i ng-if=\"component.enableDate\" class=\"glyphicon glyphicon-calendar\"></i>\n      <i ng-if=\"!component.enableDate\" class=\"glyphicon glyphicon-time\"></i>\n    </button>\n  </span>\n</div>\n"
+        "<div class=\"input-group\">\n  <input type=\"text\" class=\"form-control\"\n  name=\"{{ componentId }}\"\n  id=\"{{ componentId }}\"\n  ng-focus=\"calendarOpen = autoOpen\"\n  ng-click=\"calendarOpen = true\"\n  ng-init=\"calendarOpen = false\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"component.validate.required\"\n  is-open=\"calendarOpen\"\n  datetime-picker=\"{{ component.format }}\"\n  min-date=\"component.minDate\"\n  max-date=\"component.maxDate\"\n  datepicker-mode=\"component.datepickerMode\"\n  when-closed=\"onClosed()\"\n  custom-validator=\"component.validate.custom\"\n  enable-date=\"component.enableDate\"\n  enable-time=\"component.enableTime\"\n  ng-model=\"data[component.key]\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n  placeholder=\"{{ component.placeholder | formioTranslate }}\"\n  datepicker-options=\"component.datePicker\"\n  timepicker-options=\"component.timePicker\" />\n  <span class=\"input-group-btn\">\n    <button type=\"button\" ng-disabled=\"readOnly\" class=\"btn btn-default\" ng-click=\"calendarOpen = true\">\n      <i ng-if=\"component.enableDate\" class=\"glyphicon glyphicon-calendar\"></i>\n      <i ng-if=\"!component.enableDate\" class=\"glyphicon glyphicon-time\"></i>\n    </button>\n  </span>\n</div>\n"
       ));
     }
   ]);
 };
 
-},{}],19:[function(require,module,exports){
+},{}],23:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.config([
@@ -4626,14 +3534,17 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           unique: false,
-          persistent: true
+          persistent: true,
+          kickbox: {
+            enabled: false
+          }
         }
       });
     }
   ]);
 };
 
-},{}],20:[function(require,module,exports){
+},{}],24:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4658,17 +3569,17 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/fieldset.html',
-        "<fieldset id=\"{{ component.key }}\" ng-if=\"!component.hide\">\n  <legend ng-if=\"component.legend\">{{ component.legend | formioTranslate }}</legend>\n  <formio-component ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" formio=\"formio\" read-only=\"readOnly\" formio-form=\"formioForm\" grid-row=\"gridRow\" grid-col=\"gridCol\"></formio-component>\n</fieldset>\n"
+        "<fieldset id=\"{{ component.key }}\">\n  <legend ng-if=\"component.legend\">{{ component.legend | formioTranslate }}</legend>\n  <formio-component\n    ng-repeat=\"_component in component.components track by $index\"\n    component=\"_component\"\n    data=\"data\"\n    formio=\"formio\"\n    read-only=\"readOnly\"\n    formio-form=\"formioForm\"\n    grid-row=\"gridRow\"\n    grid-col=\"gridCol\"\n    ng-if=\"show[component.key || ''] && show[_component.key || '']\"\n    show=\"show\"\n  ></formio-component>\n</fieldset>\n"
       );
 
       $templateCache.put('formio/componentsView/fieldset.html',
-        "<fieldset id=\"{{ component.key }}\">\n  <legend ng-if=\"component.legend\">{{ component.legend }}</legend>\n  <formio-component-view ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" form=\"form\"></formio-component-view>\n</fieldset>\n"
+        "<fieldset id=\"{{ component.key }}\">\n  <legend ng-if=\"component.legend\">{{ component.legend }}</legend>\n  <formio-component-view ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" form=\"form\" ignore=\"ignore\"></formio-component-view>\n</fieldset>\n"
       );
     }
   ]);
 };
 
-},{}],21:[function(require,module,exports){
+},{}],25:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4684,10 +3595,13 @@ module.exports = function(app) {
           tableView: true,
           label: '',
           key: 'file',
+          image: false,
+          imageSize: '200',
           placeholder: '',
           multiple: false,
           defaultValue: '',
-          protected: false
+          protected: false,
+          persistent: true
         },
         viewTemplate: 'formio/componentsView/file.html'
       });
@@ -4720,6 +3634,29 @@ module.exports = function(app) {
     };
   }]);
 
+  app.directive('formioImageList', [function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        files: '=',
+        form: '=',
+        width: '=',
+        readOnly: '='
+      },
+      templateUrl: 'formio/components/formio-image-list.html',
+      controller: [
+        '$scope',
+        function($scope) {
+          $scope.removeFile = function(event, index) {
+            event.preventDefault();
+            $scope.files.splice(index, 1);
+          };
+        }
+      ]
+    };
+  }]);
+
   app.directive('formioFile', [function() {
     return {
       restrict: 'E',
@@ -4730,22 +3667,31 @@ module.exports = function(app) {
       },
       template: '<a href="{{ file.url }}" ng-click="getFile($event)" target="_blank">{{ file.name }}</a>',
       controller: [
-        '$scope',
+        '$window',
         '$rootScope',
-        'FormioPlugins',
+        '$scope',
+        'Formio',
         function(
-          $scope,
+          $window,
           $rootScope,
-          FormioPlugins
+          $scope,
+          Formio
         ) {
           $scope.getFile = function(evt) {
-            // In view mode there may not be a form. Need a way to override.
+            evt.preventDefault();
             $scope.form = $scope.form || $rootScope.filePath;
-
-            var plugin = FormioPlugins('storage', $scope.file.storage);
-            if (plugin) {
-              plugin.downloadFile(evt, $scope.file, $scope);
-            }
+            var formio = new Formio($scope.form);
+            formio
+              .downloadFile($scope.file).then(function(file) {
+                if (file) {
+                  $window.open(file.url, '_blank');
+                }
+              })
+              .catch(function(response) {
+                // Is alert the best way to do this?
+                // User is expecting an immediate notification due to attempting to download a file.
+                alert(response);
+              });
           };
         }
       ]
@@ -4758,31 +3704,27 @@ module.exports = function(app) {
       replace: true,
       scope: {
         file: '=',
-        form: '='
+        form: '=',
+        width: '='
       },
-      template: '<img ng-src="{{ imageSrc }}" alt="{{ file.name }}" />',
+      template: '<img ng-src="{{ imageSrc }}" alt="{{ file.name }}" ng-style="{width: width}" />',
       controller: [
-        '$scope',
         '$rootScope',
-        'FormioPlugins',
+        '$scope',
+        'Formio',
         function(
-          $scope,
           $rootScope,
-          FormioPlugins
+          $scope,
+          Formio
         ) {
-          var plugin = FormioPlugins('storage', $scope.file.storage);
-
-          // In view mode there may not be a form. Need a way to override.
           $scope.form = $scope.form || $rootScope.filePath;
+          var formio = new Formio($scope.form);
 
-          // Sign the file if needed.
-          if (plugin) {
-            plugin.getFile($scope.form, $scope.file)
-              .then(function(result) {
-                $scope.imageSrc = result.url;
-                $scope.$apply();
-              });
-          }
+          formio.downloadFile($scope.file)
+            .then(function(result) {
+              $scope.imageSrc = result.url;
+              $scope.$apply();
+            });
         }
       ]
     };
@@ -4790,11 +3732,9 @@ module.exports = function(app) {
 
   app.controller('formioFileUpload', [
     '$scope',
-    'FormioPlugins',
     'FormioUtils',
     function(
       $scope,
-      FormioPlugins,
       FormioUtils
     ) {
       $scope.fileUploads = {};
@@ -4813,21 +3753,34 @@ module.exports = function(app) {
 
       $scope.upload = function(files) {
         if ($scope.component.storage && files && files.length) {
-          var plugin = FormioPlugins('storage', $scope.component.storage);
           angular.forEach(files, function(file) {
             // Get a unique name for this file to keep file collisions from occurring.
             var fileName = FormioUtils.uniqueName(file.name);
-            if (plugin) {
-              $scope.fileUploads[fileName] = {
-                name: fileName,
-                size: file.size,
-                status: 'info',
-                message: 'Starting upload'
-              };
-              plugin.uploadFile(file, fileName, $scope.fileUploads[fileName], $scope)
+            $scope.fileUploads[fileName] = {
+              name: fileName,
+              size: file.size,
+              status: 'info',
+              message: 'Starting upload'
+            };
+            var dir = $scope.component.dir || '';
+            var formio = null;
+            if ($scope.formio) {
+              formio = $scope.formio;
+            }
+            else {
+              $scope.fileUploads[fileName].status = 'error';
+              $scope.fileUploads[fileName].message = 'File Upload URL not provided.';
+            }
+
+            if (formio) {
+              formio.uploadFile($scope.component.storage, file, fileName, dir, function processNotify(evt) {
+                $scope.fileUploads[fileName].status = 'progress';
+                $scope.fileUploads[fileName].progress = parseInt(100.0 * evt.loaded / evt.total);
+                delete $scope.fileUploads[fileName].message;
+                $scope.$apply();
+              }, $scope.component.url)
                 .then(function(fileInfo) {
                   delete $scope.fileUploads[fileName];
-                  fileInfo.storage = $scope.component.storage;
                   // Ensure that the file component is an array.
                   if (
                     !$scope.data[$scope.component.key] ||
@@ -4836,20 +3789,14 @@ module.exports = function(app) {
                     $scope.data[$scope.component.key] = [];
                   }
                   $scope.data[$scope.component.key].push(fileInfo);
+                  $scope.$apply();
                 })
-                .catch(function(message) {
+                .catch(function(response) {
                   $scope.fileUploads[fileName].status = 'error';
-                  $scope.fileUploads[fileName].message = message;
+                  $scope.fileUploads[fileName].message = response.data;
                   delete $scope.fileUploads[fileName].progress;
+                  $scope.$apply();
                 });
-            }
-            else {
-              $scope.fileUploads[fileName] = {
-                name: fileName,
-                size: file.size,
-                status: 'error',
-                message: 'Storage plugin not found'
-              };
             }
           });
         }
@@ -4861,22 +3808,26 @@ module.exports = function(app) {
     function(
       $templateCache
     ) {
+      $templateCache.put('formio/components/formio-image-list.html',
+        "<div>\n  <span ng-repeat=\"file in files track by $index\" ng-if=\"file\">\n    <formio-image file=\"file\" form=\"form\" width=\"width\"></formio-image>\n    <span ng-if=\"!readOnly\" style=\"width:1%;white-space:nowrap;\"><a ng-if=\"!readOnly\" href=\"#\" ng-click=\"removeFile($event, $index)\" style=\"padding: 2px 4px;\" class=\"btn btn-sm btn-default\"><span class=\"glyphicon glyphicon-remove\"></span></a></span>\n  </span>\n</div>\n"
+      );
+
       $templateCache.put('formio/components/formio-file-list.html',
         "<table class=\"table table-striped table-bordered\">\n  <thead>\n    <tr>\n      <td ng-if=\"!readOnly\" style=\"width:1%;white-space:nowrap;\"></td>\n      <th>File Name</th>\n      <th>Size</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr ng-repeat=\"file in files track by $index\">\n      <td ng-if=\"!readOnly\" style=\"width:1%;white-space:nowrap;\"><a ng-if=\"!readOnly\" href=\"#\" ng-click=\"removeFile($event, $index)\" style=\"padding: 2px 4px;\" class=\"btn btn-sm btn-default\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>\n      <td><formio-file file=\"file\" form=\"form\"></formio-file></td>\n      <td>{{ fileSize(file.size) }}</td>\n    </tr>\n  </tbody>\n</table>\n"
       );
 
       $templateCache.put('formio/components/file.html',
-        "<label ng-if=\"component.label && !component.hideLabel\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<span ng-if=\"!component.label && component.validate.required\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<div ng-controller=\"formioFileUpload\">\n  <formio-file-list files=\"data[component.key]\" form=\"formio.formUrl\"></formio-file-list>\n  <div ng-if=\"!readOnly && (component.multiple || (!component.multiple && !data[component.key].length))\">\n    <div ngf-drop=\"upload($files)\" class=\"fileSelector\" ngf-drag-over-class=\"'fileDragOver'\" ngf-multiple=\"component.multiple\" id=\"{{ componentId }}\" name=\"{{ componentId }}\"><span class=\"glyphicon glyphicon-cloud-upload\"></span>Drop files to attach, or <a href=\"#\" ngf-select=\"upload($files)\" tabindex=\"{{ component.tabindex || 0 }}\" ngf-multiple=\"component.multiple\">browse</a>.</div>\n    <div ng-if=\"!component.storage\" class=\"alert alert-warning\">No storage has been set for this field. File uploads are disabled until storage is set up.</div>\n    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>\n  </div>\n  <div ng-repeat=\"fileUpload in fileUploads track by $index\" ng-class=\"{'has-error': fileUpload.status === 'error'}\" class=\"file\">\n    <div class=\"row\">\n      <div class=\"fileName control-label col-sm-10\">{{ fileUpload.name }} <span ng-click=\"removeUpload(fileUpload.name)\" class=\"glyphicon glyphicon-remove\"></span></div>\n      <div class=\"fileSize control-label col-sm-2 text-right\">{{ fileSize(fileUpload.size) }}</div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-sm-12\">\n        <span ng-if=\"fileUpload.status === 'progress'\">\n          <div class=\"progress\">\n            <div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"{{fileUpload.progress}}\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:{{fileUpload.progress}}%\">\n              <span class=\"sr-only\">{{fileUpload.progress}}% Complete</span>\n            </div>\n          </div>\n        </span>\n        <div ng-if=\"!fileUpload.status !== 'progress'\" class=\"bg-{{ fileUpload.status }} control-label\">{{ fileUpload.message }}</div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+        "<label ng-if=\"component.label && !component.hideLabel\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<span ng-if=\"!component.label && component.validate.required\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<div ng-controller=\"formioFileUpload\">\n  <formio-file-list files=\"data[component.key]\" form=\"formio.formUrl\" ng-if=\"!component.image\"></formio-file-list>\n  <formio-image-list files=\"data[component.key]\" form=\"formio.formUrl\" width=\"component.imageSize\" ng-if=\"component.image\"></formio-image-list>\n  <div ng-if=\"!readOnly && (component.multiple || (!component.multiple && !data[component.key].length))\">\n    <div ngf-drop=\"upload($files)\" class=\"fileSelector\" ngf-drag-over-class=\"'fileDragOver'\" ngf-multiple=\"component.multiple\" id=\"{{ componentId }}\" name=\"{{ componentId }}\"><span class=\"glyphicon glyphicon-cloud-upload\"></span>Drop files to attach, or <a style=\"cursor: pointer;\" ngf-select=\"upload($files)\" tabindex=\"{{ component.tabindex || 0 }}\" ngf-multiple=\"component.multiple\">browse</a>.</div>\n    <div ng-if=\"!component.storage\" class=\"alert alert-warning\">No storage has been set for this field. File uploads are disabled until storage is set up.</div>\n    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>\n  </div>\n  <div ng-repeat=\"fileUpload in fileUploads track by $index\" ng-class=\"{'has-error': fileUpload.status === 'error'}\" class=\"file\">\n    <div class=\"row\">\n      <div class=\"fileName control-label col-sm-10\">{{ fileUpload.name }} <span ng-click=\"removeUpload(fileUpload.name)\" class=\"glyphicon glyphicon-remove\"></span></div>\n      <div class=\"fileSize control-label col-sm-2 text-right\">{{ fileSize(fileUpload.size) }}</div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-sm-12\">\n        <span ng-if=\"fileUpload.status === 'progress'\">\n          <div class=\"progress\">\n            <div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"{{fileUpload.progress}}\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:{{fileUpload.progress}}%\">\n              <span class=\"sr-only\">{{fileUpload.progress}}% Complete</span>\n            </div>\n          </div>\n        </span>\n        <div ng-if=\"!fileUpload.status !== 'progress'\" class=\"bg-{{ fileUpload.status }} control-label\">{{ fileUpload.message }}</div>\n      </div>\n    </div>\n  </div>\n</div>\n"
       );
 
       $templateCache.put('formio/componentsView/file.html',
-        "<label ng-if=\"component.label && !component.hideLabel\" for=\"{{ component.key }}\" class=\"control-label\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<div ng-controller=\"formioFileUpload\">\n  <formio-file-list files=\"data[component.key]\" form=\"formUrl\" read-only=\"true\"></formio-file-list>\n</div>\n"
+        "<label ng-if=\"component.label && !component.hideLabel\" for=\"{{ component.key }}\" class=\"control-label\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<div ng-controller=\"formioFileUpload\">\n  <formio-file-list files=\"data[component.key]\" form=\"formUrl\" read-only=\"true\" ng-if=\"!component.image\"></formio-file-list>\n  <formio-image-list files=\"data[component.key]\" form=\"formUrl\" read-only=\"true\" width=\"component.imageSize\" ng-if=\"component.image\"></formio-image-list>\n</div>\n"
       );
     }
   ]);
 };
 
-},{}],22:[function(require,module,exports){
+},{}],26:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -4909,7 +3860,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],23:[function(require,module,exports){
+},{}],27:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -4988,48 +3939,48 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],24:[function(require,module,exports){
+},{}],28:[function(_dereq_,module,exports){
 "use strict";
 var app = angular.module('formio');
 
 // Basic
-require('./components')(app);
-require('./textfield')(app);
-require('./number')(app);
-require('./password')(app);
-require('./textarea')(app);
-require('./checkbox')(app);
-require('./selectboxes')(app);
-require('./select')(app);
-require('./radio')(app);
-require('./htmlelement')(app);
-require('./content')(app);
-require('./button')(app);
+_dereq_('./components')(app);
+_dereq_('./textfield')(app);
+_dereq_('./number')(app);
+_dereq_('./password')(app);
+_dereq_('./textarea')(app);
+_dereq_('./checkbox')(app);
+_dereq_('./selectboxes')(app);
+_dereq_('./select')(app);
+_dereq_('./radio')(app);
+_dereq_('./htmlelement')(app);
+_dereq_('./content')(app);
+_dereq_('./button')(app);
 
 // Special
-require('./email')(app);
-require('./phonenumber')(app);
-require('./address')(app);
-require('./datetime')(app);
-require('./currency')(app);
-require('./hidden')(app);
-require('./resource')(app);
-require('./file')(app);
-require('./signature')(app);
-require('./custom')(app);
-require('./datagrid')(app);
-require('./survey')(app);
+_dereq_('./email')(app);
+_dereq_('./phonenumber')(app);
+_dereq_('./address')(app);
+_dereq_('./datetime')(app);
+_dereq_('./currency')(app);
+_dereq_('./hidden')(app);
+_dereq_('./resource')(app);
+_dereq_('./file')(app);
+_dereq_('./signature')(app);
+_dereq_('./custom')(app);
+_dereq_('./datagrid')(app);
+_dereq_('./survey')(app);
 
 // Layout
-require('./columns')(app);
-require('./fieldset')(app);
-require('./container')(app);
-require('./page')(app);
-require('./panel')(app);
-require('./table')(app);
-require('./well')(app);
+_dereq_('./columns')(app);
+_dereq_('./fieldset')(app);
+_dereq_('./container')(app);
+_dereq_('./page')(app);
+_dereq_('./panel')(app);
+_dereq_('./table')(app);
+_dereq_('./well')(app);
 
-},{"./address":8,"./button":9,"./checkbox":10,"./columns":11,"./components":12,"./container":13,"./content":14,"./currency":15,"./custom":16,"./datagrid":17,"./datetime":18,"./email":19,"./fieldset":20,"./file":21,"./hidden":22,"./htmlelement":23,"./number":25,"./page":26,"./panel":27,"./password":28,"./phonenumber":29,"./radio":30,"./resource":31,"./select":32,"./selectboxes":33,"./signature":34,"./survey":35,"./table":36,"./textarea":37,"./textfield":38,"./well":39}],25:[function(require,module,exports){
+},{"./address":12,"./button":13,"./checkbox":14,"./columns":15,"./components":16,"./container":17,"./content":18,"./currency":19,"./custom":20,"./datagrid":21,"./datetime":22,"./email":23,"./fieldset":24,"./file":25,"./hidden":26,"./htmlelement":27,"./number":29,"./page":30,"./panel":31,"./password":32,"./phonenumber":33,"./radio":34,"./resource":35,"./select":36,"./selectboxes":37,"./signature":38,"./survey":39,"./table":40,"./textarea":41,"./textfield":42,"./well":43}],29:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -5086,7 +4037,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],26:[function(require,module,exports){
+},{}],30:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -5112,7 +4063,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],27:[function(require,module,exports){
+},{}],31:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -5137,17 +4088,17 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/panel.html',
-        "<div class=\"panel panel-{{ component.theme }}\" id=\"{{ component.key }}\" ng-if=\"!component.hide\">\n  <div ng-if=\"component.title\" class=\"panel-heading\">\n    <h3 class=\"panel-title\">{{ component.title | formioTranslate }}</h3>\n  </div>\n  <div class=\"panel-body\">\n    <formio-component ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" formio=\"formio\" read-only=\"readOnly\" formio-form=\"formioForm\" grid-row=\"gridRow\" grid-col=\"gridCol\"></formio-component>\n  </div>\n</div>\n"
+        "<div class=\"panel panel-{{ component.theme }}\" id=\"{{ component.key }}\">\n  <div ng-if=\"component.title\" class=\"panel-heading\">\n    <h3 class=\"panel-title\">{{ component.title | formioTranslate }}</h3>\n  </div>\n  <div class=\"panel-body\">\n    <formio-component\n      ng-repeat=\"_component in component.components track by $index\"\n      component=\"_component\"\n      data=\"data\"\n      formio=\"formio\"\n      read-only=\"readOnly\"\n      formio-form=\"formioForm\"\n      grid-row=\"gridRow\"\n      grid-col=\"gridCol\"\n      ng-if=\"show[component.key || ''] && show[_component.key || '']\"\n      show=\"show\"\n    ></formio-component>\n  </div>\n</div>\n"
       );
 
       $templateCache.put('formio/componentsView/panel.html',
-        "<div class=\"panel panel-{{ component.theme }}\" id=\"{{ component.key }}\">\n  <div ng-if=\"component.title\" class=\"panel-heading\">\n    <h3 class=\"panel-title\">{{ component.title }}</h3>\n  </div>\n  <div class=\"panel-body\">\n    <formio-component-view ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" form=\"form\"></formio-component-view>\n  </div>\n</div>\n"
+        "<div class=\"panel panel-{{ component.theme }}\" id=\"{{ component.key }}\">\n  <div ng-if=\"component.title\" class=\"panel-heading\">\n    <h3 class=\"panel-title\">{{ component.title }}</h3>\n  </div>\n  <div class=\"panel-body\">\n    <formio-component-view ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" form=\"form\" ignore=\"ignore\"></formio-component-view>\n  </div>\n</div>\n"
       );
     }
   ]);
 };
 
-},{}],28:[function(require,module,exports){
+},{}],32:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.config([
@@ -5176,7 +4127,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],29:[function(require,module,exports){
+},{}],33:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.config([
@@ -5209,7 +4160,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],30:[function(require,module,exports){
+},{}],34:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -5220,6 +4171,14 @@ module.exports = function(app) {
       formioComponentsProvider.register('radio', {
         title: 'Radio',
         template: 'formio/components/radio.html',
+        tableView: function(data, component) {
+          for (var i in component.values) {
+            if (component.values[i].value === data) {
+              return component.values[i].label;
+            }
+          }
+          return data;
+        },
         settings: {
           input: true,
           tableView: true,
@@ -5244,13 +4203,13 @@ module.exports = function(app) {
     'FormioUtils',
     function($templateCache, FormioUtils) {
       $templateCache.put('formio/components/radio.html', FormioUtils.fieldWrap(
-        "<ng-form name=\"{{ componentId }}\" ng-model=\"data[component.key]\" custom-validator=\"component.validate.custom\">\n  <div ng-class=\"component.inline ? 'radio-inline' : 'radio'\" ng-repeat=\"v in component.values track by $index\">\n    <label class=\"control-label\" for=\"{{ componentId }}-{{ v.value }}\">\n      <input type=\"{{ component.inputType }}\"\n             id=\"{{ componentId }}-{{ v.value }}\"\n             value=\"{{ v.value }}\"\n             tabindex=\"{{ component.tabindex || 0 }}\"\n             ng-model=\"data[component.key]\"\n             ng-required=\"component.validate.required\"\n             ng-disabled=\"readOnly\">\n\n      {{ v.label | formioTranslate }}\n    </label>\n  </div>\n</ng-form>\n"
+        "<ng-form name=\"{{ componentId }}\" ng-model=\"data[component.key]\" custom-validator=\"component.validate.custom\">\n  <div ng-class=\"component.inline ? 'radio-inline' : 'radio'\" ng-repeat=\"v in component.values track by $index\">\n    <label class=\"control-label\" for=\"{{ componentId }}-{{ v.value }}\">\n      <input type=\"{{ component.inputType }}\"\n             id=\"{{ componentId }}-{{ v.value }}\"\n             value=\"{{ v.value }}\"\n             tabindex=\"{{ component.tabindex || 0 }}\"\n             ng-model=\"data[component.key]\"\n             ng-required=\"component.validate.required\"\n             custom-validator=\"component.validate.custom\"\n             ng-disabled=\"readOnly\">\n\n      {{ v.label | formioTranslate }}\n    </label>\n  </div>\n</ng-form>\n"
       ));
     }
   ]);
 };
 
-},{}],31:[function(require,module,exports){
+},{}],35:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -5375,8 +4334,9 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],32:[function(require,module,exports){
+},{}],36:[function(_dereq_,module,exports){
 "use strict";
+/*eslint max-depth: ["error", 6]*/
 
 module.exports = function(app) {
   app.directive('formioSelectItem', [
@@ -5391,7 +4351,7 @@ module.exports = function(app) {
         },
         link: function(scope, element) {
           if (scope.template) {
-            element.html($compile(angular.element(scope.template))(scope));
+            element.append($compile(angular.element(scope.template))(scope));
           }
         }
       };
@@ -5492,7 +4452,7 @@ module.exports = function(app) {
                 value = item;
               }
               return (prev === '' ? '' : ', ') + value;
-            });
+            }, '');
           }
           else {
             var item = getItem(data);
@@ -5506,12 +4466,13 @@ module.exports = function(app) {
             return value;
           }
         },
-        controller: ['$scope', '$http', 'Formio', '$interpolate', function($scope, $http, Formio, $interpolate) {
+        controller: ['$rootScope', '$scope', '$http', 'Formio', '$interpolate', function($rootScope, $scope, $http, Formio, $interpolate) {
           var settings = $scope.component;
           var options = {cache: true};
           $scope.nowrap = true;
           $scope.hasNextPage = false;
           $scope.selectItems = [];
+          var selectValues = $scope.component.selectValues;
           var valueProp = $scope.component.valueProperty;
           $scope.getSelectItem = function(item) {
             if (!item) {
@@ -5545,9 +4506,22 @@ module.exports = function(app) {
 
           // Add a watch if they wish to refresh on selection of another field.
           if (settings.refreshOn) {
-            $scope.$watch('data.' + settings.refreshOn, function() {
-              $scope.refreshItems();
-            });
+            if (settings.refreshOn === 'data') {
+              $scope.$watch('data', function() {
+                $scope.refreshItems();
+                if (settings.clearOnRefresh) {
+                  $scope.data[settings.key] = settings.multiple ? [] : '';
+                }
+              }, true);
+            }
+            else {
+              $scope.$watch('data.' + settings.refreshOn, function() {
+                $scope.refreshItems();
+                if (settings.clearOnRefresh) {
+                  $scope.data[settings.key] = settings.multiple ? [] : '';
+                }
+              });
+            }
           }
 
           switch (settings.dataSrc) {
@@ -5557,10 +4531,39 @@ module.exports = function(app) {
             case 'json':
               try {
                 $scope.selectItems = angular.fromJson(settings.data.json);
+
+                if (selectValues) {
+                  // Allow dot notation in the selectValue property.
+                  if (selectValues.indexOf('.') !== -1) {
+                    var parts = selectValues.split('.');
+                    var select = $scope.selectItems;
+                    for (var i in parts) {
+                      select = select[parts[i]];
+                    }
+                    $scope.selectItems = select;
+                  }
+                  else {
+                    $scope.selectItems = $scope.selectItems[selectValues];
+                  }
+                }
               }
               catch (error) {
                 $scope.selectItems = [];
               }
+              break;
+            case 'custom':
+              $scope.refreshItems = function() {
+                try {
+                  /* eslint-disable no-unused-vars */
+                  var data = _.cloneDeep($scope.data);
+                  /* eslint-enable no-unused-vars */
+                  $scope.selectItems = eval('(function(data) { var values = [];' + settings.data.custom.toString() + '; return values; })(data)');
+                }
+                catch (error) {
+                  $scope.selectItems = [];
+                }
+              };
+              $scope.refreshItems();
               break;
             case 'url':
             case 'resource':
@@ -5608,6 +4611,10 @@ module.exports = function(app) {
                 $scope.hasNextPage = true;
                 $scope.refreshItems = function(input, newUrl, append) {
                   newUrl = newUrl || url;
+                  newUrl = $interpolate(newUrl)({
+                    data: $scope.data,
+                    formioBase: $rootScope.apiBase || 'https://api.form.io'
+                  });
                   if (!newUrl) {
                     return;
                   }
@@ -5631,8 +4638,18 @@ module.exports = function(app) {
                     newUrl += ((newUrl.indexOf('?') === -1) ? '?' : '&') + filter;
                   }
 
+                  // If they wish to return only some fields.
+                  if (settings.selectFields) {
+                    options.params.select = settings.selectFields;
+                  }
+
                   // Set the new result.
                   var setResult = function(data) {
+                    // coerce the data into an array.
+                    if (!(data instanceof Array)) {
+                      data = [data];
+                    }
+
                     if (data.length < options.params.limit) {
                       $scope.hasNextPage = false;
                     }
@@ -5648,12 +4665,18 @@ module.exports = function(app) {
                   $http.get(newUrl, options).then(function(result) {
                     var data = result.data;
                     if (data) {
-                      if (data.hasOwnProperty('data')) {
+                      // If the selectValue prop is defined, use it.
+                      if (selectValues) {
+                        setResult(_.get(data, selectValues, []));
+                      }
+                      // Attempt to default to the formio settings for a resource.
+                      else if (data.hasOwnProperty('data')) {
                         setResult(data.data);
                       }
                       else if (data.hasOwnProperty('items')) {
                         setResult(data.items);
                       }
+                      // Use the data itself.
                       else {
                         setResult(data);
                       }
@@ -5679,7 +4702,8 @@ module.exports = function(app) {
             values: [],
             json: '',
             url: '',
-            resource: ''
+            resource: '',
+            custom: ''
           },
           dataSrc: 'values',
           valueProperty: '',
@@ -5703,7 +4727,7 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/select.html',
-        "<label ng-if=\"component.label && !component.hideLabel\"  for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<span ng-if=\"!component.label && component.validate.required\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select\n  ui-select-required\n  ui-select-open-on-focus\n  ng-model=\"data[component.key]\"\n  safe-multiple-to-single\n  name=\"{{ componentId }}\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"component.validate.required\"\n  id=\"{{ componentId }}\"\n  theme=\"bootstrap\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n>\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate }}\">\n    <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n  </ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"getSelectItem(item) as item in selectItems | filter: $select.search\" refresh=\"refreshItems($select.search)\" refresh-delay=\"250\">\n    <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n    <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"selectLoading\">Load more...</button>\n  </ui-select-choices>\n</ui-select>\n<formio-errors></formio-errors>\n"
+        "<label ng-if=\"component.label && !component.hideLabel\"  for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': component.validate.required}\">{{ component.label | formioTranslate }}</label>\n<span ng-if=\"!component.label && component.validate.required\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select\n  ui-select-required\n  ui-select-open-on-focus\n  ng-model=\"data[component.key]\"\n  safe-multiple-to-single\n  name=\"{{ componentId }}\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"component.validate.required\"\n  id=\"{{ componentId }}\"\n  theme=\"bootstrap\"\n  custom-validator=\"component.validate.custom\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n>\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate }}\">\n    <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n  </ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"getSelectItem(item) as item in selectItems | filter: $select.search\" refresh=\"refreshItems($select.search)\" refresh-delay=\"250\">\n    <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n    <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"selectLoading\">Load more...</button>\n  </ui-select-choices>\n</ui-select>\n<formio-errors></formio-errors>\n"
       );
 
       // Change the ui-select to ui-select multiple.
@@ -5714,7 +4738,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],33:[function(require,module,exports){
+},{}],37:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -5742,7 +4766,8 @@ module.exports = function(app) {
             : false;
         });
         // FA-835 - Update the view model with our defaults.
-        ngModel.$setViewValue(model);
+        // FA-921 - Attempt to load a current model, if present before the defaults.
+        ngModel.$setViewValue($scope.model || model);
 
         ngModel.$setPristine(true);
         ngModel.$isEmpty = function(value) {
@@ -5817,7 +4842,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],34:[function(require,module,exports){
+},{}],38:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -5872,15 +4897,24 @@ module.exports = function(app) {
 
         // Sets the dimension of a width or height.
         var setDimension = function(dim) {
+          var param = (dim === 'width') ? 'clientWidth' : 'clientHeight';
           if (scope.component[dim].slice(-1) === '%') {
             var percent = parseFloat(scope.component[dim].slice(0, -1)) / 100;
-            element[0][dim] = element.parent()[dim]() * percent;
+            element[0][dim] = element.parent().eq(0)[0][param] * percent;
           }
           else {
             element[0][dim] = parseInt(scope.component[dim], 10);
             scope.component[dim] = element[0][dim] + 'px';
           }
         };
+
+        // Reset size if element changes visibility.
+        scope.$watch('component.display', function(newDisplay) {
+          if (newDisplay) {
+            setDimension('width');
+            setDimension('height');
+          }
+        });
 
         // Set the width and height of the canvas.
         setDimension('width');
@@ -5932,11 +4966,6 @@ module.exports = function(app) {
         signaturePad.onEnd = function() {
           scope.$evalAsync(readSignature);
         };
-
-        // Read initial empty canvas, unless signature is required, then keep it pristine
-        if (!scope.component.validate.required) {
-          readSignature();
-        }
       }
     };
   });
@@ -5946,17 +4975,17 @@ module.exports = function(app) {
     function($templateCache,
               FormioUtils) {
       $templateCache.put('formio/components/signature.html', FormioUtils.fieldWrap(
-        "<img ng-if=\"readOnly\" ng-attr-src=\"{{data[component.key]}}\" src=\"\" />\n<div ng-if=\"!readOnly\" style=\"width: {{ component.width }}; height: {{ component.height }};\">\n  <a class=\"btn btn-xs btn-default\" style=\"position:absolute; left: 0; top: 0; z-index: 1000\" ng-click=\"component.clearSignature()\">\n    <span class=\"glyphicon glyphicon-refresh\"></span>\n  </a>\n  <canvas signature component=\"component\" name=\"{{ componentId }}\" ng-model=\"data[component.key]\" ng-required=\"component.validate.required\"></canvas>\n  <div class=\"formio-signature-footer\" style=\"text-align: center;color:#C3C3C3;\" ng-class=\"{'field-required': component.validate.required}\">{{ component.footer | formioTranslate }}</div>\n</div>\n"
+        "<div ng-if=\"readOnly\">\n  <div ng-if=\"data[component.key] === 'YES'\">\n    [ Signature is hidden ]\n  </div>\n  <div ng-if=\"data[component.key] !== 'YES'\">\n    <img class=\"signature\" ng-attr-src=\"{{data[component.key]}}\" src=\"\" />\n  </div>\n</div>\n<div ng-if=\"!readOnly\" style=\"width: {{ component.width }}; height: {{ component.height }};\">\n  <a class=\"btn btn-xs btn-default\" style=\"position:absolute; left: 0; top: 0; z-index: 1000\" ng-click=\"component.clearSignature()\">\n    <span class=\"glyphicon glyphicon-refresh\"></span>\n  </a>\n  <canvas signature component=\"component\" name=\"{{ componentId }}\" ng-model=\"data[component.key]\" ng-required=\"component.validate.required\"></canvas>\n  <div class=\"formio-signature-footer\" style=\"text-align: center;color:#C3C3C3;\" ng-class=\"{'field-required': component.validate.required}\">{{ component.footer | formioTranslate }}</div>\n</div>\n"
       ));
 
       $templateCache.put('formio/componentsView/signature.html', FormioUtils.fieldWrap(
-        "<img ng-attr-src=\"{{data[component.key]}}\" src=\"\" />\n"
+        "<div ng-if=\"data[component.key] === 'YES'\">\n  [ Signature is hidden ]\n</div>\n<div ng-if=\"data[component.key] !== 'YES'\">\n  <img class=\"signature\" ng-attr-src=\"{{data[component.key]}}\" src=\"\" />\n</div>\n"
       ));
     }
   ]);
 };
 
-},{}],35:[function(require,module,exports){
+},{}],39:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -6013,7 +5042,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],36:[function(require,module,exports){
+},{}],40:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -6047,17 +5076,17 @@ module.exports = function(app) {
       tableClasses += "'table-hover': component.hover, ";
       tableClasses += "'table-condensed': component.condensed}";
       $templateCache.put('formio/components/table.html',
-        "<div class=\"table-responsive\" id=\"{{ component.key }}\" ng-if=\"!component.hide\">\n  <table ng-class=\"{'table-striped': component.striped, 'table-bordered': component.bordered, 'table-hover': component.hover, 'table-condensed': component.condensed}\" class=\"table\">\n    <thead ng-if=\"component.header.length\">\n      <th ng-repeat=\"header in component.header track by $index\">{{ header | formioTranslate }}</th>\n    </thead>\n    <tbody>\n      <tr ng-repeat=\"row in component.rows track by $index\">\n        <td ng-repeat=\"column in row track by $index\">\n          <formio-component ng-repeat=\"component in column.components track by $index\" component=\"component\" data=\"data\" formio=\"formio\" formio-form=\"formioForm\" grid-row=\"gridRow\" grid-col=\"gridCol\"></formio-component>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
+        "<div class=\"table-responsive\" id=\"{{ component.key }}\">\n  <table ng-class=\"{'table-striped': component.striped, 'table-bordered': component.bordered, 'table-hover': component.hover, 'table-condensed': component.condensed}\" class=\"table\">\n    <thead ng-if=\"component.header.length\">\n      <th ng-repeat=\"header in component.header track by $index\">{{ header | formioTranslate }}</th>\n    </thead>\n    <tbody>\n      <tr ng-repeat=\"row in component.rows track by $index\">\n        <td ng-repeat=\"column in row track by $index\">\n          <formio-component\n            ng-repeat=\"component in column.components track by $index\"\n            component=\"component\"\n            data=\"data\"\n            formio=\"formio\"\n            formio-form=\"formioForm\"\n            grid-row=\"gridRow\"\n            grid-col=\"gridCol\"\n            ng-if=\"show[column.key || ''] && show[component.key || '']\"\n            show=\"show\"\n          ></formio-component>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
       );
 
       $templateCache.put('formio/componentsView/table.html',
-        "<div class=\"table-responsive\" id=\"{{ component.key }}\">\n  <table ng-class=\"{'table-striped': component.striped, 'table-bordered': component.bordered, 'table-hover': component.hover, 'table-condensed': component.condensed}\" class=\"table\">\n    <thead ng-if=\"component.header.length\">\n      <th ng-repeat=\"header in component.header track by $index\">{{ header }}</th>\n    </thead>\n    <tbody>\n      <tr ng-repeat=\"row in component.rows track by $index\">\n        <td ng-repeat=\"column in row track by $index\">\n          <formio-component-view ng-repeat=\"component in column.components track by $index\" component=\"component\" data=\"data\" form=\"form\"></formio-component-view>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
+        "<div class=\"table-responsive\" id=\"{{ component.key }}\">\n  <table ng-class=\"{'table-striped': component.striped, 'table-bordered': component.bordered, 'table-hover': component.hover, 'table-condensed': component.condensed}\" class=\"table\">\n    <thead ng-if=\"component.header.length\">\n      <th ng-repeat=\"header in component.header track by $index\">{{ header }}</th>\n    </thead>\n    <tbody>\n      <tr ng-repeat=\"row in component.rows track by $index\">\n        <td ng-repeat=\"column in row track by $index\">\n          <formio-component-view ng-repeat=\"component in column.components track by $index\" component=\"component\" data=\"data\" form=\"form\" ignore=\"ignore\"></formio-component-view>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
       );
     }
   ]);
 };
 
-},{}],37:[function(require,module,exports){
+},{}],41:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -6068,6 +5097,7 @@ module.exports = function(app) {
         title: 'Text Area',
         template: function($scope) {
           if ($scope.component.wysiwyg) {
+            $scope.wysiwyg = $scope.component.wysiwyg;
             return 'formio/components/texteditor.html';
           }
           return 'formio/components/textarea.html';
@@ -6106,13 +5136,13 @@ module.exports = function(app) {
         "<textarea\nclass=\"form-control\"\nng-model=\"data[component.key]\"\nng-disabled=\"readOnly\"\nng-required=\"component.validate.required\"\nsafe-multiple-to-single\nid=\"{{ componentId }}\"\nname=\"{{ componentId }}\"\ntabindex=\"{{ component.tabindex || 0 }}\"\nplaceholder=\"{{ component.placeholder | formioTranslate }}\"\ncustom-validator=\"component.validate.custom\"\nrows=\"{{ component.rows }}\"></textarea>\n"
       ));
       $templateCache.put('formio/components/texteditor.html', FormioUtils.fieldWrap(
-        "<textarea\n  class=\"form-control\"\n  ng-model=\"data[component.key]\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"component.validate.required\"\n  ckeditor=\"component.wysiwyg\"\n  safe-multiple-to-single\n  id=\"{{ componentId }}\"\n  name=\"{{ componentId }}\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n  placeholder=\"{{ component.placeholder }}\"\n  custom-validator=\"component.validate.custom\"\n  rows=\"{{ component.rows }}\"></textarea>\n"
+        "<textarea\n  class=\"form-control\"\n  ng-model=\"data[component.key]\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"component.validate.required\"\n  ckeditor=\"wysiwyg\"\n  safe-multiple-to-single\n  id=\"{{ componentId }}\"\n  name=\"{{ componentId }}\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n  placeholder=\"{{ component.placeholder }}\"\n  custom-validator=\"component.validate.custom\"\n  rows=\"{{ component.rows }}\"></textarea>\n"
       ));
     }
   ]);
 };
 
-},{}],38:[function(require,module,exports){
+},{}],42:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -6171,7 +5201,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],39:[function(require,module,exports){
+},{}],43:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -6194,16 +5224,16 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/well.html',
-        "<div class=\"well\" id=\"{{ component.key }}\" ng-if=\"!component.hide\">\n  <formio-component ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" formio=\"formio\" read-only=\"readOnly\" formio-form=\"formioForm\" grid-row=\"gridRow\" grid-col=\"gridCol\"></formio-component>\n</div>\n"
+        "<div class=\"well\" id=\"{{ component.key }}\">\n  <formio-component\n    ng-repeat=\"_component in component.components track by $index\"\n    component=\"_component\"\n    data=\"data\"\n    formio=\"formio\"\n    read-only=\"readOnly\"\n    formio-form=\"formioForm\"\n    grid-row=\"gridRow\"\n    grid-col=\"gridCol\"\n    ng-if=\"show[component.key || ''] && show[_component.key || '']\"\n    show=\"show\"\n  ></formio-component>\n</div>\n"
       );
       $templateCache.put('formio/componentsView/well.html',
-        "<div class=\"well\" id=\"{{ component.key }}\">\n  <formio-component-view ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" form=\"form\"></formio-component-view>\n</div>\n"
+        "<div class=\"well\" id=\"{{ component.key }}\">\n  <formio-component-view ng-repeat=\"component in component.components track by $index\" component=\"component\" data=\"data\" form=\"form\" ignore=\"ignore\"></formio-component-view>\n</div>\n"
       );
     }
   ]);
 };
 
-},{}],40:[function(require,module,exports){
+},{}],44:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -6240,7 +5270,7 @@ module.exports = function() {
   };
 };
 
-},{}],41:[function(require,module,exports){
+},{}],45:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -6248,6 +5278,7 @@ module.exports = function() {
     replace: true,
     scope: {
       src: '=?',
+      url: '=?',
       formAction: '=?',
       form: '=?',
       submission: '=?',
@@ -6287,79 +5318,145 @@ module.exports = function() {
         }
 
         // Build the display map.
-        $scope.show = {};
+        $scope.show = {
+          '': true,
+          'undefined': true,
+          'null': true
+        };
         var boolean = {
           'true': true,
           'false': false
         };
 
-        var updateComponents = function() {
+        /**
+         * Sweep the current submission, to identify and remove data that has been conditionally hidden.
+         *
+         * This will iterate over every key in the submission data obj, regardless of the structure.
+         */
+        var sweepSubmission = function() {
+          var show = $scope.show || {
+              '': true,
+              'undefined': true,
+              'null': true
+            };
+          var submission = $scope.submission.data || {};
+
+          /**
+           * Sweep the given component keys and remove any data for the given keys which are being conditionally hidden.
+           *
+           * @param {Object} components
+           *   The list of components to sweep.
+           * @param {Boolean} ret
+           *   Whether or not you want to know if a modification needs to be made.
+           */
+          var sweep = function sweep(components, ret) {
+            // Skip our unwanted types.
+            if (components === null || typeof components === 'undefined') {
+              if (ret) {
+                return false;
+              }
+              return;
+            }
+
+            // If given a string, then we are looking at the api key of a component.
+            if (typeof components === 'string') {
+              if (show.hasOwnProperty(components) && show[components] === false) {
+                if (ret) {
+                  return true;
+                }
+                return;
+              }
+            }
+            // If given an array, iterate over each element, assuming its not a string itself.
+            // If each element is a string, then we aren't looking at a component, but data itself.
+            else if (components instanceof Array) {
+              var filtered = [];
+
+              components.forEach(function(component) {
+                if (typeof component === 'string') {
+                  filtered.push(component);
+                  return;
+                }
+
+                // Recurse into the components of this component.
+                var modified = sweep(component, true);
+                if (!modified) {
+                  filtered.push(component);
+                }
+              });
+
+              components = filtered;
+              return;
+            }
+            // If given an object, iterate the properties as component keys.
+            else if (typeof components === 'object') {
+              Object.keys(components).forEach(function(key) {
+                // If the key is deleted, delete the whole obj.
+                var modifiedKey = sweep(key, true);
+                if (modifiedKey) {
+                  delete components[key];
+                }
+                else {
+                  // If a child leaf is modified (non key) delete its whole subtree.
+                  if (components[key] instanceof Array || typeof components[key] === 'object') {
+                    // If the component can have sub-components, recurse.
+                    sweep(components[key]);
+                  }
+                }
+              });
+              return;
+            }
+
+            return;
+          };
+          return sweep(submission);
+        };
+
+        // The list of all conditionals.
+        var _conditionals = {};
+
+        // The list of all custom conditionals, segregated because they must be run on every change to data.
+        var _customConditionals = {};
+
+        /** Sweep all the components and build the conditionals map.
+         *
+         * @private
+         */
+        var _sweepConditionals = function() {
+          $scope.form = $scope.form || {};
           $scope.form.components = $scope.form.components || [];
           FormioUtils.eachComponent($scope.form.components, function(component) {
-            // Display every component by default
-            $scope.show[component.key] = ($scope.show[component.key] === undefined)
-              ? true
-              : $scope.show[component.key];
+            if (!component.hasOwnProperty('key')) {
+              return;
+            }
 
-            // Only change display options if all required conditional properties are present.
+            // Show everything by default.
+            $scope.show[component.key] = true;
+
+            // We only care about valid/complete conditional settings.
             if (
               component.conditional
               && (component.conditional.show !== null && component.conditional.show !== '')
               && (component.conditional.when !== null && component.conditional.when !== '')
             ) {
               // Default the conditional values.
-              component.conditional.show = boolean[component.conditional.show];
+              component.conditional.show = boolean.hasOwnProperty(component.conditional.show)
+                ? boolean[component.conditional.show]
+                : true;
               component.conditional.eq = component.conditional.eq || '';
 
-              // Get the conditional component.
-              var cond = FormioUtils.getComponent($scope.form.components, component.conditional.when.toString());
-              if (!cond) {
-                return;
-              }
-              var value = $scope.submission.data[cond.key];
+              // Keys should be unique, so don't worry about clobbering an existing duplicate.
+              _conditionals[component.key] = component.conditional;
 
-              if (typeof value !== 'undefined' && typeof value !== 'object') {
-                // Check if the conditional value is equal to the trigger value
-                $scope.show[component.key] = value.toString() === component.conditional.eq.toString()
-                  ? boolean[component.conditional.show]
-                  : !boolean[component.conditional.show];
+              // Store the components default value for conditional logic, if present.
+              if (component.hasOwnProperty('defaultValue')) {
+                _conditionals[component.key].defaultValue = component.defaultValue;
               }
-              // Special check for check boxes component.
-              else if (typeof value !== 'undefined' && typeof value === 'object') {
-                $scope.show[component.key] = boolean.hasOwnProperty(value[component.conditional.eq])
-                  ? boolean[value[component.conditional.eq]]
-                  : true;
-              }
-              // Check against the components default value, if present and the components hasnt been interacted with.
-              else if (typeof value === 'undefined' && cond.hasOwnProperty('defaultValue')) {
-                $scope.show[component.key] = cond.defaultValue.toString() === component.conditional.eq.toString()
-                  ? boolean[component.conditional.show]
-                  : !boolean[component.conditional.show];
-              }
-              // If there is no value, we still need to process as not equal.
-              else {
-                $scope.show[component.key] = !boolean[component.conditional.show];
-              }
-
-              // Update the visibility, if it's possible a change occurred.
-              component.hide = !$scope.show[component.key];
             }
             // Custom conditional logic.
             else if (component.customConditional) {
-              try {
-                // Create a child block, and expose the submission data.
-                var data = $scope.submission.data; // eslint-disable-line no-unused-vars
-                // Eval the custom conditional and update the show value.
-                var show = eval('(function() { ' + component.customConditional.toString() + '; return show; })()');
-                // Show by default, if an invalid type is given.
-                $scope.show[component.key] = boolean.hasOwnProperty(show.toString()) ? boolean[show] : true;
-              }
-              catch (e) {
-                $scope.show[component.key] = true;
-              }
-
-              // Update the visibility, if its possible a change occurred.
-              component.hide = !$scope.show[component.key];
+              // Add this customConditional to the conditionals list.
+              _customConditionals[component.key] = component.customConditional;
             }
 
             // Set hidden if specified
@@ -6368,7 +5465,7 @@ module.exports = function() {
             }
 
             // Set required if specified
-            if ($scope.requireComponents && component.hasOwnProperty('validate')) {
+            if ($scope.requireComponents && component.hasOwnProperty('validate') && $scope.requireComponents.indexOf(component.key) !== -1) {
               component.validate.required = $scope.requireComponents.indexOf(component.key) !== -1;
             }
 
@@ -6379,9 +5476,122 @@ module.exports = function() {
           }, true);
         };
 
-        // Update the components on the initial form render and all subsequent submission data changes.
-        $scope.$on('formRender', updateComponents);
-        $scope.$watchCollection('submission.data', updateComponents);
+        /**
+         * Using the conditionals map, invoke the conditionals for each component.
+         *
+         * @param {String} componentKey
+         *   The component to toggle conditional logic for.
+         *
+         * @private
+         */
+        var _toggleConditional = function(componentKey, subData) {
+          if (_conditionals.hasOwnProperty(componentKey)) {
+            var data = Object.assign({}, $scope.submission.data, subData);
+            var cond = _conditionals[componentKey];
+            var value = FormioUtils.getValue({data: data}, cond.when);
+
+            if (typeof value !== 'undefined' && typeof value !== 'object') {
+              // Check if the conditional value is equal to the trigger value
+              $scope.show[componentKey] = value.toString() === cond.eq.toString()
+                ? boolean[cond.show]
+                : !boolean[cond.show];
+            }
+            // Special check for check boxes component.
+            else if (typeof value !== 'undefined' && typeof value === 'object') {
+              // Only update the visibility is present, otherwise hide, because it was deleted by the submission sweep.
+              if (value.hasOwnProperty(cond.eq)) {
+                $scope.show[componentKey] = boolean.hasOwnProperty(value[cond.eq])
+                  ? boolean[value[cond.eq]]
+                  : true;
+              }
+              else {
+                $scope.show[componentKey] = false;
+              }
+            }
+            // Check against the components default value, if present and the components hasn't been interacted with.
+            else if (typeof value === 'undefined' && cond.hasOwnProperty('defaultValue')) {
+              $scope.show[componentKey] = cond.defaultValue.toString() === cond.eq.toString()
+                ? boolean[cond.show]
+                : !boolean[cond.show];
+            }
+            // If there is no value, we still need to process as not equal.
+            else {
+              $scope.show[componentKey] = !boolean[cond.show];
+            }
+          }
+          return $scope.show.hasOwnProperty(componentKey) ? $scope.show[componentKey] : null;
+        };
+
+        /**
+         * Using the custom conditionals map, invoke the conditionals for each component.
+         *
+         * @param {String} componentKey
+         *   The component to toggle conditional logic for.
+         *
+         * @private
+         */
+        var _toggleCustomConditional = function(componentKey, subData) {
+          if (_customConditionals.hasOwnProperty(componentKey)) {
+            var cond = _customConditionals[componentKey];
+
+            try {
+              // Create a child block, and expose the submission data.
+              var data = Object.assign({}, $scope.submission.data, subData); // eslint-disable-line no-unused-vars
+              // Eval the custom conditional and update the show value.
+              var show = eval('(function() { ' + cond.toString() + '; return show; })()');
+              // Show by default, if an invalid type is given.
+              $scope.show[componentKey] = boolean.hasOwnProperty(show.toString()) ? boolean[show] : true;
+            }
+            catch (e) {
+              $scope.show[componentKey] = true;
+            }
+          }
+          return $scope.show.hasOwnProperty(componentKey) ? $scope.show[componentKey] : null;
+        };
+
+        $scope.checkConditional = function(componentKey, subData) {
+          _toggleConditional(componentKey, subData);
+          var customConditional = _toggleCustomConditional(componentKey, subData);
+          // customConditional will be true if either are true since the value persists in $scope.show.
+          return customConditional;
+        };
+
+        // On every change to data, trigger the conditionals.
+        $scope.$watch(function() {
+          return $scope.submission && $scope.submission.data
+            ? $scope.submission.data
+            : {};
+        }, function() {
+          // Toggle every conditional.
+          var allConditionals = Object.keys(_conditionals);
+          (allConditionals || []).forEach(function(componentKey) {
+            _toggleConditional(componentKey);
+          });
+
+          var allCustomConditionals = Object.keys(_customConditionals);
+          (allCustomConditionals || []).forEach(function(componentKey) {
+            _toggleCustomConditional(componentKey);
+          });
+
+          var allHidden = Object.keys($scope.show);
+          (allHidden || []).forEach(function(componentKey) {
+            // If a component is hidden, delete its value, so other conditionals are property chain reacted.
+            if (!$scope.show[componentKey]) {
+              return sweepSubmission();
+            }
+          });
+        }, true);
+
+        var cancelFormLoadEvent = $scope.$on('formLoad', function() {
+          _sweepConditionals();
+          cancelFormLoadEvent();
+        });
+
+        if ($scope.options && $scope.options.watchData) {
+          $scope.$watch('submission.data', function() {
+            _sweepConditionals();
+          }, true);
+        }
 
         if (!$scope._src) {
           $scope.$watch('src', function(src) {
@@ -6402,10 +5612,33 @@ module.exports = function() {
           submission: true
         });
 
+        $scope.checkErrors = function(form) {
+          if (form.submitting) {
+            return true;
+          }
+          form.$pristine = false;
+          for (var key in form) {
+            if (form[key] && form[key].hasOwnProperty('$pristine')) {
+              form[key].$pristine = false;
+            }
+          }
+          return !form.$valid;
+        };
+
         // Called when the form is submitted.
         $scope.onSubmit = function(form) {
-          if (!form.$valid || form.submitting) return;
+          $scope.formioAlerts = [];
+          if ($scope.checkErrors(form)) {
+            $scope.formioAlerts.push({
+              type: 'danger',
+              message: 'Please fix the following errors before submitting.'
+            });
+            return;
+          }
+
           form.submitting = true;
+
+          sweepSubmission();
 
           // Create a sanitized submission object.
           var submissionData = {data: {}};
@@ -6440,7 +5673,7 @@ module.exports = function() {
             if (component.type === 'resource' && component.key && component.defaultPermission) {
               defaultPermissions[component.key] = component.defaultPermission;
             }
-            if ($scope.submission.data.hasOwnProperty(component.key) && $scope.show[component.key]) {
+            if ($scope.submission.data.hasOwnProperty(component.key) && $scope.show[component.key] === true) {
               var value = $scope.submission.data[component.key];
               if (component.type === 'number') {
                 submissionData.data[component.key] = value ? parseFloat(value) : 0;
@@ -6449,7 +5682,7 @@ module.exports = function() {
                 submissionData.data[component.key] = value;
               }
             }
-          });
+          }, true);
 
           angular.forEach($scope.submission.data, function(value, key) {
             if (value && !value.hasOwnProperty('_id')) {
@@ -6542,7 +5775,7 @@ module.exports = function() {
           }
 
           // If they wish to submit to the default location.
-          else if ($scope.formio) {
+          else if ($scope.formio && !$scope.formio.noSubmit) {
             // copy to remove angular $$hashKey
             $scope.formio.saveSubmission(submissionData, $scope.formioOptions).then(function(submission) {
               onSubmitDone(submission.method, submission);
@@ -6560,7 +5793,7 @@ module.exports = function() {
   };
 };
 
-},{}],42:[function(require,module,exports){
+},{}],46:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'Formio',
@@ -6580,7 +5813,8 @@ module.exports = [
         formioForm: '=',
         readOnly: '=',
         gridRow: '=',
-        gridCol: '='
+        gridCol: '=',
+        show: '='
       },
       templateUrl: 'formio/component.html',
       link: function(scope, el, attrs, formioCtrl) {
@@ -6614,6 +5848,9 @@ module.exports = [
             silentEvents: ['click', 'focus']
           };
 
+          // Pass through checkConditional since this is an isolate scope.
+          $scope.checkConditional = $scope.$parent.checkConditional;
+
           // Get the settings.
           var component = formioComponents.components[$scope.component.type] || formioComponents.components['custom'];
 
@@ -6633,6 +5870,9 @@ module.exports = [
 
           // Remove a field value.
           $scope.removeFieldValue = function(index) {
+            if (!Array.isArray($scope.data[$scope.component.key])) {
+              $scope.data[$scope.component.key] = [];
+            }
             $scope.data[$scope.component.key].splice(index, 1);
           };
 
@@ -6723,7 +5963,7 @@ module.exports = [
   }
 ];
 
-},{}],43:[function(require,module,exports){
+},{}],47:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'formioComponents',
@@ -6736,7 +5976,8 @@ module.exports = [
       scope: {
         component: '=',
         data: '=',
-        form: '='
+        form: '=',
+        ignore: '=?'
       },
       templateUrl: 'formio/component-view.html',
       controller: [
@@ -6762,13 +6003,25 @@ module.exports = [
           else {
             $scope.template = component.viewTemplate;
           }
+
+          // Set the component name.
+          $scope.componentId = $scope.component.key;
+          if ($scope.gridRow !== undefined) {
+            $scope.componentId += ('-' + $scope.gridRow);
+          }
+          if ($scope.gridCol !== undefined) {
+            $scope.componentId += ('-' + $scope.gridCol);
+          }
+
+          // See if we should show this component.
+          $scope.shouldShow = !$scope.ignore || ($scope.ignore.indexOf($scope.componentId) === -1);
         }
       ]
     };
   }
 ];
 
-},{}],44:[function(require,module,exports){
+},{}],48:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -6851,7 +6104,7 @@ module.exports = function() {
   };
 };
 
-},{}],45:[function(require,module,exports){
+},{}],49:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$compile',
@@ -6870,7 +6123,7 @@ module.exports = [
   }
 ];
 
-},{}],46:[function(require,module,exports){
+},{}],50:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -6880,7 +6133,7 @@ module.exports = function() {
   };
 };
 
-},{}],47:[function(require,module,exports){
+},{}],51:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -6895,7 +6148,7 @@ module.exports = function() {
   };
 };
 
-},{}],48:[function(require,module,exports){
+},{}],52:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -6950,7 +6203,7 @@ module.exports = function() {
   };
 };
 
-},{}],49:[function(require,module,exports){
+},{}],53:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -7019,12 +6272,20 @@ module.exports = function() {
           session = angular.fromJson(session);
         }
 
+        var getForm = function() {
+          var element = $element.find('#formio-wizard-form');
+          if (!element.length) {
+            return {};
+          }
+          return element.children().scope().formioForm;
+        };
+
         $scope.formio = null;
         $scope.page = {};
         $scope.pages = [];
         $scope.hasTitles = false;
         $scope.colclass = '';
-        if (!$scope.submission || !Object.keys($scope.submission.data).length) {
+        if (!$scope.submission || !Object.keys($scope.submission).length) {
           $scope.submission = session ? {data: session.data} : {data: {}};
         }
         $scope.currentPage = session ? session.page : 0;
@@ -7087,10 +6348,10 @@ module.exports = function() {
                 fieldForm[elementScope.component.key].$pristine = false;
               }
             });
-            $scope.formioAlerts.push({
+            $scope.formioAlerts = [{
               type: 'danger',
               message: 'Please fix the following errors before proceeding.'
-            });
+            }];
             return true;
           }
           return false;
@@ -7101,44 +6362,125 @@ module.exports = function() {
           if ($scope.checkErrors()) {
             return;
           }
-          var sub = angular.copy($scope.submission);
+
+          // Create a sanitized submission object.
+          var submissionData = {data: {}};
+          if ($scope.submission._id) {
+            submissionData._id = $scope.submission._id;
+          }
+          if ($scope.submission.data._id) {
+            submissionData._id = $scope.submission.data._id;
+          }
+
+          var grabIds = function(input) {
+            if (!input) {
+              return [];
+            }
+
+            if (!(input instanceof Array)) {
+              input = [input];
+            }
+
+            var final = [];
+            input.forEach(function(element) {
+              if (element && element._id) {
+                final.push(element._id);
+              }
+            });
+
+            return final;
+          };
+
+          var defaultPermissions = {};
           FormioUtils.eachComponent($scope.form.components, function(component) {
-            if (sub.data.hasOwnProperty(component.key) && (component.type === 'number')) {
-              if (sub.data[component.key]) {
-                sub.data[component.key] = parseFloat(sub.data[component.key]);
+            if (component.type === 'resource' && component.key && component.defaultPermission) {
+              defaultPermissions[component.key] = component.defaultPermission;
+            }
+            if (submissionData.data.hasOwnProperty(component.key) && (component.type === 'number')) {
+              var value = $scope.submission.data[component.key];
+              if (component.type === 'number') {
+                submissionData.data[component.key] = value ? parseFloat(value) : 0;
               }
               else {
-                sub.data[component.key] = 0;
+                submissionData.data[component.key] = value;
+              }
+            }
+          }, true);
+
+          angular.forEach($scope.submission.data, function(value, key) {
+            if (value && !value.hasOwnProperty('_id')) {
+              submissionData.data[key] = value;
+            }
+
+            // Setup the submission access.
+            var perm = defaultPermissions[key];
+            if (perm) {
+              submissionData.access = submissionData.access || [];
+
+              // Coerce value into an array for plucking.
+              if (!(value instanceof Array)) {
+                value = [value];
+              }
+
+              // Try to find and update an existing permission.
+              var found = false;
+              submissionData.access.forEach(function(permission) {
+                if (permission.type === perm) {
+                  found = true;
+                  permission.resources = permission.resources || [];
+                  permission.resources.concat(grabIds(value));
+                }
+              });
+
+              // Add a permission, because one was not found.
+              if (!found) {
+                submissionData.access.push({
+                  type: perm,
+                  resources: grabIds(value)
+                });
               }
             }
           });
+          // Strip out any angular keys.
+          submissionData = angular.copy(submissionData);
+
+          var submitEvent = $scope.$emit('formSubmit', submissionData);
+          if (submitEvent.defaultPrevented) {
+              // Listener wants to cancel the form submission
+              return;
+          }
 
           var onDone = function(submission) {
             if ($scope.storage && !$scope.readOnly) {
               localStorage.setItem($scope.storage, '');
             }
+            $scope.showAlerts({
+              type: 'success',
+              message: 'Submission Complete!'
+            });
             $scope.$emit('formSubmission', submission);
           };
 
           // Save to specified action.
           if ($scope.action) {
-            var method = sub._id ? 'put' : 'post';
-            $http[method]($scope.action, sub).success(function(submission) {
+            var method = submissionData._id ? 'put' : 'post';
+            $http[method]($scope.action, submissionData).success(function(submission) {
               Formio.clearCache();
               onDone(submission);
             }).error(FormioScope.onError($scope, $element));
           }
-          else if ($scope.formio) {
-            $scope.formio.saveSubmission(sub).then(onDone).catch(FormioScope.onError($scope, $element));
+          else if ($scope.formio && !$scope.formio.noSubmit) {
+            $scope.formio.saveSubmission(submissionData).then(onDone).catch(FormioScope.onError($scope, $element));
           }
           else {
-            onDone(sub);
+            onDone(submissionData);
           }
         };
 
         $scope.cancel = function() {
           $scope.clear();
           showPage(true);
+          $scope.$emit('cancel');
         };
 
         // Move onto the next page.
@@ -7176,12 +6518,7 @@ module.exports = function() {
         };
 
         $scope.isValid = function() {
-          var element = $element.find('#formio-wizard-form');
-          if (!element.length) {
-            return false;
-          }
-          var formioForm = element.children().scope().formioForm;
-          return formioForm.$valid;
+          return getForm().$valid;
         };
 
         $scope.$on('wizardGoToPage', function(event, page) {
@@ -7255,7 +6592,7 @@ module.exports = function() {
   };
 };
 
-},{}],50:[function(require,module,exports){
+},{}],54:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'Formio',
@@ -7308,6 +6645,10 @@ module.exports = [
           }
         });
 
+        $scope.setLoading = function(_loading) {
+          $scope.formLoading = _loading;
+        };
+
         // Used to set the form action.
         var getAction = function(action) {
           if (!action) return '';
@@ -7339,27 +6680,27 @@ module.exports = [
           }
         });
 
-        $scope.$watch('form', function(form) {
+        // Trigger a form load event when the components length is more than 0.
+        $scope.$watch('form.components.length', function() {
           if (
-            !form ||
-            (Object.keys(form).length === 0) ||
-            !form.components ||
-            !form.components.length
+            !$scope.form ||
+            !$scope.form.components ||
+            !$scope.form.components.length
           ) {
             return;
           }
-          $scope.formLoading = false;
+          $scope.setLoading(false);
           $scope.$emit('formLoad', $scope.form);
         });
 
         $scope.updateSubmissions = function() {
-          $scope.formLoading = true;
+          $scope.setLoading(true);
           var params = {};
           if ($scope.perPage) params.limit = $scope.perPage;
           if ($scope.skip) params.skip = $scope.skip;
           loader.loadSubmissions({params: params}).then(function(submissions) {
             angular.merge($scope.submissions, angular.copy(submissions));
-            $scope.formLoading = false;
+            $scope.setLoading(false);
             $scope.$emit('submissionsLoad', submissions);
           }, this.onError($scope));
         }.bind(this);
@@ -7367,33 +6708,33 @@ module.exports = [
         if ($scope._src) {
           loader = new Formio($scope._src);
           if (options.form) {
-            $scope.formLoading = true;
+            $scope.setLoading(true);
 
             // If a form is already provided, then skip the load.
             if ($scope.form && Object.keys($scope.form).length) {
-              $scope.formLoading = false;
+              $scope.setLoading(false);
               $scope.$emit('formLoad', $scope.form);
             }
             else {
               loader.loadForm().then(function(form) {
                 angular.merge($scope.form, angular.copy(form));
-                $scope.formLoading = false;
+                $scope.setLoading(false);
                 $scope.$emit('formLoad', $scope.form);
               }, this.onError($scope));
             }
           }
           if (options.submission && loader.submissionId) {
-            $scope.formLoading = true;
+            $scope.setLoading(true);
 
             // If a submission is already provided, then skip the load.
             if ($scope.submission && Object.keys($scope.submission.data).length) {
-              $scope.formLoading = false;
+              $scope.setLoading(false);
               $scope.$emit('submissionLoad', $scope.submission);
             }
             else {
               loader.loadSubmission().then(function(submission) {
                 angular.merge($scope.submission, angular.copy(submission));
-                $scope.formLoading = false;
+                $scope.setLoading(false);
                 $scope.$emit('submissionLoad', submission);
               }, this.onError($scope));
             }
@@ -7403,8 +6744,15 @@ module.exports = [
           }
         }
         else {
+          // If they provide a url to the form, we still need to create it but tell it to not submit.
+          if ($scope.url) {
+            loader = new Formio($scope.url);
+            loader.noSubmit = true;
+          }
+
           $scope.formoLoaded = true;
-          $scope.formLoading = $scope.form && (Object.keys($scope.form).length === 0);
+          $scope.formLoading = !$scope.form || (Object.keys($scope.form).length === 0) || !$scope.form.components.length;
+          $scope.setLoading($scope.formLoading);
 
           // Emit the events if these objects are already loaded.
           if (!$scope.formLoading) {
@@ -7425,15 +6773,16 @@ module.exports = [
   }
 ];
 
-},{}],51:[function(require,module,exports){
+},{}],55:[function(_dereq_,module,exports){
 "use strict";
-var formioUtils = require('formio-utils');
+var formioUtils = _dereq_('formio-utils');
 
 module.exports = function() {
   return {
     flattenComponents: formioUtils.flattenComponents,
     eachComponent: formioUtils.eachComponent,
     getComponent: formioUtils.getComponent,
+    getValue: formioUtils.getValue,
     hideFields: function(form, components) {
       this.eachComponent(form.components, function(component) {
         for (var i in components) {
@@ -7462,23 +6811,25 @@ module.exports = function() {
       input = input + '<formio-errors></formio-errors>';
       var multiInput = input.replace('data[component.key]', 'data[component.key][$index]');
       var inputLabel = '<label ng-if="component.label && !component.hideLabel" for="{{ component.key }}" class="control-label" ng-class="{\'field-required\': component.validate.required}">{{ component.label | formioTranslate }}</label>';
-      var requiredInline = '<span ng-if="!component.label && component.validate.required" class="glyphicon glyphicon-asterisk form-control-feedback field-required-inline" aria-hidden="true"></span>';
+      var requiredInline = '<span ng-if="(component.hideLabel === true || component.label === \'\' || !component.label) && component.validate.required" class="glyphicon glyphicon-asterisk form-control-feedback field-required-inline" aria-hidden="true"></span>';
       var template =
         '<div ng-if="!component.multiple">' +
-          inputLabel + requiredInline +
+          inputLabel +
           '<div class="input-group">' +
             '<div class="input-group-addon" ng-if="!!component.prefix">{{ component.prefix }}</div>' +
             input +
+            requiredInline +
             '<div class="input-group-addon" ng-if="!!component.suffix">{{ component.suffix }}</div>' +
           '</div>' +
         '</div>' +
         '<div ng-if="component.multiple"><table class="table table-bordered">' +
           inputLabel +
           '<tr ng-repeat="value in data[component.key] track by $index">' +
-            '<td>' + requiredInline +
+            '<td>' +
               '<div class="input-group">' +
                 '<div class="input-group-addon" ng-if="!!component.prefix">{{ component.prefix }}</div>' +
-                multiInput +
+                  multiInput +
+                  requiredInline +
                 '<div class="input-group-addon" ng-if="!!component.suffix">{{ component.suffix }}</div>' +
               '</div>' +
             '</td>' +
@@ -7493,7 +6844,7 @@ module.exports = function() {
   };
 };
 
-},{"formio-utils":3}],52:[function(require,module,exports){
+},{"formio-utils":2}],56:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$q',
@@ -7542,7 +6893,7 @@ module.exports = [
   }
 ];
 
-},{}],53:[function(require,module,exports){
+},{}],57:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'Formio',
@@ -7557,7 +6908,7 @@ module.exports = [
       if (!value) {
         return '';
       }
-      if (!component || !component.type) {
+      if (!component || !component.input|| !component.type) {
         return value;
       }
       var componentInfo = formioComponents.components[component.type];
@@ -7576,7 +6927,7 @@ module.exports = [
   }
 ];
 
-},{}],54:[function(require,module,exports){
+},{}],58:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'FormioUtils',
@@ -7585,7 +6936,7 @@ module.exports = [
   }
 ];
 
-},{}],55:[function(require,module,exports){
+},{}],59:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$sce',
@@ -7598,7 +6949,7 @@ module.exports = [
   }
 ];
 
-},{}],56:[function(require,module,exports){
+},{}],60:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   function() {
@@ -7617,7 +6968,7 @@ module.exports = [
   }
 ];
 
-},{}],57:[function(require,module,exports){
+},{}],61:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'formioTableView',
@@ -7630,7 +6981,7 @@ module.exports = [
   }
 ];
 
-},{}],58:[function(require,module,exports){
+},{}],62:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'Formio',
@@ -7645,7 +6996,7 @@ module.exports = [
   }
 ];
 
-},{}],59:[function(require,module,exports){
+},{}],63:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$filter',
@@ -7674,7 +7025,7 @@ module.exports = [
   }
 ];
 
-},{}],60:[function(require,module,exports){
+},{}],64:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -7692,50 +7043,48 @@ var app = angular.module('formio', [
 /**
  * Create the formio providers.
  */
-app.provider('Formio', require('./providers/Formio'));
-
-app.provider('FormioPlugins', require('./providers/FormioPlugins'));
+app.provider('Formio', _dereq_('./providers/Formio'));
 
 /**
  * Provides a way to register the Formio scope.
  */
-app.factory('FormioScope', require('./factories/FormioScope'));
+app.factory('FormioScope', _dereq_('./factories/FormioScope'));
 
-app.factory('FormioUtils', require('./factories/FormioUtils'));
+app.factory('FormioUtils', _dereq_('./factories/FormioUtils'));
 
-app.factory('formioInterceptor', require('./factories/formioInterceptor'));
+app.factory('formioInterceptor', _dereq_('./factories/formioInterceptor'));
 
-app.factory('formioTableView', require('./factories/formioTableView'));
+app.factory('formioTableView', _dereq_('./factories/formioTableView'));
 
-app.directive('formio', require('./directives/formio'));
+app.directive('formio', _dereq_('./directives/formio'));
 
-app.directive('formioDelete', require('./directives/formioDelete'));
+app.directive('formioDelete', _dereq_('./directives/formioDelete'));
 
-app.directive('formioErrors', require('./directives/formioErrors'));
+app.directive('formioErrors', _dereq_('./directives/formioErrors'));
 
-app.directive('customValidator', require('./directives/customValidator'));
+app.directive('customValidator', _dereq_('./directives/customValidator'));
 
-app.directive('formioSubmissions', require('./directives/formioSubmissions'));
+app.directive('formioSubmissions', _dereq_('./directives/formioSubmissions'));
 
-app.directive('formioSubmission', require('./directives/formioSubmission'));
+app.directive('formioSubmission', _dereq_('./directives/formioSubmission'));
 
-app.directive('formioComponent', require('./directives/formioComponent'));
+app.directive('formioComponent', _dereq_('./directives/formioComponent'));
 
-app.directive('formioComponentView', require('./directives/formioComponentView'));
+app.directive('formioComponentView', _dereq_('./directives/formioComponentView'));
 
-app.directive('formioElement', require('./directives/formioElement'));
+app.directive('formioElement', _dereq_('./directives/formioElement'));
 
-app.directive('formioWizard', require('./directives/formioWizard'));
+app.directive('formioWizard', _dereq_('./directives/formioWizard'));
 
 /**
  * Filter to flatten form components.
  */
-app.filter('flattenComponents', require('./filters/flattenComponents'));
-app.filter('tableComponents', require('./filters/tableComponents'));
-app.filter('tableView', require('./filters/tableView'));
-app.filter('tableFieldView', require('./filters/tableFieldView'));
-app.filter('safehtml', require('./filters/safehtml'));
-app.filter('formioTranslate', require('./filters/translate'));
+app.filter('flattenComponents', _dereq_('./filters/flattenComponents'));
+app.filter('tableComponents', _dereq_('./filters/tableComponents'));
+app.filter('tableView', _dereq_('./filters/tableView'));
+app.filter('tableFieldView', _dereq_('./filters/tableFieldView'));
+app.filter('safehtml', _dereq_('./filters/safehtml'));
+app.filter('formioTranslate', _dereq_('./filters/translate'));
 
 app.config([
   '$httpProvider',
@@ -7753,39 +7102,37 @@ app.config([
   }
 ]);
 
-require('./plugins')(app);
-
 app.run([
   '$templateCache',
   function($templateCache) {
     // The template for the formio forms.
     $templateCache.put('formio.html',
-      "<div>\n  <i style=\"font-size: 2em;\" ng-if=\"formLoading\" class=\"glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <formio-wizard ng-if=\"form.display === 'wizard'\" src=\"src\" form=\"form\" submission=\"submission\" form-action=\"formAction\" read-only=\"readOnly\" hide-components=\"hideComponents\" formio-options=\"formioOptions\" storage=\"form.name\"></formio-wizard>\n  <form ng-if=\"!form.display || (form.display === 'form')\" role=\"form\" name=\"formioForm\" ng-submit=\"onSubmit(formioForm)\" novalidate>\n    <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">\n      {{ alert.message }}\n    </div>\n    <!-- DO NOT PUT \"track by $index\" HERE SINCE DYNAMICALLY ADDING/REMOVING COMPONENTS WILL BREAK -->\n    <formio-component ng-repeat=\"component in form.components\" component=\"component\" data=\"submission.data\" formio-form=\"formioForm\" formio=\"formio\" read-only=\"readOnly || component.disabled\" ng-if=\"!component.hide\"></formio-component>\n  </form>\n</div>\n"
+      "<div>\n  <i style=\"font-size: 2em;\" ng-if=\"formLoading\" ng-class=\"{'formio-hidden': !formLoading}\" class=\"formio-loading glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <formio-wizard ng-if=\"form.display === 'wizard'\" src=\"src\" form=\"form\" submission=\"submission\" form-action=\"formAction\" read-only=\"readOnly\" hide-components=\"hideComponents\" formio-options=\"formioOptions\" storage=\"form.name\"></formio-wizard>\n  <form ng-if=\"!form.display || (form.display === 'form')\" role=\"form\" name=\"formioForm\" ng-submit=\"onSubmit(formioForm)\" novalidate>\n    <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">\n      {{ alert.message | formioTranslate }}\n    </div>\n    <!-- DO NOT PUT \"track by $index\" HERE SINCE DYNAMICALLY ADDING/REMOVING COMPONENTS WILL BREAK -->\n    <formio-component\n      ng-repeat=\"component in form.components\"\n      component=\"component\"\n      data=\"submission.data\"\n      formio-form=\"formioForm\"\n      formio=\"formio\"\n      read-only=\"readOnly || component.disabled\"\n      ng-if=\"show[component.key || '']\"\n      show=\"show\"\n    ></formio-component>\n  </form>\n</div>\n"
     );
 
     $templateCache.put('formio-wizard.html',
-      "<div class=\"formio-wizard-wrapper\">\n  <div class=\"row bs-wizard\" style=\"border-bottom:0;\" ng-class=\"{hasTitles: hasTitles}\">\n    <div ng-class=\"{disabled: ($index > currentPage), active: ($index == currentPage), complete: ($index < currentPage), noTitle: !page.title}\" class=\"{{ colclass }} bs-wizard-step\" ng-repeat=\"page in pages track by $index\">\n      <div class=\"text-center bs-wizard-stepnum\" ng-if=\"page.title\">{{ page.title }}</div>\n      <div class=\"progress\"><div class=\"progress-bar progress-bar-primary\"></div></div>\n      <a ng-click=\"goto($index)\" class=\"bs-wizard-dot bg-primary\"><div class=\"bs-wizard-dot-inner bg-success\"></div></a>\n    </div>\n  </div>\n  <style type=\"text/css\">.bs-wizard > .bs-wizard-step:first-child { margin-left: {{ margin }}%; }</style>\n  <i ng-show=\"!wizardLoaded\" id=\"formio-loading\" style=\"font-size: 2em;\" class=\"glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">{{ alert.message }}</div>\n  <div class=\"formio-wizard\"></div>\n  <ul ng-show=\"wizardLoaded\" class=\"list-inline\">\n    <li><a class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</a></li>\n    <li ng-if=\"currentPage > 0\"><a class=\"btn btn-primary\" ng-click=\"prev()\">Previous</a></li>\n    <li ng-if=\"currentPage < (form.components.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"next()\">Next</a>\n    </li>\n    <li ng-if=\"currentPage >= (form.components.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"submit()\">Submit Form</a>\n    </li>\n  </ul>\n</div>\n"
+      "<div class=\"formio-wizard-wrapper\">\n  <div class=\"row bs-wizard\" style=\"border-bottom:0;\" ng-class=\"{hasTitles: hasTitles}\">\n    <div ng-class=\"{disabled: ($index > currentPage), active: ($index == currentPage), complete: ($index < currentPage), noTitle: !page.title}\" class=\"{{ colclass }} bs-wizard-step\" ng-repeat=\"page in pages track by $index\">\n      <div class=\"text-center bs-wizard-stepnum\" ng-if=\"page.title\">{{ page.title }}</div>\n      <div class=\"progress\"><div class=\"progress-bar progress-bar-primary\"></div></div>\n      <a ng-click=\"goto($index)\" class=\"bs-wizard-dot bg-primary\"><div class=\"bs-wizard-dot-inner bg-success\"></div></a>\n    </div>\n  </div>\n  <style type=\"text/css\">.bs-wizard > .bs-wizard-step:first-child { margin-left: {{ margin }}%; }</style>\n  <i ng-show=\"!wizardLoaded\" id=\"formio-loading\" style=\"font-size: 2em;\" class=\"glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">{{ alert.message | formioTranslate }}</div>\n  <div class=\"formio-wizard\"></div>\n  <ul ng-show=\"wizardLoaded\" class=\"list-inline\">\n    <li><a class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</a></li>\n    <li ng-if=\"currentPage > 0\"><a class=\"btn btn-primary\" ng-click=\"prev()\">Previous</a></li>\n    <li ng-if=\"currentPage < (form.components.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"next()\">Next</a>\n    </li>\n    <li ng-if=\"currentPage >= (form.components.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"submit()\">Submit Form</a>\n    </li>\n  </ul>\n</div>\n"
     );
 
     $templateCache.put('formio-delete.html',
-      "<form role=\"form\">\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">\n    {{ alert.message }}\n  </div>\n  <h3>{{ deleteMessage }}</h3>\n  <div class=\"btn-toolbar\">\n    <button ng-click=\"onDelete()\" class=\"btn btn-danger\">Yes</button>\n    <button ng-click=\"onCancel()\" class=\"btn btn-default\">No</button>\n  </div>\n</form>\n"
+      "<form role=\"form\">\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">\n    {{ alert.message | formioTranslate }}\n  </div>\n  <h3>{{ deleteMessage | formioTranslate }}</h3>\n  <div class=\"btn-toolbar\">\n    <button ng-click=\"onDelete()\" class=\"btn btn-danger\">{{ 'Yes' | formioTranslate }}</button>\n    <button ng-click=\"onCancel()\" class=\"btn btn-default\">{{ 'No' | formioTranslate }}</button>\n  </div>\n</form>\n"
     );
 
     $templateCache.put('formio/submission.html',
-      "<div>\n  <div ng-repeat=\"component in form.components track by $index\" >\n    <formio-component-view form=\"form\" component=\"component\" data=\"submission.data\"></formio-component-view>\n  </div>\n</div>\n"
+      "<div>\n  <div ng-repeat=\"component in form.components track by $index\">\n    <formio-component-view form=\"form\" component=\"component\" data=\"submission.data\" ignore=\"ignore\"></formio-component-view>\n  </div>\n</div>\n"
     );
 
     $templateCache.put('formio/submissions.html',
-      "<div>\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">\n    {{ alert.message }}\n  </div>\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th ng-repeat=\"component in form.components track by $index | flattenComponents\" ng-if=\"tableView(component)\">{{ component.label || component.key }}</th>\n        <th>Submitted</th>\n        <th>Updated</th>\n        <th>Operations</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr ng-repeat=\"submission in submissions track by $index\" class=\"formio-submission\" ng-click=\"$emit('submissionView', submission)\">\n        <td ng-repeat=\"component in form.components track by $index | flattenComponents\" ng-if=\"tableView(component)\">{{ submission.data | tableView:component }}</td>\n        <td>{{ submission.created | amDateFormat:'l, h:mm:ss a' }}</td>\n        <td>{{ submission.modified | amDateFormat:'l, h:mm:ss a' }}</td>\n        <td>\n          <div class=\"button-group\" style=\"display:flex;\">\n            <a ng-click=\"$emit('submissionView', submission); $event.stopPropagation();\" class=\"btn btn-primary btn-xs\"><span class=\"glyphicon glyphicon-eye-open\"></span></a>&nbsp;\n            <a ng-click=\"$emit('submissionEdit', submission); $event.stopPropagation();\" class=\"btn btn-default btn-xs\"><span class=\"glyphicon glyphicon-edit\"></span></a>&nbsp;\n            <a ng-click=\"$emit('submissionDelete', submission); $event.stopPropagation();\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove-circle\"></span></a>\n          </div>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n  <pagination\n    ng-if=\"submissions.serverCount > perPage\"\n    ng-model=\"currentPage\"\n    ng-change=\"pageChanged(currentPage)\"\n    total-items=\"submissions.serverCount\"\n    items-per-page=\"perPage\"\n    direction-links=\"false\"\n    boundary-links=\"true\"\n    first-text=\"&laquo;\"\n    last-text=\"&raquo;\"\n    >\n  </pagination>\n</div>\n"
+      "<div>\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">\n    {{ alert.message | formioTranslate }}\n  </div>\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th ng-repeat=\"component in form.components | flattenComponents track by $index\" ng-if=\"tableView(component)\">{{ component.label || component.key }}</th>\n        <th>Submitted</th>\n        <th>Updated</th>\n        <th>Operations</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr ng-repeat=\"submission in submissions track by $index\" class=\"formio-submission\" ng-click=\"$emit('submissionView', submission)\">\n        <td ng-repeat=\"component in form.components | flattenComponents track by $index\" ng-if=\"tableView(component)\">{{ submission.data | tableView:component }}</td>\n        <td>{{ submission.created | amDateFormat:'l, h:mm:ss a' }}</td>\n        <td>{{ submission.modified | amDateFormat:'l, h:mm:ss a' }}</td>\n        <td>\n          <div class=\"button-group\" style=\"display:flex;\">\n            <a ng-click=\"$emit('submissionView', submission); $event.stopPropagation();\" class=\"btn btn-primary btn-xs\"><span class=\"glyphicon glyphicon-eye-open\"></span></a>&nbsp;\n            <a ng-click=\"$emit('submissionEdit', submission); $event.stopPropagation();\" class=\"btn btn-default btn-xs\"><span class=\"glyphicon glyphicon-edit\"></span></a>&nbsp;\n            <a ng-click=\"$emit('submissionDelete', submission); $event.stopPropagation();\" class=\"btn btn-danger btn-xs\"><span class=\"glyphicon glyphicon-remove-circle\"></span></a>\n          </div>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n  <pagination\n    ng-if=\"submissions.serverCount > perPage\"\n    ng-model=\"currentPage\"\n    ng-change=\"pageChanged(currentPage)\"\n    total-items=\"submissions.serverCount\"\n    items-per-page=\"perPage\"\n    direction-links=\"false\"\n    boundary-links=\"true\"\n    first-text=\"&laquo;\"\n    last-text=\"&raquo;\"\n    >\n  </pagination>\n</div>\n"
     );
 
     // A formio component template.
     $templateCache.put('formio/component.html',
-      "<div class=\"form-group has-feedback form-field-type-{{ component.type }} formio-component-{{ component.key }} {{component.customClass}}\" id=\"form-group-{{ componentId }}\" ng-class=\"{'has-error': formioForm[componentId].$invalid && !formioForm[componentId].$pristine }\" ng-style=\"component.style\" ng-hide=\"component.hide || component.hidden\">\n  <formio-element></formio-element>\n</div>\n"
+      "<div class=\"form-group has-feedback form-field-type-{{ component.type }} formio-component-{{ component.key }} {{component.customClass}}\" id=\"form-group-{{ componentId }}\" ng-class=\"{'has-error': formioForm[componentId].$invalid && !formioForm[componentId].$pristine }\" ng-style=\"component.style\" ng-hide=\"component.hidden\">\n  <formio-element></formio-element>\n</div>\n"
     );
 
     $templateCache.put('formio/component-view.html',
-      "<div name=\"componentId\" class=\"form-group has-feedback form-field-type-{{ component.type }} {{component.customClass}} formio-component-{{ component.key }}\" id=\"form-group-{{ componentId }}\" ng-style=\"component.style\" ng-hide=\"component.hidden\">\n  <formio-element></formio-element>\n</div>\n"
+      "<div name=\"{{ componentId }}\" class=\"form-group has-feedback form-field-type-{{ component.type }} {{component.customClass}} formio-component-{{ component.key }}\" id=\"form-group-{{ componentId }}\" ng-style=\"component.style\" ng-hide=\"component.hidden\">\n  <formio-element ng-if=\"shouldShow\"></formio-element>\n</div>\n"
     );
 
     $templateCache.put('formio/element-view.html',
@@ -7793,310 +7140,18 @@ app.run([
     );
 
     $templateCache.put('formio/errors.html',
-      "<div ng-show=\"formioForm[componentId].$error && !formioForm[componentId].$pristine\">\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.email\">{{ component.label || component.key }} must be a valid email.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.required\">{{ component.label || component.key }} is required.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.number\">{{ component.label || component.key }} must be a number.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.maxlength\">{{ component.label || component.key }} must be shorter than {{ component.validate.maxLength + 1 }} characters.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.minlength\">{{ component.label || component.key }} must be longer than {{ component.validate.minLength - 1 }} characters.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.min\">{{ component.label || component.key }} must be higher than {{ component.validate.min - 1 }}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.max\">{{ component.label || component.key }} must be lower than {{ component.validate.max + 1 }}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.custom\">{{ component.customError }}</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.pattern\">{{ component.label || component.key }} does not match the pattern {{ component.validate.pattern }}</p>\n</div>\n"
+      "<div ng-show=\"formioForm[componentId].$error && !formioForm[componentId].$pristine\">\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.email\">{{ component.label || component.placeholder || component.key }} {{'must be a valid email' | formioTranslate}}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.required\">{{ component.label || component.placeholder || component.key }} {{'is required' | formioTranslate}}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.number\">{{ component.label || component.placeholder || component.key }} {{'must be a number' | formioTranslate}}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.maxlength\">{{ component.label || component.placeholder || component.key }} {{'must be shorter than' | formioTranslate}} {{ component.validate.maxLength + 1 }} {{'characters' | formioTranslate}}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.minlength\">{{ component.label || component.placeholder || component.key }} {{'must be longer than' | formioTranslate}} {{ component.validate.minLength - 1 }} {{'characters' | formioTranslate}}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.min\">{{ component.label || component.placeholder || component.key }} {{'must be higher than' | formioTranslate}} {{ component.validate.min - 1 }}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.max\">{{ component.label || component.placeholder || component.key }} {{'must be lower than' | formioTranslate}} {{ component.validate.max + 1 }}.</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.custom\">{{ component.customError | formioTranslate }}</p>\n  <p class=\"help-block\" ng-show=\"formioForm[componentId].$error.pattern\">{{ component.label || component.placeholder || component.key }} {{'does not match the pattern' | formioTranslate}} {{ component.validate.pattern }}</p>\n</div>\n"
     );
   }
 ]);
 
-require('./components');
+_dereq_('./components');
 
-},{"./components":24,"./directives/customValidator":40,"./directives/formio":41,"./directives/formioComponent":42,"./directives/formioComponentView":43,"./directives/formioDelete":44,"./directives/formioElement":45,"./directives/formioErrors":46,"./directives/formioSubmission":47,"./directives/formioSubmissions":48,"./directives/formioWizard":49,"./factories/FormioScope":50,"./factories/FormioUtils":51,"./factories/formioInterceptor":52,"./factories/formioTableView":53,"./filters/flattenComponents":54,"./filters/safehtml":55,"./filters/tableComponents":56,"./filters/tableFieldView":57,"./filters/tableView":58,"./filters/translate":59,"./plugins":61,"./providers/Formio":65,"./providers/FormioPlugins":66}],61:[function(require,module,exports){
-"use strict";
-module.exports = function(app) {
-  require('./storage/url')(app);
-  require('./storage/s3')(app);
-  require('./storage/dropbox')(app);
-};
-
-},{"./storage/dropbox":62,"./storage/s3":63,"./storage/url":64}],62:[function(require,module,exports){
-"use strict";
-module.exports = function(app) {
-  app.config([
-    'FormioPluginsProvider',
-    'FormioStorageDropboxProvider',
-    function(
-      FormioPluginsProvider,
-      FormioStorageDropboxProvider
-    ) {
-      FormioPluginsProvider.register('storage', 'dropbox', FormioStorageDropboxProvider.$get());
-    }]
-  );
-
-  app.factory('FormioStorageDropbox', [
-    '$q',
-    '$rootScope',
-    '$window',
-    '$http',
-    'Blob',
-    'FileSaver',
-    function(
-      $q,
-      $rootScope,
-      $window,
-      $http,
-      Blob,
-      FileSaver
-    ) {
-      var getDropboxToken = function() {
-        var dropboxToken;
-        if ($rootScope.user && $rootScope.user.externalTokens) {
-          angular.forEach($rootScope.user.externalTokens, function(token) {
-            if (token.type === 'dropbox') {
-              dropboxToken = token.token;
-            }
-          });
-        }
-        return dropboxToken;
-        //return _.result(_.find($rootScope.user.externalTokens, {type: 'dropbox'}), 'token');
-      };
-
-      return {
-        title: 'Dropbox',
-        name: 'dropbox',
-        uploadFile: function(file, fileName, status, $scope) {
-          var defer = $q.defer();
-          var dir = $scope.component.dir || '';
-          var dropboxToken = getDropboxToken();
-          if (!dropboxToken) {
-            defer.reject('You must authenticate with dropbox before uploading files.');
-          }
-          else {
-            // Both Upload and $http don't handle files as application/octet-stream which is required by dropbox.
-            var xhr = new XMLHttpRequest();
-
-            var onProgress = function(evt) {
-              status.status = 'progress';
-              status.progress = parseInt(100.0 * evt.loaded / evt.total);
-              delete status.message;
-              $scope.$apply();
-            };
-
-            xhr.upload.onprogress = onProgress;
-
-            xhr.onload = function() {
-              if (xhr.status === 200) {
-                defer.resolve(JSON.parse(xhr.response));
-                $scope.$apply();
-              }
-              else {
-                defer.reject(xhr.response || 'Unable to upload file');
-                $scope.$apply();
-              }
-            };
-
-            xhr.open('POST', 'https://content.dropboxapi.com/2/files/upload');
-            xhr.setRequestHeader('Authorization', 'Bearer ' + dropboxToken);
-            xhr.setRequestHeader('Content-Type', 'application/octet-stream');
-            xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify({
-              path: '/' + dir + fileName,
-              mode: 'add',
-              autorename: true,
-              mute: false
-            }));
-
-            xhr.send(file);
-          }
-          return defer.promise;
-        },
-        getFile: function(fileUrl, file) {
-          var defer = $q.defer();
-          var dropboxToken = getDropboxToken();
-          if (!dropboxToken) {
-            defer.reject('You must authenticate with dropbox before downloading files.');
-          }
-          else {
-            var xhr = new XMLHttpRequest();
-            xhr.responseType = 'arraybuffer';
-
-            xhr.onload = function() {
-              if (xhr.status === 200) {
-                defer.resolve(xhr.response);
-              }
-              else {
-                defer.reject(xhr.response || 'Unable to download file');
-              }
-            };
-
-            xhr.open('POST', 'https://content.dropboxapi.com/2/files/download');
-            xhr.setRequestHeader('Authorization', 'Bearer ' + dropboxToken);
-            xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify({
-              path: file.path_lower
-            }));
-            xhr.send();
-          }
-          return defer.promise;
-        },
-        downloadFile: function(evt, file) {
-          var strMimeType = 'application/octet-stream';
-          evt.preventDefault();
-          this.getFile(null, file).then(function(data) {
-            var blob = new Blob([data], {type: strMimeType});
-            FileSaver.saveAs(blob, file.name, true);
-          }).catch(function(err) {
-            alert(err);
-          });
-        }
-      };
-    }
-  ]);
-};
-
-
-},{}],63:[function(require,module,exports){
-"use strict";
-module.exports = function(app) {
-  app.config([
-    'FormioPluginsProvider',
-    'FormioStorageS3Provider',
-    function(
-      FormioPluginsProvider,
-      FormioStorageS3Provider
-    ) {
-      FormioPluginsProvider.register('storage', 's3', FormioStorageS3Provider.$get());
-    }
-  ]);
-
-  app.factory('FormioStorageS3', [
-    '$q',
-    '$window',
-    'Formio',
-    'Upload',
-    function(
-      $q,
-      $window,
-      Formio,
-      Upload
-    ) {
-      return {
-        title: 'S3',
-        name: 's3',
-        uploadFile: function(file, fileName, status, $scope) {
-          var defer = $q.defer();
-          Formio.request($scope.formio.formUrl + '/storage/s3', 'POST', {
-            name: fileName,
-            size: file.size,
-            type: file.type
-          })
-            .then(function(response) {
-              var request = {
-                url: response.url,
-                method: 'POST',
-                data: response.data
-              };
-              request.data.file = file;
-              var dir = $scope.component.dir || '';
-              request.data.key += dir + fileName;
-              var upload = Upload.upload(request);
-              upload
-                .then(function() {
-                  // Handle upload finished.
-                  defer.resolve({
-                    name: fileName,
-                    bucket: response.bucket,
-                    key: request.data.key,
-                    url: response.url + request.data.key,
-                    acl: request.data.acl,
-                    size: file.size,
-                    type: file.type
-                  });
-                }, function(resp) {
-                  // Handle error
-                  var oParser = new DOMParser();
-                  var oDOM = oParser.parseFromString(resp.data, 'text/xml');
-                  var message = oDOM.getElementsByTagName('Message')[0].innerHTML;
-                  defer.reject(message);
-                }, function(evt) {
-                  // Progress notify
-                  status.status = 'progress';
-                  status.progress = parseInt(100.0 * evt.loaded / evt.total);
-                  delete status.message;
-                });
-            });
-          return defer.promise;
-        },
-        getFile: function(formUrl, file) {
-          if (file.acl !== 'public-read') {
-            return Formio.request(formUrl + '/storage/s3?bucket=' + file.bucket + '&key=' + file.key, 'GET');
-          }
-          else {
-            var deferred = $q.defer();
-            deferred.resolve(file);
-            return deferred.promise;
-          }
-        },
-        downloadFile: function(evt, file, $scope) {
-          evt.preventDefault();
-          this.getFile($scope.form, file).then(function(file) {
-            $window.open(file.url, '_blank');
-          }).catch(function(response) {
-            // Is alert the best way to do this?
-            // User is expecting an immediate notification due to attempting to download a file.
-            alert(response);
-          });
-        }
-      };
-    }
-  ]);
-};
-
-},{}],64:[function(require,module,exports){
-"use strict";
-module.exports = function(app) {
-  app.config([
-    'FormioPluginsProvider',
-    'FormioStorageUrlProvider',
-    function(
-      FormioPluginsProvider,
-      FormioStorageUrlProvider
-    ) {
-      FormioPluginsProvider.register('storage', 'url', FormioStorageUrlProvider.$get());
-    }
-  ]);
-
-  app.factory('FormioStorageUrl', [
-    '$q',
-    'Upload',
-    function(
-      $q,
-      Upload
-    ) {
-      return {
-        title: 'Url',
-        name: 'url',
-        uploadFile: function(file, fileName, status, $scope) {
-          var defer = $q.defer();
-          Upload.upload({
-            url: $scope.component.url,
-            data: {
-              file: file,
-              name: fileName
-            }
-          })
-            .then(function(resp) {
-              defer.resolve(resp);
-            }, function(resp) {
-              defer.reject(resp.data);
-            }, function(evt) {
-              // Progress notify
-              status.status = 'progress';
-              status.progress = parseInt(100.0 * evt.loaded / evt.total);
-              delete status.message;
-            });
-          return defer.promise;
-        },
-        downloadFile: function() {
-          // Do nothing which will cause a normal link click to occur.
-        }
-      };
-    }]
-  );
-};
-
-},{}],65:[function(require,module,exports){
+},{"./components":28,"./directives/customValidator":44,"./directives/formio":45,"./directives/formioComponent":46,"./directives/formioComponentView":47,"./directives/formioDelete":48,"./directives/formioElement":49,"./directives/formioErrors":50,"./directives/formioSubmission":51,"./directives/formioSubmissions":52,"./directives/formioWizard":53,"./factories/FormioScope":54,"./factories/FormioUtils":55,"./factories/formioInterceptor":56,"./factories/formioTableView":57,"./filters/flattenComponents":58,"./filters/safehtml":59,"./filters/tableComponents":60,"./filters/tableFieldView":61,"./filters/tableView":62,"./filters/translate":63,"./providers/Formio":65}],65:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   // The formio class.
-  var Formio = require('formiojs/src/formio.js');
+  var Formio = _dereq_('formiojs');
 
   // Return the provider interface.
   return {
@@ -8110,6 +7165,7 @@ module.exports = function() {
     getAppUrl: Formio.getAppUrl,
     registerPlugin: Formio.registerPlugin,
     getPlugin: Formio.getPlugin,
+    providers: Formio.providers,
     setDomain: function() {
       // Remove this?
     },
@@ -8159,33 +7215,5 @@ module.exports = function() {
   };
 };
 
-},{"formiojs/src/formio.js":4}],66:[function(require,module,exports){
-"use strict";
-module.exports = function() {
-  var plugins = {};
-
-  return {
-    register: function(type, name, plugin) {
-      if (!plugins[type]) {
-        plugins[type] = {};
-      }
-      plugins[type][name] = plugin;
-    },
-
-    $get: [
-      function() {
-        return function(type, name) {
-          if (type) {
-            if (name) {
-              return plugins[type][name] || false;
-            }
-            return plugins[type] || false;
-          }
-          return plugins;
-        };
-      }
-    ]
-  };
-};
-
-},{}]},{},[60]);
+},{"formiojs":3}]},{},[64])(64)
+});

@@ -44,9 +44,9 @@
   <script src="../assets/lib/angular/angular.js"></script>
   <script src="../assets/lib/ng-file-upload/ng-file-upload.js"></script>
   <script src="../assets/lib/angular-sanitize/angular-sanitize.js"></script>
-  <script src="../assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="../assets/lib/moment/moment.js"></script>
   <script src="../assets/lib/angular-moment/angular-moment.js"></script>
+  <script src="../assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="../assets/lib/bootstrap-ui-datetime-picker/dist/datetime-picker.js"></script>
   <script src="../assets/lib/signature_pad/signature_pad.js"></script>
   <script src="../assets/lib/angular-ui-mask/dist/mask.js"></script>
@@ -55,7 +55,7 @@
   <script src="../assets/lib/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
   <script src="../assets/lib/angular-ui-select/dist/select.js"></script>
   <script src="../assets/lib/ng-formio/dist/formio.js"></script>
-  <script src="../assets/lib/es6-promise/promise.js"></script>
+  <script src="../assets/lib/es6-promise/es6-promise.js"></script>
   <script src="../assets/lib/urijs/src/URI.js"></script>
   <!-- endbower -->
   

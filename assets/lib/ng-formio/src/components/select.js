@@ -1,3 +1,4 @@
+/*eslint max-depth: ["error", 6]*/
 var fs = require('fs');
 module.exports = function(app) {
   app.directive('formioSelectItem', [
@@ -12,7 +13,7 @@ module.exports = function(app) {
         },
         link: function(scope, element) {
           if (scope.template) {
-            element.html($compile(angular.element(scope.template))(scope));
+            element.append($compile(angular.element(scope.template))(scope));
           }
         }
       };
@@ -113,7 +114,7 @@ module.exports = function(app) {
                 value = item;
               }
               return (prev === '' ? '' : ', ') + value;
-            });
+            }, '');
           }
           else {
             var item = getItem(data);
@@ -127,12 +128,13 @@ module.exports = function(app) {
             return value;
           }
         },
-        controller: ['$scope', '$http', 'Formio', '$interpolate', function($scope, $http, Formio, $interpolate) {
+        controller: ['$rootScope', '$scope', '$http', 'Formio', '$interpolate', function($rootScope, $scope, $http, Formio, $interpolate) {
           var settings = $scope.component;
           var options = {cache: true};
           $scope.nowrap = true;
           $scope.hasNextPage = false;
           $scope.selectItems = [];
+          var selectValues = $scope.component.selectValues;
           var valueProp = $scope.component.valueProperty;
           $scope.getSelectItem = function(item) {
             if (!item) {
@@ -166,9 +168,22 @@ module.exports = function(app) {
 
           // Add a watch if they wish to refresh on selection of another field.
           if (settings.refreshOn) {
-            $scope.$watch('data.' + settings.refreshOn, function() {
-              $scope.refreshItems();
-            });
+            if (settings.refreshOn === 'data') {
+              $scope.$watch('data', function() {
+                $scope.refreshItems();
+                if (settings.clearOnRefresh) {
+                  $scope.data[settings.key] = settings.multiple ? [] : '';
+                }
+              }, true);
+            }
+            else {
+              $scope.$watch('data.' + settings.refreshOn, function() {
+                $scope.refreshItems();
+                if (settings.clearOnRefresh) {
+                  $scope.data[settings.key] = settings.multiple ? [] : '';
+                }
+              });
+            }
           }
 
           switch (settings.dataSrc) {
@@ -178,10 +193,39 @@ module.exports = function(app) {
             case 'json':
               try {
                 $scope.selectItems = angular.fromJson(settings.data.json);
+
+                if (selectValues) {
+                  // Allow dot notation in the selectValue property.
+                  if (selectValues.indexOf('.') !== -1) {
+                    var parts = selectValues.split('.');
+                    var select = $scope.selectItems;
+                    for (var i in parts) {
+                      select = select[parts[i]];
+                    }
+                    $scope.selectItems = select;
+                  }
+                  else {
+                    $scope.selectItems = $scope.selectItems[selectValues];
+                  }
+                }
               }
               catch (error) {
                 $scope.selectItems = [];
               }
+              break;
+            case 'custom':
+              $scope.refreshItems = function() {
+                try {
+                  /* eslint-disable no-unused-vars */
+                  var data = _.cloneDeep($scope.data);
+                  /* eslint-enable no-unused-vars */
+                  $scope.selectItems = eval('(function(data) { var values = [];' + settings.data.custom.toString() + '; return values; })(data)');
+                }
+                catch (error) {
+                  $scope.selectItems = [];
+                }
+              };
+              $scope.refreshItems();
               break;
             case 'url':
             case 'resource':
@@ -229,6 +273,10 @@ module.exports = function(app) {
                 $scope.hasNextPage = true;
                 $scope.refreshItems = function(input, newUrl, append) {
                   newUrl = newUrl || url;
+                  newUrl = $interpolate(newUrl)({
+                    data: $scope.data,
+                    formioBase: $rootScope.apiBase || 'https://api.form.io'
+                  });
                   if (!newUrl) {
                     return;
                   }
@@ -252,8 +300,18 @@ module.exports = function(app) {
                     newUrl += ((newUrl.indexOf('?') === -1) ? '?' : '&') + filter;
                   }
 
+                  // If they wish to return only some fields.
+                  if (settings.selectFields) {
+                    options.params.select = settings.selectFields;
+                  }
+
                   // Set the new result.
                   var setResult = function(data) {
+                    // coerce the data into an array.
+                    if (!(data instanceof Array)) {
+                      data = [data];
+                    }
+
                     if (data.length < options.params.limit) {
                       $scope.hasNextPage = false;
                     }
@@ -269,12 +327,18 @@ module.exports = function(app) {
                   $http.get(newUrl, options).then(function(result) {
                     var data = result.data;
                     if (data) {
-                      if (data.hasOwnProperty('data')) {
+                      // If the selectValue prop is defined, use it.
+                      if (selectValues) {
+                        setResult(_.get(data, selectValues, []));
+                      }
+                      // Attempt to default to the formio settings for a resource.
+                      else if (data.hasOwnProperty('data')) {
                         setResult(data.data);
                       }
                       else if (data.hasOwnProperty('items')) {
                         setResult(data.items);
                       }
+                      // Use the data itself.
                       else {
                         setResult(data);
                       }
@@ -300,7 +364,8 @@ module.exports = function(app) {
             values: [],
             json: '',
             url: '',
-            resource: ''
+            resource: '',
+            custom: ''
           },
           dataSrc: 'values',
           valueProperty: '',

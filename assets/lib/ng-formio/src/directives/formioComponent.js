@@ -16,7 +16,8 @@ module.exports = [
         formioForm: '=',
         readOnly: '=',
         gridRow: '=',
-        gridCol: '='
+        gridCol: '=',
+        show: '='
       },
       templateUrl: 'formio/component.html',
       link: function(scope, el, attrs, formioCtrl) {
@@ -50,6 +51,9 @@ module.exports = [
             silentEvents: ['click', 'focus']
           };
 
+          // Pass through checkConditional since this is an isolate scope.
+          $scope.checkConditional = $scope.$parent.checkConditional;
+
           // Get the settings.
           var component = formioComponents.components[$scope.component.type] || formioComponents.components['custom'];
 
@@ -69,6 +73,9 @@ module.exports = [
 
           // Remove a field value.
           $scope.removeFieldValue = function(index) {
+            if (!Array.isArray($scope.data[$scope.component.key])) {
+              $scope.data[$scope.component.key] = [];
+            }
             $scope.data[$scope.component.key].splice(index, 1);
           };
 

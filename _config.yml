@@ -8,6 +8,9 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - asserts/lib
+  - vendor
+  - node_modules
+  - _site
 collections:
   books:
     output: true

@@ -4,9 +4,9 @@
   "description": "The help site for Form.io.",
   "main": "gulpfile.js",
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "wiredep": "^2.2.2",
-    "gulp-sass": "^2.0.4"
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.2",
+    "wiredep": "^2.2.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

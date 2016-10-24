@@ -51,15 +51,24 @@ module.exports = function(app) {
 
         // Sets the dimension of a width or height.
         var setDimension = function(dim) {
+          var param = (dim === 'width') ? 'clientWidth' : 'clientHeight';
           if (scope.component[dim].slice(-1) === '%') {
             var percent = parseFloat(scope.component[dim].slice(0, -1)) / 100;
-            element[0][dim] = element.parent()[dim]() * percent;
+            element[0][dim] = element.parent().eq(0)[0][param] * percent;
           }
           else {
             element[0][dim] = parseInt(scope.component[dim], 10);
             scope.component[dim] = element[0][dim] + 'px';
           }
         };
+
+        // Reset size if element changes visibility.
+        scope.$watch('component.display', function(newDisplay) {
+          if (newDisplay) {
+            setDimension('width');
+            setDimension('height');
+          }
+        });
 
         // Set the width and height of the canvas.
         setDimension('width');
@@ -111,11 +120,6 @@ module.exports = function(app) {
         signaturePad.onEnd = function() {
           scope.$evalAsync(readSignature);
         };
-
-        // Read initial empty canvas, unless signature is required, then keep it pristine
-        if (!scope.component.validate.required) {
-          readSignature();
-        }
       }
     };
   });
