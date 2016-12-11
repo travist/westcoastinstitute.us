@@ -1,7 +1,7 @@
 /*!
  * angular-ui-mask
  * https://github.com/angular-ui/ui-mask
- * Version: 1.8.7 - 2016-07-26T15:59:07.992Z
+ * Version: 1.8.7 - 2016-12-11T19:48:05.946Z
  * License: MIT
  */
 
@@ -690,8 +690,8 @@ angular.module('ui.mask', [])
                             function getCaretPosition(input) {
                                 if (!input)
                                     return 0;
-                                if (input.selectionStart !== undefined) {
-                                    return input.selectionStart;
+                                if (input.selectionEnd !== undefined) {
+                                    return input.selectionEnd;
                                 } else if (document.selection) {
                                     if (isFocused(iElement[0])) {
                                         // Curse you IE

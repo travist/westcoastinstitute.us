@@ -20,11 +20,28 @@ module.exports = function(app) {
           theme: 'primary'
         },
         controller: ['$scope', function($scope) {
+          if ($scope.builder) return;
           var settings = $scope.component;
+          $scope.getButtonType = function() {
+            switch (settings.action) {
+              case 'submit':
+                return 'submit';
+              case 'reset':
+                return 'reset';
+              case 'event':
+              case 'oauth':
+              default:
+                return 'button';
+            }
+          };
+
           var onClick = function() {
             switch (settings.action) {
               case 'submit':
                 return;
+              case 'event':
+                $scope.$emit($scope.component.event, $scope.data);
+                break;
               case 'reset':
                 $scope.resetForm();
                 break;

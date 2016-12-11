@@ -10,6 +10,7 @@ module.exports = function() {
       submission: '=?',
       readOnly: '=?',
       hideComponents: '=?',
+      disableComponents: '=?',
       formioOptions: '=?',
       storage: '=?'
     },
@@ -51,6 +52,7 @@ module.exports = function() {
       'FormioScope',
       'FormioUtils',
       '$http',
+      '$timeout',
       function(
         $scope,
         $compile,
@@ -58,20 +60,13 @@ module.exports = function() {
         Formio,
         FormioScope,
         FormioUtils,
-        $http
+        $http,
+        $timeout
       ) {
         var session = ($scope.storage && !$scope.readOnly) ? localStorage.getItem($scope.storage) : false;
         if (session) {
           session = angular.fromJson(session);
         }
-
-        var getForm = function() {
-          var element = $element.find('#formio-wizard-form');
-          if (!element.length) {
-            return {};
-          }
-          return element.children().scope().formioForm;
-        };
 
         $scope.formio = null;
         $scope.page = {};
@@ -82,8 +77,54 @@ module.exports = function() {
           $scope.submission = session ? {data: session.data} : {data: {}};
         }
         $scope.currentPage = session ? session.page : 0;
-
         $scope.formioAlerts = [];
+
+        var getForm = function() {
+          var element = $element.find('#formio-wizard-form');
+          if (!element.length) {
+            return {};
+          }
+          return element.children().scope().formioForm;
+        };
+
+        // Show the current page.
+        var showPage = function(scroll) {
+          $scope.wizardLoaded = false;
+          $scope.page.components = [];
+          $scope.page.components.length = 0;
+          $timeout(function() {
+            // If the page is past the components length, try to clear first.
+            if ($scope.currentPage >= $scope.pages.length) {
+              $scope.clear();
+            }
+
+            if ($scope.storage && !$scope.readOnly) {
+              localStorage.setItem($scope.storage, angular.toJson({
+                page: $scope.currentPage,
+                data: $scope.submission.data
+              }));
+            }
+
+            $scope.page.components = $scope.pages[$scope.currentPage].components;
+            $scope.formioAlerts = [];
+            if (scroll) {
+              window.scrollTo(0, $scope.wizardTop);
+            }
+            $scope.wizardLoaded = true;
+            $scope.$emit('wizardPage', $scope.currentPage);
+            $timeout($scope.$apply.bind($scope));
+          });
+        };
+
+        if (!$scope.form && $scope.src) {
+          (new Formio($scope.src)).loadForm().then(function(form) {
+            $scope.form = form;
+            if (!$scope.wizardLoaded) {
+              showPage();
+            }
+          });
+        }
+
         // Shows the given alerts (single or array), and dismisses old alerts
         this.showAlerts = $scope.showAlerts = function(alerts) {
           $scope.formioAlerts = [].concat(alerts);
@@ -95,39 +136,6 @@ module.exports = function() {
           }
           $scope.submission = {data: {}};
           $scope.currentPage = 0;
-        };
-
-        // Show the current page.
-        var showPage = function(scroll) {
-          // If the page is past the components length, try to clear first.
-          if ($scope.currentPage >= $scope.form.components.length) {
-            $scope.clear();
-          }
-
-          $scope.wizardLoaded = false;
-          if ($scope.storage && !$scope.readOnly) {
-            localStorage.setItem($scope.storage, angular.toJson({
-              page: $scope.currentPage,
-              data: $scope.submission.data
-            }));
-          }
-          $scope.page.components = $scope.form.components[$scope.currentPage].components;
-          var pageElement = angular.element(document.createElement('formio'));
-          $scope.wizardElement.html($compile(pageElement.attr({
-            src: "'" + $scope.src + "'",
-            form: 'page',
-            submission: 'submission',
-            'read-only': 'readOnly',
-            'hide-components': 'hideComponents',
-            'formio-options': 'formioOptions',
-            id: 'formio-wizard-form'
-          }))($scope));
-          $scope.wizardLoaded = true;
-          $scope.formioAlerts = [];
-          if (scroll) {
-            window.scrollTo(0, $scope.wizardTop);
-          }
-          $scope.$emit('wizardPage', $scope.currentPage);
         };
 
         // Check for errors.
@@ -201,9 +209,7 @@ module.exports = function() {
           }, true);
 
           angular.forEach($scope.submission.data, function(value, key) {
-            if (value && !value.hasOwnProperty('_id')) {
-              submissionData.data[key] = value;
-            }
+            submissionData.data[key] = value;
 
             // Setup the submission access.
             var perm = defaultPermissions[key];
@@ -257,10 +263,10 @@ module.exports = function() {
           // Save to specified action.
           if ($scope.action) {
             var method = submissionData._id ? 'put' : 'post';
-            $http[method]($scope.action, submissionData).success(function(submission) {
+            $http[method]($scope.action, submissionData).then(function(submission) {
               Formio.clearCache();
               onDone(submission);
-            }).error(FormioScope.onError($scope, $element));
+            }, FormioScope.onError($scope, $element));
           }
           else if ($scope.formio && !$scope.formio.noSubmit) {
             $scope.formio.saveSubmission(submissionData).then(onDone).catch(FormioScope.onError($scope, $element));
@@ -281,7 +287,7 @@ module.exports = function() {
           if ($scope.checkErrors()) {
             return;
           }
-          if ($scope.currentPage >= ($scope.form.components.length - 1)) {
+          if ($scope.currentPage >= ($scope.pages.length - 1)) {
             return;
           }
           $scope.currentPage++;
@@ -303,7 +309,7 @@ module.exports = function() {
           if (page < 0) {
             return;
           }
-          if (page >= $scope.form.components.length) {
+          if (page >= $scope.pages.length) {
             return;
           }
           $scope.currentPage = page;
@@ -329,6 +335,8 @@ module.exports = function() {
           }
         };
 
+        var allPages = [];
+        var hasConditionalPages = false;
         var setForm = function(form) {
           $scope.pages = [];
           angular.forEach(form.components, function(component) {
@@ -337,12 +345,33 @@ module.exports = function() {
               if (!$scope.hasTitles && component.title) {
                 $scope.hasTitles = true;
               }
+              if (component.customConditional) {
+                hasConditionalPages = true;
+              }
+              else if (component.conditional && component.conditional.when) {
+                hasConditionalPages = true;
+              }
+              allPages.push(component);
               $scope.pages.push(component);
             }
           });
 
+          // FOR-71
+          if (!$scope.builder && hasConditionalPages) {
+            $scope.$watch('submission.data', function(data) {
+              var newPages = [];
+              angular.forEach(allPages, function(page) {
+                if (FormioUtils.isVisible(page, null, data)) {
+                  newPages.push(page);
+                }
+              });
+              $scope.pages = newPages;
+              updatePages();
+              setTimeout($scope.$apply.bind($scope), 10);
+            }, true);
+          }
+
           $scope.form = $scope.form ? angular.merge($scope.form, angular.copy(form)) : angular.copy(form);
-          $scope.form.components = $scope.pages;
           $scope.page = angular.copy(form);
           $scope.page.display = 'form';
           $scope.$emit('wizardFormLoad', form);
@@ -350,21 +379,24 @@ module.exports = function() {
           showPage();
         };
 
-        $scope.$watch('form', function(form) {
-          if (
-            $scope.src ||
-            !form ||
-            !Object.keys(form).length ||
-            !form.components ||
-            !form.components.length
-          ) {
-            return;
-          }
-          var formUrl = form.project ? '/project/' + form.project : '';
-          formUrl += '/form/' + form._id;
-          $scope.formio = new Formio(formUrl);
-          setForm(form);
-        });
+        // FOR-71
+        if (!$scope.builder) {
+          $scope.$watch('form', function(form) {
+            if (
+              $scope.src ||
+              !form ||
+              !Object.keys(form).length ||
+              !form.components ||
+              !form.components.length
+            ) {
+              return;
+            }
+            var formUrl = form.project ? '/project/' + form.project : '';
+            formUrl += '/form/' + form._id;
+            $scope.formio = new Formio(formUrl);
+            setForm(form);
+          });
+        }
 
         // When the components length changes update the pages.
         $scope.$watch('form.components.length', updatePages);

@@ -43,283 +43,12 @@ module.exports = function() {
           $scope._src += 'live=1';
         }
 
-        // Build the display map.
-        $scope.show = {
-          '': true,
-          'undefined': true,
-          'null': true
-        };
-        var boolean = {
-          'true': true,
-          'false': false
-        };
-
-        /**
-         * Sweep the current submission, to identify and remove data that has been conditionally hidden.
-         *
-         * This will iterate over every key in the submission data obj, regardless of the structure.
-         */
-        var sweepSubmission = function() {
-          var show = $scope.show || {
-              '': true,
-              'undefined': true,
-              'null': true
-            };
-          var submission = $scope.submission.data || {};
-
-          /**
-           * Sweep the given component keys and remove any data for the given keys which are being conditionally hidden.
-           *
-           * @param {Object} components
-           *   The list of components to sweep.
-           * @param {Boolean} ret
-           *   Whether or not you want to know if a modification needs to be made.
-           */
-          var sweep = function sweep(components, ret) {
-            // Skip our unwanted types.
-            if (components === null || typeof components === 'undefined') {
-              if (ret) {
-                return false;
-              }
-              return;
-            }
-
-            // If given a string, then we are looking at the api key of a component.
-            if (typeof components === 'string') {
-              if (show.hasOwnProperty(components) && show[components] === false) {
-                if (ret) {
-                  return true;
-                }
-                return;
-              }
-            }
-            // If given an array, iterate over each element, assuming its not a string itself.
-            // If each element is a string, then we aren't looking at a component, but data itself.
-            else if (components instanceof Array) {
-              var filtered = [];
-
-              components.forEach(function(component) {
-                if (typeof component === 'string') {
-                  filtered.push(component);
-                  return;
-                }
-
-                // Recurse into the components of this component.
-                var modified = sweep(component, true);
-                if (!modified) {
-                  filtered.push(component);
-                }
-              });
-
-              components = filtered;
-              return;
-            }
-            // If given an object, iterate the properties as component keys.
-            else if (typeof components === 'object') {
-              Object.keys(components).forEach(function(key) {
-                // If the key is deleted, delete the whole obj.
-                var modifiedKey = sweep(key, true);
-                if (modifiedKey) {
-                  delete components[key];
-                }
-                else {
-                  // If a child leaf is modified (non key) delete its whole subtree.
-                  if (components[key] instanceof Array || typeof components[key] === 'object') {
-                    // If the component can have sub-components, recurse.
-                    sweep(components[key]);
-                  }
-                }
-              });
-              return;
-            }
-
-            return;
-          };
-          return sweep(submission);
-        };
-
-        // The list of all conditionals.
-        var _conditionals = {};
-
-        // The list of all custom conditionals, segregated because they must be run on every change to data.
-        var _customConditionals = {};
-
-        /** Sweep all the components and build the conditionals map.
-         *
-         * @private
-         */
-        var _sweepConditionals = function() {
-          $scope.form = $scope.form || {};
-          $scope.form.components = $scope.form.components || [];
-          FormioUtils.eachComponent($scope.form.components, function(component) {
-            if (!component.hasOwnProperty('key')) {
-              return;
-            }
-
-            // Show everything by default.
-            $scope.show[component.key] = true;
-
-            // We only care about valid/complete conditional settings.
-            if (
-              component.conditional
-              && (component.conditional.show !== null && component.conditional.show !== '')
-              && (component.conditional.when !== null && component.conditional.when !== '')
-            ) {
-              // Default the conditional values.
-              component.conditional.show = boolean.hasOwnProperty(component.conditional.show)
-                ? boolean[component.conditional.show]
-                : true;
-              component.conditional.eq = component.conditional.eq || '';
-
-              // Keys should be unique, so don't worry about clobbering an existing duplicate.
-              _conditionals[component.key] = component.conditional;
-
-              // Store the components default value for conditional logic, if present.
-              if (component.hasOwnProperty('defaultValue')) {
-                _conditionals[component.key].defaultValue = component.defaultValue;
-              }
-            }
-            // Custom conditional logic.
-            else if (component.customConditional) {
-              // Add this customConditional to the conditionals list.
-              _customConditionals[component.key] = component.customConditional;
-            }
-
-            // Set hidden if specified
-            if ($scope.hideComponents) {
-              component.hidden = $scope.hideComponents.indexOf(component.key) !== -1;
-            }
-
-            // Set required if specified
-            if ($scope.requireComponents && component.hasOwnProperty('validate') && $scope.requireComponents.indexOf(component.key) !== -1) {
-              component.validate.required = $scope.requireComponents.indexOf(component.key) !== -1;
-            }
-
-            // Set disabled if specified
-            if ($scope.disableComponents) {
-              component.disabled = $scope.disableComponents.indexOf(component.key) !== -1;
-            }
-          }, true);
-        };
-
-        /**
-         * Using the conditionals map, invoke the conditionals for each component.
-         *
-         * @param {String} componentKey
-         *   The component to toggle conditional logic for.
-         *
-         * @private
-         */
-        var _toggleConditional = function(componentKey, subData) {
-          if (_conditionals.hasOwnProperty(componentKey)) {
-            var data = Object.assign({}, $scope.submission.data, subData);
-            var cond = _conditionals[componentKey];
-            var value = FormioUtils.getValue({data: data}, cond.when);
-
-            if (typeof value !== 'undefined' && typeof value !== 'object') {
-              // Check if the conditional value is equal to the trigger value
-              $scope.show[componentKey] = value.toString() === cond.eq.toString()
-                ? boolean[cond.show]
-                : !boolean[cond.show];
-            }
-            // Special check for check boxes component.
-            else if (typeof value !== 'undefined' && typeof value === 'object') {
-              // Only update the visibility is present, otherwise hide, because it was deleted by the submission sweep.
-              if (value.hasOwnProperty(cond.eq)) {
-                $scope.show[componentKey] = boolean.hasOwnProperty(value[cond.eq])
-                  ? boolean[value[cond.eq]]
-                  : true;
-              }
-              else {
-                $scope.show[componentKey] = false;
-              }
-            }
-            // Check against the components default value, if present and the components hasn't been interacted with.
-            else if (typeof value === 'undefined' && cond.hasOwnProperty('defaultValue')) {
-              $scope.show[componentKey] = cond.defaultValue.toString() === cond.eq.toString()
-                ? boolean[cond.show]
-                : !boolean[cond.show];
-            }
-            // If there is no value, we still need to process as not equal.
-            else {
-              $scope.show[componentKey] = !boolean[cond.show];
-            }
-          }
-          return $scope.show.hasOwnProperty(componentKey) ? $scope.show[componentKey] : null;
-        };
-
-        /**
-         * Using the custom conditionals map, invoke the conditionals for each component.
-         *
-         * @param {String} componentKey
-         *   The component to toggle conditional logic for.
-         *
-         * @private
-         */
-        var _toggleCustomConditional = function(componentKey, subData) {
-          if (_customConditionals.hasOwnProperty(componentKey)) {
-            var cond = _customConditionals[componentKey];
-
-            try {
-              // Create a child block, and expose the submission data.
-              var data = Object.assign({}, $scope.submission.data, subData); // eslint-disable-line no-unused-vars
-              // Eval the custom conditional and update the show value.
-              var show = eval('(function() { ' + cond.toString() + '; return show; })()');
-              // Show by default, if an invalid type is given.
-              $scope.show[componentKey] = boolean.hasOwnProperty(show.toString()) ? boolean[show] : true;
-            }
-            catch (e) {
-              $scope.show[componentKey] = true;
-            }
-          }
-          return $scope.show.hasOwnProperty(componentKey) ? $scope.show[componentKey] : null;
-        };
-
-        $scope.checkConditional = function(componentKey, subData) {
-          _toggleConditional(componentKey, subData);
-          var customConditional = _toggleCustomConditional(componentKey, subData);
-          // customConditional will be true if either are true since the value persists in $scope.show.
-          return customConditional;
-        };
-
-        // On every change to data, trigger the conditionals.
-        $scope.$watch(function() {
-          return $scope.submission && $scope.submission.data
-            ? $scope.submission.data
-            : {};
-        }, function() {
-          // Toggle every conditional.
-          var allConditionals = Object.keys(_conditionals);
-          (allConditionals || []).forEach(function(componentKey) {
-            _toggleConditional(componentKey);
-          });
-
-          var allCustomConditionals = Object.keys(_customConditionals);
-          (allCustomConditionals || []).forEach(function(componentKey) {
-            _toggleCustomConditional(componentKey);
-          });
-
-          var allHidden = Object.keys($scope.show);
-          (allHidden || []).forEach(function(componentKey) {
-            // If a component is hidden, delete its value, so other conditionals are property chain reacted.
-            if (!$scope.show[componentKey]) {
-              return sweepSubmission();
-            }
-          });
-        }, true);
-
         var cancelFormLoadEvent = $scope.$on('formLoad', function() {
-          _sweepConditionals();
           cancelFormLoadEvent();
         });
 
-        if ($scope.options && $scope.options.watchData) {
-          $scope.$watch('submission.data', function() {
-            _sweepConditionals();
-          }, true);
-        }
-
-        if (!$scope._src) {
+        // FOR-71
+        if (!$scope._src && !$scope.builder) {
           $scope.$watch('src', function(src) {
             if (!src) {
               return;
@@ -351,6 +80,19 @@ module.exports = function() {
           return !form.$valid;
         };
 
+        $scope.isVisible = function(component, row) {
+          return FormioUtils.isVisible(
+            component,
+            row,
+            $scope.submission ? $scope.submission.data : null,
+            $scope.hideComponents
+          );
+        };
+
+        $scope.isDisabled = function(component) {
+          return $scope.readOnly || component.disabled || (Array.isArray($scope.disableComponents) && $scope.disableComponents.indexOf(component.key) !== -1);
+        };
+
         // Called when the form is submitted.
         $scope.onSubmit = function(form) {
           $scope.formioAlerts = [];
@@ -363,8 +105,6 @@ module.exports = function() {
           }
 
           form.submitting = true;
-
-          sweepSubmission();
 
           // Create a sanitized submission object.
           var submissionData = {data: {}};
@@ -399,7 +139,7 @@ module.exports = function() {
             if (component.type === 'resource' && component.key && component.defaultPermission) {
               defaultPermissions[component.key] = component.defaultPermission;
             }
-            if ($scope.submission.data.hasOwnProperty(component.key) && $scope.show[component.key] === true) {
+            if ($scope.submission.data.hasOwnProperty(component.key)) {
               var value = $scope.submission.data[component.key];
               if (component.type === 'number') {
                 submissionData.data[component.key] = value ? parseFloat(value) : 0;
@@ -447,10 +187,12 @@ module.exports = function() {
 
           // Show the submit message and say the form is no longer submitting.
           var onSubmit = function(submission, message) {
-            $scope.showAlerts({
-              type: 'success',
-              message: message
-            });
+            if (message) {
+              $scope.showAlerts({
+                type: 'success',
+                message: message
+              });
+            }
             form.submitting = false;
           };
 
@@ -491,10 +233,10 @@ module.exports = function() {
           // Allow custom action urls.
           if ($scope.action) {
             var method = submissionData._id ? 'put' : 'post';
-            $http[method]($scope.action, submissionData).success(function(submission) {
+            $http[method]($scope.action, submissionData).then(function(submission) {
               Formio.clearCache();
               onSubmitDone(method, submission);
-            }).error(FormioScope.onError($scope, $element))
+            }, FormioScope.onError($scope, $element))
               .finally(function() {
                 form.submitting = false;
               });

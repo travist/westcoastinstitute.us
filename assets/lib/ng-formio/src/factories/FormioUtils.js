@@ -2,6 +2,26 @@ var formioUtils = require('formio-utils');
 
 module.exports = function() {
   return {
+    checkVisible: function(component, row, data) {
+      if (!formioUtils.checkCondition(component, row, data)) {
+        if (row && row.hasOwnProperty(component.key)) {
+          delete row[component.key];
+        }
+        if (data && data.hasOwnProperty(component.key)) {
+          delete data[component.key];
+        }
+        return false;
+      }
+      return true;
+    },
+    isVisible: function(component, row, data, hide) {
+      // If the component is in the hideComponents array, then hide it by default.
+      if (hide && Array.isArray(hide) && (hide.indexOf(component.key) !== -1)) {
+        return false;
+      }
+
+      return this.checkVisible(component, row, data);
+    },
     flattenComponents: formioUtils.flattenComponents,
     eachComponent: formioUtils.eachComponent,
     getComponent: formioUtils.getComponent,
@@ -31,9 +51,9 @@ module.exports = function() {
       });
     },
     fieldWrap: function(input) {
-      input = input + '<formio-errors></formio-errors>';
+      input = input + '<formio-errors ng-if="::!builder"></formio-errors>';
       var multiInput = input.replace('data[component.key]', 'data[component.key][$index]');
-      var inputLabel = '<label ng-if="component.label && !component.hideLabel" for="{{ component.key }}" class="control-label" ng-class="{\'field-required\': component.validate.required}">{{ component.label | formioTranslate }}</label>';
+      var inputLabel = '<label ng-if="component.label && !component.hideLabel" for="{{ component.key }}" class="control-label" ng-class="{\'field-required\': component.validate.required}">{{ component.label | formioTranslate:null:builder }}</label>';
       var requiredInline = '<span ng-if="(component.hideLabel === true || component.label === \'\' || !component.label) && component.validate.required" class="glyphicon glyphicon-asterisk form-control-feedback field-required-inline" aria-hidden="true"></span>';
       var template =
         '<div ng-if="!component.multiple">' +
@@ -59,7 +79,7 @@ module.exports = function() {
             '<td><a ng-click="removeFieldValue($index)" class="btn btn-default"><span class="glyphicon glyphicon-remove-circle"></span></a></td>' +
           '</tr>' +
           '<tr>' +
-            '<td colspan="2"><a ng-click="addFieldValue()" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {{ component.addAnother || "Add Another" | formioTranslate }}</a></td>' +
+            '<td colspan="2"><a ng-click="addFieldValue()" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {{ component.addAnother || "Add Another" | formioTranslate:null:builder }}</a></td>' +
           '</tr>' +
         '</table></div>';
       return template;

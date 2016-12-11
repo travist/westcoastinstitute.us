@@ -2,6 +2,31 @@
 
 The release notes tracked in this document are also made available on the [releases page](https://github.com/medialize/URI.js/releases)
 
+### 1.18.4 (December 4th 2016) ###
+
+* fixing [`URI.withinString()`](http://medialize.github.io/URI.js/docs.html#static-withinString) to capture balanced parentheses - [Issue #247](https://github.com/medialize/URI.js/issues/247)
+
+### 1.18.3 (November 17th 2016) ###
+
+* fixing UMD wrappers to properly detect CommonJS - [Issue #318](https://github.com/medialize/URI.js/issues/318), [PR #319](https://github.com/medialize/URI.js/pull/319)
+
+### 1.18.2 (September 25th 2016) ###
+
+* fixing [`URI.withinString()`](http://medialize.github.io/URI.js/docs.html#static-withinString) to allow callback to return `undefined` or `string` - [Issue #303](https://github.com/medialize/URI.js/issues/303)
+* fixing [`.absoluteTo()`](http://medialize.github.io/URI.js/docs.html#absoluteto) to properly resolve relative paths for fragment-only URLs
+
+### 1.18.1 (May 29th 2016) ###
+
+* fixing UMD wrapper of `jquery.URI.js` - [Issue #295](https://github.com/medialize/URI.js/issues/295)
+
+### 1.18.0 (April 30th 2016) ###
+
+* adding [`URI.joinPaths()`](http://medialize.github.io/URI.js/docs.html#static-joinPaths) to compose paths from directory tokens - [Issue #285](https://github.com/medialize/URI.js/issues/285)
+* fixing [`URITemplate()`](http://medialize.github.io/URI.js/uri-template.html) to allow `.` in variable names - [PR #287](https://github.com/medialize/URI.js/pull/287)
+* fixing [`URITemplate()`](http://medialize.github.io/URI.js/uri-template.html) to reject invalid literals - [PR #289](https://github.com/medialize/URI.js/pull/289)
+* fixing [`URITemplate()`](http://medialize.github.io/URI.js/uri-template.html) to reject prefix modifier on composite values - [PR #290](https://github.com/medialize/URI.js/pull/290)
+* fixing [`URI.buildUserinfo()`](http://medialize.github.io/URI.js/docs.html#static-buildUserinfo) to properly serialize password-only values - [PR #293](https://github.com/medialize/URI.js/pull/293)
+
 ### 1.17.1 (February 25th 2016) ###
 
 * fixing [`.normalizePath()`](http://medialize.github.io/URI.js/docs.html#normalize-path) to properly handle percent-encoded dot segments and leading dots in basename - [Issue #264](https://github.com/medialize/URI.js/issues/264), by [JordanMilne](https://github.com/JordanMilne)
