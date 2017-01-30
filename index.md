@@ -23,24 +23,28 @@ weight: 0
   <img class="watermark" style="width:400px;margin-bottom: -150px;" src="/assets/img/sunlogo.png" />
 </div>
 <div class="row companies">
-  <div class="col-sm-2 text-center">
-    <a href="http://www.gestalttherapy.org/" target="_blank"><img src="/assets/img/pgi.png" class="img-responsive" /></a>
-  </div>
-  <div class="col-sm-2 text-center">
+  <div class="col-sm-2 text-center" style="padding:0 5px;">
     <a href="http://www.a4pt.org/ps.index.cfm" target="_blank"><img src="/assets/img/APT_logo_small.jpg" class="img-responsive" style="width: 60%; margin:auto;" /></a>
     <strong><small>APT Approved Provider</small><br/><small>(04-152)</small></strong>
   </div>
-  <div class="col-sm-2 text-center">
-    <a href="http://www.vsof.org/" target="_blank"><img src="/assets/img/oaklander-foundation.png" class="img-responsive" /></a>
+  <div class="col-sm-2 text-center" style="padding:0 5px;">
+      <img src="/assets/img/cepa.png" class="img-responsive" style="width: 60%; margin:auto;" />
+      <strong><small>CAMFT Approved Provider</small><br/><small>(008931)</small></strong>
   </div>
-  <div class="col-sm-2 text-center">
+  <div class="col-sm-2 text-center" style="padding:0 5px;">
     <a href="http://sicgt.org/" target="_blank"><img src="/assets/img/gestalt_logo.png" class="img-responsive" /></a>
   </div>
-  <div class="col-sm-2 text-center">
+  <div class="col-sm-1 text-center" style="padding:0 5px;">
+    <a href="http://www.gestalttherapy.org/" target="_blank"><img src="/assets/img/pgi.png" class="img-responsive" /></a>
+  </div>
+  <div class="col-sm-2 text-center" style="padding:0 5px;">
     <a href="http://gatla.org/" target="_blank"><img src="/assets/img/GATLA_Logo6.png" class="img-responsive" /></a>
   </div>
-  <div class="col-sm-2 text-center">
-    <a href="http://www.gestalt.org/news" class="btn btn-info btn-block" target="_blank"><h3>GN&N</h3></a>
+  <div class="col-sm-2 text-center" style="padding:0 5px;">
+    <a href="http://www.vsof.org/" target="_blank"><img src="/assets/img/oaklander-foundation.png" class="img-responsive" /></a>
+  </div>
+  <div class="col-sm-1 text-center" style="padding:0 5px;">
+    <a href="http://www.gestalt.org/news" class="btn btn-info btn-block" target="_blank" style="padding:4px 4px;"><h3>GN&N</h3></a>
   </div>
 </div>
 <div class="well row">

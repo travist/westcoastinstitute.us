@@ -18,7 +18,7 @@ chapter: trainers
             <ul class="list-group">
               <li class="list-group-item">
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
-                <h4><strong>May 27 - June 4, 2017</strong></h4>
+                <h4><strong>May 28 - June 4, 2017</strong></h4>
               </li>
             </ul>
           </div>
@@ -28,6 +28,7 @@ chapter: trainers
         <p>
         <ul>
             <li><strong>Fee:</strong> $1600 USD</li>
+            <li>Information regarding financial assistance, schedule of trainings, lodging, and transportation to and from airports will be provided to all registrants with confirmation of registration.</li>
             <li><strong>CEU's:</strong> 40 contact hours. The West Coast Institute for Gestalt Therapy with Children and Adolescents is approved 	by the Association for Play Therapy, APT Approved Provider Number 04-152 to offer continuing education specific to play therapy.</li>
             <li>WCI is approved by the California Association of Marriage and Family Therapists to 	sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs as required by the California Board of Behavioral Sciences. Provider Number 008931.</li>
             <li>WCI is sponsored by Serra Institute for Contemporary Gestalt Therapy to provide CEU’s for psychologists.</li>

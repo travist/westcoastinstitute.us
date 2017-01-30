@@ -42,17 +42,17 @@ weight: 1
         <p>Stephanie has a private practice in Santa Barbara, CA where she specializes with children, adolescents, and couples. She is adjunct faculty at Pacifica Graduate Institute where she teaches child psychotherapy from the Gestalt Oaklander Approach. She has led parent education / support groups and groups for single mothers living at St. Vincent DePaul, Santa Barbara. She is a Certified Gestalt Therapist with Children and Adolescents.</p>
     </div>
 </div>
-<div class="row separator"></div>
-<h3>Adjunct Faculty</h3>
 <div class="row">
     <div class="col-sm-3">
         <img src="/assets/img/Denise.jpg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
         <h3>Denise Richman, MS, LMFT</h3>
-        <p>Denise has expertise in somatic / movements and dramatic therapies as clinician and business management outreach and program development. She is a frequent presenter at Fox Studios child development center. She developed and presented the workshop fostering creativity in young children for parents who work at the studio. She is in private practice and is a workshop facilitator and guest lecturer.</p>
+        <p>Denise has expertise in somatic / movements and dramatic therapies as clinician and business management outreach and program development. She is a frequent presenter at Fox Studios child development center. She developed and presented the workshop fostering creativity in young children for parents who work at the studio. She is in private practice and is a workshop facilitator and guest lecturer. She is a Certified Gestalt Therapist with Children and Adolescents.</p>
     </div>
 </div>
+<div class="row separator"></div>
+<h3>Adjunct Faculty</h3>
 <div class="row">
     <div class="col-sm-3">
         <img src="/assets/img/Christine_Orpen.jpg" class="img-responsive img-thumbnail" />

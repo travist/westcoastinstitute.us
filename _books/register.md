@@ -9,12 +9,6 @@ controller: RegistrationController
     <div class="col-sm-12" style="text-align: center;">
         <h3 class="header-sm-title">West Coast Institute for Gestalt Therapy</h3>
         <h3 class="header-sm-title">with Children & Adolescents</h3>
-        <div class="well" style="text-align: center">
-            <strong>Advanced Trainer</strong>
-            <p>Felicia Carroll</p>
-            <p>Licensed Marriage Family Therapist</p>
-            <p>Registered Play Therapist-Supervisor</p>
-        </div>
     </div>
 </div>
 <div class="row">

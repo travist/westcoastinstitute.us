@@ -22,6 +22,11 @@ chapter: conference
                 <p><img src="/assets/img/expressive-therapies-summit.jpg" class="img-responsive img-thumbnail" /></p>
                 <p>Felicia will be teaching a Master class "Writing life narratives with Children: Every child's life is worth a story" at the <a href="http://summit.expressivemedia.org/" target="_blank">Expressive Therapies Summit in New York City 2016</a>.</p>
               </li>
+              <li class="list-group-item">
+                <h4><strong>November 10, 2017</strong></h4>
+                <p><img src="/assets/img/eselen.jpg" class="img-responsive img-thumbnail" /></p>              
+                <strong>Esalen Institute Conference</strong> - 40th Anniversary of Gazebo Park School founded by Janet Lederman.</p>
+              </li>
             </ul>
           </div>
         </div>

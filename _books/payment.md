@@ -21,7 +21,7 @@ weight: 10
                 <div class="checkbox">
                     <label>
                       <input id="yearlong" type="checkbox" value="">
-                      Year Long Training - <strong>$<span id="yearlong-value">2400</span></strong>
+                      The Weekender Training - <strong>$<span id="yearlong-value">2400</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">
@@ -56,7 +56,7 @@ weight: 10
           <div class="panel-heading">Refund Policy</div>
           <div class="panel-body">
             <p>All refund requests must be made in writing and received 15 days prior the beginning of any training.  This allows others who are on a waiting list to make plans to attend.  If not received prior to the 15 days, no refund will be made.  No refunds will be made after the program begins.    WCI nor any of its trainers are responsible for loss of travel or lodging expenses for any cause.</p>
-            <p>Registration fees will not be refunded but will be applied toward a future training.  Any scholarship funds will be returned to the grantor.</p>
+            <p>Registration fees will not be refunded unless WCI cancels the program. Paid fees can be applied toward a future training. Any scholarship funds will be returned to the grantor.</p>
             <p><strong>Please Note:</strong> International trainings are organized through local organizers.  Refunds or grievances  are not the responsibility of WCI or any WCI trainer. Please contact the organizer of the training in your respective location.</p>
           </div>
         </div>

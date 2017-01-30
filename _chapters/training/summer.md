@@ -1,5 +1,5 @@
 ---
-title: Summer Intensive Training
+title: Summer Intensive Basic Training
 book: training
 weight: 10
 chapter: summer
@@ -17,6 +17,7 @@ chapter: summer
                 <strong>Training Fee's</strong>
                 <ul>
                     <li>Summer Intensive Training: $2400</li>
+                    <li>Information regarding financial assistance, schedule of trainings, lodging, and transportation to and from airports will be provided to all registrants with confirmation of registration.</li>
                     <li>A deposit of $300 is necessary to reserve your space. After a deposit has been made, the remaining amount is due on or before the beginning of the training. Please note that the program is limited to 10 people.</li>
                 </ul>
                 <strong>CEU's</strong>
@@ -47,7 +48,8 @@ chapter: summer
             </ul>
           </div>
         </div>
-        <p>The Summer Training provides an opportunity for participants to enjoy a summer vacation combined with an intensive learning experience. Each day of the workshop will have didactic discussion, experiential practicum with feedback, and case presentations. Video of sessions with children and power point assisted slides will illustrate work with children. If possible, demonstrations with children may be used. Emphasis in this training is on learning concepts and skills that will enhance the therapeutic practice of those working with children/adolescents and not on the personal development of participants. However, participants will find the practicums and demonstrations to be personally and professionally rewarding. Participants are asked to read Dr. Oaklander’s books, Windows to Our Children and Hidden Treasure available through <a href="http://vsof.org">http://vsof.org</a>. Other readings will be made available to those attending the training(s).</p>
+        <p>The Summer Training provides an opportunity for participants to enjoy a summer vacation combined with an intensive learning experience. Each day of the workshop will have didactic discussion, experiential practicum with feedback, and case presentations. Video of sessions with children and power point assisted slides will illustrate work with children. If possible, demonstrations with children may be used. Emphasis in this training is on learning concepts and skills that will enhance the therapeutic practice of those working with children/adolescents and not on the personal development of participants. However, participants will find the practicums and demonstrations to be personally and professionally rewarding. The focus of the Basic Training Programs is the integration of theoretical understanding, skill development using various play modalities, and clinical practice.</p>
+        <p>Participants are asked to read Dr. Oaklander’s books, Windows to Our Children and Hidden Treasure available through <a href="http://vsof.org">http://vsof.org</a>. Other readings will be made available to those attending the training(s).</p>
         <blockquote>
           <p>Since I have cut back on giving trainings, I am delighted that Felicia is offering this summer training as well as other programs that will continue my work and the contributions of the Oaklander Model to the practice of child psychotherapy. Her work is intelligent, sensitive and inspiring. I recommend her trainings to everyone.</p>
           <footer><cite>Violet Oaklander, Ph.D. Founder of the Gestalt approach with children and adolescents who conducted a highly successful summer training each summer from 1981 until her retirement in 2007.</cite></footer>

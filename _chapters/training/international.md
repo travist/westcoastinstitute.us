@@ -39,15 +39,20 @@ chapter: international
         </ul>
         <p>Many more dates are being planned for 2017 - 2018.</p>
         <p><a href="/contact">Contact Felicia</a> for more details.</p>
-        <h2>Recommended International Programs</h2>
-        <p><strong>Instituto de Therapia Juego Gestalt Ninos and Adolescentes</strong></p>
-        <ul>
-          <li>Location: Leon, Mexico</li>
-          <li>Program: Year Long: Therapia for Jeugo: El Modelo Oaklander</li>
-          <li>Date: Begins September 25, 2016</li>
-          <li>Contact: Susana Millan Cruz sumillan60@yahoo.com</li>
-        </ul>
     </div>
+</div>
+<div class="docs-section">
+  <h2 id="recommended-international" class="header-title">Recommended International Trainers</a></h2>
+  <div class="docs-section">
+    <strong>Instituto de Therapia Juego Gestalt Ninos and Adolescentes</strong>
+    <ul>
+      <li>Trainer: Susana Millan Cruz</li>
+      <li>Location: Leon, Mexico</li>
+      <li>Contact: sumillan60@yahoo.com</li>
+      <li>Program: Year Long: Therapia for Jeugo: El Modelo Oaklander</li>
+      <li>Date: Begins September 25, 2016</li>
+    </ul>
+  </div>
 </div>
 <hr>
 <p></p>
