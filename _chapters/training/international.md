@@ -42,7 +42,7 @@ chapter: international
     </div>
 </div>
 <div class="docs-section">
-  <h2 id="recommended-international" class="header-title">Recommended International Trainers</a></h2>
+  <h2 id="recommended-international" class="header-title">Recommended International Trainers</h2>
   <div class="docs-section">
     <strong>Instituto de Therapia Juego Gestalt Ninos and Adolescentes</strong>
     <ul>
