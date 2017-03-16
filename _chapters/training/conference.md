@@ -26,6 +26,7 @@ chapter: conference
                 <h4><strong>November 10, 2017</strong></h4>
                 <p><img src="/assets/img/eselen.jpg" class="img-responsive img-thumbnail" /></p>              
                 <strong>Esalen Institute Conference</strong> - 40th Anniversary of Gazebo Park School founded by Janet Lederman.</p>
+                <h5>Felicia will present, <strong>“What JL Whispered to the Forest!”</strong></h5>
               </li>
             </ul>
           </div>

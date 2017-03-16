@@ -31,6 +31,9 @@ chapter: advanced
                 <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
                 <h4><strong>October 15 - October 22, 2017</strong></h4>
               </li>
+              <li class="list-group-item">
+                <h4 class="text-warning"><strong>Register now to have a place!</strong></h4>
+              </li>
             </ul>
           </div>
         </div>

@@ -38,12 +38,17 @@ chapter: summer
           <div class="panel-body">
             <ul class="list-group">
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
+                <!--<a href="/register" class="btn btn-primary" style="float:right">Register Now</a>-->
+                <a class="btn btn-danger" style="float:right">FULL</a>
                 <h4><strong>July 8 - July 16, 2017</strong></h4>
               </li>
               <li class="list-group-item">
-                <a href="/register" class="btn btn-primary" style="float:right">Register Now</a>
+                <!--<a href="/register" class="btn btn-primary" style="float:right">Register Now</a>-->
+                <a class="btn btn-danger" style="float:right">FULL</a>
                 <h4><strong>July 29 - August 6, 2017</strong></h4>
+              </li>
+              <li class="list-group-item">
+                <h4><strong>Filled for 2017.  Look for 2018 dates</strong></h4>
               </li>
             </ul>
           </div>
