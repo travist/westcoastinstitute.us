@@ -48,9 +48,7 @@ chapter: international
     <ul>
       <li>Trainer: Susana Millan Cruz</li>
       <li>Location: Leon, Mexico</li>
-      <li>Contact: sumillan60@yahoo.com</li>
-      <li>Program: Year Long: Therapia for Jeugo: El Modelo Oaklander</li>
-      <li>Date: Begins September 25, 2016</li>
+      <li>Contact: sumillan60@yahoo.com.mx</li>
     </ul>
   </div>
 </div>
