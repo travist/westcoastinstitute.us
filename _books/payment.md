@@ -20,8 +20,8 @@ weight: 10
                 </div>
                 <div class="checkbox">
                     <label>
-                      <input id="yearlong" type="checkbox" value="">
-                      The Weekender Training - <strong>$<span id="yearlong-value">2400</span></strong>
+                      <input id="oneday" type="checkbox" value="">
+                      One Day Introductory Training - $180 - <strong>$<span id="oneday-value">50</span></strong> due on registration.
                     </label>
                 </div>
                 <div class="checkbox">

@@ -23,7 +23,7 @@ weight: 5
             </div>
             <a href="#conference" class="btn btn-block btn-success">Conference Presentations</a>
             <a href="#summer" class="btn btn-block btn-success">Summer Intensive Basic Training</a>
-            <a href="#yearlong" class="btn btn-block btn-success">The Weekender Basic Training</a>
+            <a href="#oneday" class="btn btn-block btn-success">One Day Introductory Workshop</a>
             <a href="#advanced" class="btn btn-block btn-success">Advanced Fall Intensive Training</a>
             <a href="#winter" class="btn btn-block btn-success">Winter Intensive Training</a>
             <a href="#international" class="btn btn-block btn-success">International Training</a>
