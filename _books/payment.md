@@ -21,7 +21,7 @@ weight: 10
                 <div class="checkbox">
                     <label>
                       <input id="oneday" type="checkbox" value="">
-                      One Day Introductory Training - $180 - <strong>$<span id="oneday-value">50</span></strong> due on registration.
+                      One Day Introductory Training - <strong>$180 | $<span id="oneday-value">50</span></strong> due on registration.
                     </label>
                 </div>
                 <div class="checkbox">

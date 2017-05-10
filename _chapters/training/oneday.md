@@ -8,7 +8,6 @@ chapter: oneday
     <div class="col col-sm-6">
         <div class="row">
             <div class="col-sm-12">
-                <h3>Description</h3>
                 <p>This small-group workshop will build and strengthen attendees’ skills and theoretical understanding of the Gestalt approach to play therapy with children and adolescents. An overview of the history and development of Gestalt therapy will lead attendees through the theoretical underpinnings that guide our work with children. This workshop is experiential and provides practicum sessions to support integration of theory and practice. Attendees will be guided through the application of Gestalt therapy principles as represented in the work of Violet Oaklander, Ph.D. Additionally, contemporary work from the fields of Interpersonal Neurobiology and Relational Gestalt therapy will be incorporated to further support and confirm the Gestalt approach with children and adolescents.</p>
             </div>
         </div>
@@ -56,7 +55,11 @@ chapter: oneday
             <h3 class="panel-title header-title">Location</h3>
           </div>
           <div class="panel-body">
-            Placerville, CA
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <h4><strong>Placerville, CA</strong></h4>
+                </li>
+              </ul>
           </div>
         </div>
     </div>
