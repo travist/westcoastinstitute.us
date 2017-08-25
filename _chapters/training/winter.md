@@ -10,6 +10,7 @@ chapter: winter
           <div class="panel-body">
             <p>Wintertime is great in Solvang - maybe snow - or maybe not...</p>
             <p>Time to huddle together around a fire, or hiking in cool weather. Many have requested this time of the year for an intensive training.</p>
+            <p><img src="/assets/img/solvangwinter.png" class="img-responsive img-thumbnail" /></p>
             <p>See <a href="#summer">Summer Intensive</a> for program description.</p>
           </div>
         </div>
