@@ -5,7 +5,7 @@ layout: default
 {% assign chapters = (site.chapters | where: "book" , page.book | sort: "weight") %}
 {% for chapter in chapters %}
 <div class="docs-section">
-  <h2 id="{{ chapter.chapter }}" class="header-title">{{ chapter.title }}</a></h2>
+  <a href="#{{ chapter.chapter }}"><h2 id="{{ chapter.chapter }}" class="header-title"><img style="width:1.6em;" src="/assets/img/sunlogo.png"></img> {{ chapter.title }}</a></h2></a>
   {{ chapter.content | markdownify }}
   {% assign paragraphs = (site.paragraphs | where: "chapter" , chapter.chapter | sort: "weight") %}
   {% for paragraph in paragraphs %}
@@ -15,4 +15,5 @@ layout: default
   </div>
   {% endfor %}
 </div>
+<div class="row separator"></div>
 {% endfor %}

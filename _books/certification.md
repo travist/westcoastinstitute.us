@@ -10,7 +10,7 @@ weight: 8
        <div class="row" style="text-align:center;margin-bottom: 30px;">
            <div class="header-title" style="margin-bottom: 0;">Certification Program</div>
            <div class="header-sm-title" style="margin-top: 0;margin-bottom:0;">STANDARDS AND REQUIREMENTS</div>
-           <strong style="margin-top:0;">Gestalt Therapy with Children and Adolescents</strong>
+           <strong style="margin-top:0;">Gestalt Play Therapy with Children and Adolescents</strong>
        </div>
    </div>
 </div>
@@ -35,7 +35,7 @@ weight: 8
         <ul>
             <li><strong>85 hours</strong> of training programs by recognized trainers in Gestalt Therapy with Children and Adolescents. (certificates of completion are needed with application).</li>
             <li><strong>50 hours</strong> of supervision by a recognized Gestalt Therapist (applicant is responsible for arranging and paying for supervision) Documentation of that supervision must be attached and signed by supervisor(s).</li>
-            <li><strong>Demonstration of theoretical competence by passing a written essay examination</strong>. A reading list of resources expected to be read will be provided. Applicant determines when he/she is ready for the examination. Topics for discussion will be provided and applicant is to complete and return essays with a given time. Applicant is under his/her honor for the completion of the theoretical essays.</li>
+            <li><strong>Demonstration of theoretical competence by responding to essay questions</strong>. A reading list of resources expected to be read will be provided. Applicant determines when he/she is ready for the examination. Topics for discussion will be provided and applicant is to complete and return essays with a given time. Applicant is under his/her honor for the completion of the theoretical essays.</li>
             <li><strong>Case presentation</strong>. Applicant is to write a narrative account of a recent child/adolescent course of therapy indicating your use of the Oaklander Model and the use of projective techniques and integrative processes. An outline for that presentation will be provided for those applicants who complete the theoretical essays.</li>
             <li><strong>It is recommended that applicants participate in Gestalt Therapy training by qualified Gestalt Therapy trainers/practitioners</strong> in addition to the above training hours required in Gestalt Therapy with children and adolescents.</li>
         </ul>
@@ -43,8 +43,8 @@ weight: 8
     <div class="col col-sm-6">
         <h3 class="header-sm-title">Supervision / Case Consultation</h3>
         <p>Supervision/Case Consultation can provide an opportunity to develop a foundation in Gestalt theoretical principles and methods for clinical practice. The Gestalt perspective emphasizes the nature of the relational elf and the qualities of the therapeutic alliance. Gestalt Therapy offers the child therapist an alternative way of working relationally and creatively with her young clients. Gestalt Therapy continues to influence the theory and practice of most contemporary schools in psychotherapy as well as challenge the aassumptions of others. The fundamental principles of Gestalt Therapy are confirmed by attachment theory, relational neurobiology and neuroscience. The integration of these recent developments with contemporary Gestalt Therapy shape the perspective of the supervisory/consulting discussion.</p>
-        <p><strong>Felicia Carroll, LMFT and RPT-S</strong> conducts supervision/consultation in groups, individually, and at a distance via Skype. Supervision/consultation is available to those who have completed training with Felicia Carroll or other qualified trainers.</p>
-        <p>Other WCI faculty are available for supervision / consultation. See <a href="/faculty">Faculty</a> tab.</p>
+        <p>There are currently over 20 participants in the Certification program of WCI.</p>
+        <p>All faculty of WCI are available for supervision consultation through WCI. See <a href="/faculty">Faculty</a> tab.</p>
     </div>
 </div>
 <div class="row">
@@ -66,6 +66,9 @@ weight: 8
       <p class="well"><strong>Lee Weiser, Ph.D</strong> is a licensed clinical psychologist with a BS in Child Development and MA in Human Behavior and a Ph.D. degree in Clinical Psychology with an emphasis in Depth Psychology. She has specialized in training in expressive therapies and spent many years working with children, adolescents, and their families in school settings and private practice. She has been on the faculty and taught graduate level courses at major graduate institutions. She is a founding member of the VSOFoundation. She can be reached at: lweiser@me.com</p>
       <p class="well"><strong>Lillian Freeman, LCSW</strong> is in private practice in West Los Angeles. She has work for over 30 years with children, adolescents, and families. She has taught as adjunct faculty at major graduate institutions teaching the Treatment of Children. She has been a supervisor for 15 years with private interns. She is a founding member of the VSOFoundation. She can be reached at: lillianfreemanlcsw@earthlink.net</p>
       <p class="well"><strong>Patric White, Ph. D.</strong> is a Certified Gestalt Therapist in private practice in West Los Angeles He specializes in working with children, adolescents, and families. He provides supervision for interns and conducts training workshops on the Oaklander Approach to child therapy. He has been a consultant to numerous school districts in the mental health treatment of children within the school setting. He has worked with Violet Oaklander since 1979 and is a founding member of the VSOFoundation. He can be reached at Wpatricwhit@aol.com</p>
+      <p class="well"><strong>Sarah Williams, PsyD, RPT-S</strong> is a licensed clinical psychologist, Registered Play Therapist Supervisor and Certified Gestalt Therapist with Children and Adolescents in Maui. She has completed postgraduate training courses with the Gestalt Institute of Cleveland and West Coast Institute for Gestalt Therapy with Children and Adolescents. A published author and founder of Lehualani Center, Dr. Williams has conducted presentations throughout the United States and internationally, most recently at the 11th annual GANZ Conference in Melbourne, Australia.</p>
+      <p class="well"><strong>Andrea Acosta, Ph. D. Uruguay</strong></p>
+      <p class="well"><strong>Sock Kuan Lee, Singapore</strong></p>
     </div>
    </div>
    <div class="col col-sm-4">

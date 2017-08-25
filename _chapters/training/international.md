@@ -6,6 +6,8 @@ chapter: international
 ---
 <div class="row">
     <div class="col col-sm-6">
+        <p><img src="/assets/img/international1.jpg" class="img-responsive img-thumbnail" />
+        <strong>Warsaw, Poland 2017</strong></p>
         <p><img src="/assets/img/hongkong2015.jpg" class="img-responsive img-thumbnail" />
         <strong>Hong Kong 2015</strong></p>
         <p><img src="/assets/img/FeliciaMole.jpg" class="img-responsive img-thumbnail" />
@@ -24,20 +26,20 @@ chapter: international
         Other issues/topics can also be addressed as the program is tailored for each group and cultural needs.
         </p>
         <h2>Upcoming International Workshops</h2>
-        <strong>2016 Workshops</strong>
-        <ul>
-            <li>Hong Kong, China - November 26 - December 3, 2016</li>
-        </ul>
         <strong>2017 Workshops</strong>
         <ul>
             <li>Prague, Czech Republic - January 17 - 23, 2017</li>
             <li>Prague, Czech Republic - May 9 - 14, 2017</li>
-            <li>Singapore City, Singapore - March 13 - 16, 2017</li>
             <li>Warsaw, Poland - March 24 - April 3, 2017</li>
-            <li>Bucharest, Romania - May 15 - 22, 2017</li>
             <li>Prague, Czech Republic - September 6 - 12, 2017</li>
         </ul>
-        <p>Many more dates are being planned for 2017 - 2018.</p>
+        <strong>2018 Workshops</strong>
+        <ul>
+            <li>Prague, Czech Republic - TBD</li>
+            <li>Slovenia - March 22 - 25th, 2018</li>
+            <li>Singapore City, Singapore - TBD</li>
+        </ul>
+        <p>Many more dates are being planned for 2018.</p>
         <p><a href="/contact">Contact Felicia</a> for more details.</p>
     </div>
 </div>

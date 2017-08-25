@@ -9,6 +9,8 @@
 
   <link rel="stylesheet" href="/assets/css/main.css">
   <!-- bower:css -->
+  <link rel='stylesheet' href='../assets/lib/ng-dialog/css/ngDialog.css' />
+  <link rel='stylesheet' href='../assets/lib/ng-dialog/css/ngDialog-theme-default.css' />
   <link rel='stylesheet' href='../assets/lib/angular-ui-select/dist/select.css' />
   <link rel='stylesheet' href='../assets/lib/ng-formio/css/formio.css' />
   <!-- endbower -->
@@ -44,16 +46,18 @@
   <script src="../assets/lib/angular/angular.js"></script>
   <script src="../assets/lib/ng-file-upload/ng-file-upload.js"></script>
   <script src="../assets/lib/angular-sanitize/angular-sanitize.js"></script>
+  <script src="../assets/lib/ng-dialog/js/ngDialog.js"></script>
   <script src="../assets/lib/moment/moment.js"></script>
   <script src="../assets/lib/angular-moment/angular-moment.js"></script>
   <script src="../assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="../assets/lib/bootstrap-ui-datetime-picker/dist/datetime-picker.js"></script>
-  <script src="../assets/lib/signature_pad/signature_pad.js"></script>
   <script src="../assets/lib/angular-ui-mask/dist/mask.js"></script>
   <script src="../assets/lib/blob-polyfill/Blob.js"></script>
   <script src="../assets/lib/file-saver.js/FileSaver.js"></script>
   <script src="../assets/lib/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
+  <script src="../assets/lib/angular-ui-ace/ui-ace.js"></script>
   <script src="../assets/lib/angular-ui-select/dist/select.js"></script>
+  <script src="../assets/lib/angular-ckeditor/angular-ckeditor.js"></script>
   <script src="../assets/lib/ng-formio/dist/formio.js"></script>
   <script src="../assets/lib/es6-promise/es6-promise.js"></script>
   <script src="../assets/lib/urijs/src/URI.js"></script>

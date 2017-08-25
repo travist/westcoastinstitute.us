@@ -27,13 +27,13 @@ weight: 10
                 <div class="checkbox">
                     <label>
                       <input id="advanced" type="checkbox" value="">
-                      Advanced Fall Intensive - <strong>$<span id="advanced-value">1600</span></strong>
+                      Advanced Training 2017 - <strong>$<span id="advanced-value">1600</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input id="trainers" type="checkbox" value="">
-                        Training for Trainers - <strong>$<span id="trainers-value">1600</span></strong>
+                      <input id="advanced2" type="checkbox" value="">
+                      Advanced Training 2018 - <strong>$<span id="advanced2-value">1000</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">

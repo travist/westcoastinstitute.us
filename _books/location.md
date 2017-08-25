@@ -65,11 +65,16 @@ weight: 2
 <div class="row separator"></div>
 <div class="row" style="text-align:center;margin-bottom: 30px;">
     <div class="header-title">Lodging in Solvang</div>
-    <h3><a href="http://solvanginnandcottages.com/">Solvang Inn & Cottages</a></h3>
+    <h3 style="font-weight:400"><a href="http://solvanginnandcottages.com/">Solvang Inn & Cottages</a></h3>
+    <h4><a href="http://solvanginnandcottages.com/">http://solvanginnandcottages.com</a></h4>
 </div>
 <div class="row">
     <div class="col-sm-6">
         <img src="/assets/img/solvanghotel.jpg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-6">Visit <a href="http://solvanginnandcottages.com/">Solvang Inn and Cottages</a> and give them a call to receive an especially reduced rate for WCI participants. Daily rate includes continental breakfast at a local Danish bakery. Ask about available transportation from LAX, Santa Barbara airport, and other airports in the region.</div>
+</div>
+<div class="row" style="text-align:center;margin-bottom: 30px;">
+    <div class="header-title">Lodging in Other Locations</div>
+    <p>Participants in workshops or trainings in other locations will be notified of lodging options with confirmation of registration.</p>
 </div>

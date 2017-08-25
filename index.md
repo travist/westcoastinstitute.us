@@ -4,11 +4,12 @@ link: home
 weight: 0
 ---
 <div class="front-description">
-  <div style="text-align: center">
-    <h2 class="header-title header-title-red" style="margin-top:0">TRAINING - SUPERVISION - CERTIFICATION</h2>
-    <h3 class="header-sm-title header-title-red">GESTALT THERAPY WITH CHILDREN AND ADOLESCENTS</h3>
+  <div style="text-align: center;">
+    <h2 class="header-title header-title-red" style="margin-top:0">TRAINING - CONSULTATION - CERTIFICATION</h2>
+    <h4 class="header-title">the Oaklander Approach</h4>
+    <h3 class="header-sm-title header-title-red">Knowing what to do and why you are doing it</h3>
   </div>
-  <p>The West Coast Institute for Gestalt Therapy with Children was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
+  <p style="font-size: 1.2em;">The West Coast Institute for Gestalt Therapy with Children LLC was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
   <div class="col-sm-6 col-sm-offset-6" style="margin-top:75px">
     <ul>
       <li>Small group interactive learning experiences</li>

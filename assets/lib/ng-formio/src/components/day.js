@@ -1,40 +1,5 @@
 var fs = require('fs');
 module.exports = function(app) {
-  app.directive('dayPart', function() {
-    return {
-      restrict: 'A',
-      replace: true,
-      require: 'ngModel',
-      link: function(scope, elem, attrs, ngModel) {
-        if (scope.builder) return;
-        var limitLength = attrs.characters || 2;
-        scope.$watch(attrs.ngModel, function() {
-          if (!ngModel.$viewValue) {
-            return;
-          }
-          var render = false;
-          if (ngModel.$viewValue.length > limitLength) {
-            ngModel.$setViewValue(ngModel.$viewValue.substring(0, limitLength));
-            render = true;
-          }
-          if (isNaN(ngModel.$viewValue)) {
-            ngModel.$setViewValue(ngModel.$viewValue.replace(/\D/g,''));
-            render = true;
-          }
-          if (
-            parseInt(ngModel.$viewValue) < parseInt(attrs.min) ||
-            parseInt(ngModel.$viewValue) > parseInt(attrs.max)
-          ) {
-            ngModel.$setViewValue(ngModel.$viewValue.substring(0, limitLength - 1));
-            render = true;
-          }
-          if (render) {
-            ngModel.$render();
-          }
-        });
-      }
-    };
-  });
   app.directive('dayInput', function() {
     return {
       restrict: 'E',
@@ -52,12 +17,66 @@ module.exports = function(app) {
       templateUrl: 'formio/components/day-input.html',
       controller: ['$scope', function($scope) {
         if ($scope.builder) return;
-        $scope.months = [$scope.component.fields.month.placeholder, 'January', 'February', 'March', 'April', 'May', 'June',
-          'July', 'August', 'September', 'October', 'November', 'December'];
+        $scope.months = [
+          {value: '00', label: $scope.component.fields.month.placeholder},
+          {value: '01', label: 'January'},
+          {value: '02', label: 'February'},
+          {value: '03', label: 'March'},
+          {value: '04', label: 'April'},
+          {value: '05', label: 'May'},
+          {value: '06', label: 'June'},
+          {value: '07', label: 'July'},
+          {value: '08', label: 'August'},
+          {value: '09', label: 'September'},
+          {value: '10', label: 'October'},
+          {value: '11', label: 'November'},
+          {value: '12', label: 'December'}
+        ];
+
+        function isLeapYear(year) {
+          // Year is leap if it evenly divisible by 400 or evenly divisible by 4 and not evenly divisible by 100.
+          return !(year % 400) || (!!(year % 100) && !(year % 4));
+        }
+
+        function getDaysInMonthCount(month, year) {
+          switch (month) {
+            case 1:     // January
+            case 3:     // March
+            case 5:     // May
+            case 7:     // July
+            case 8:     // August
+            case 10:    // October
+            case 12:    // December
+              return 31;
+            case 4:     // April
+            case 6:     // June
+            case 9:     // September
+            case 11:    // November
+              return 30;
+            case 2:     // February
+              return isLeapYear(year) ? 29 : 28;
+            default:
+              return 0;
+          }
+        }
+
+        $scope.maxDay = 0;
+        $scope.$watch(function() {
+          return $scope.date.month + '/' + $scope.date.year;
+        }, function() {
+          var day = Number($scope.date.day);
+          var month = Number($scope.date.month);
+          var year = Number($scope.date.year);
+          $scope.maxDay = getDaysInMonthCount(month, year);
+
+          if (day > $scope.maxDay) {
+            $scope.date.day = null;
+          }
+        });
 
         $scope.date = {
           day: '',
-          month: '',
+          month: '00',
           year: ''
         };
       }],
@@ -67,21 +86,35 @@ module.exports = function(app) {
         scope.$watch('ngModel', function() {
           // Only update on load.
           if (ngModel.$viewValue && !ngModel.$dirty) {
-            var parts = ngModel.$viewValue.split('/');
-            if (parts.length === 3) {
-              scope.date.day = parts[(scope.component.dayFirst ? 0 : 1)];
-              scope.date.month = parseInt(parts[(scope.component.dayFirst ? 1 : 0)]).toString();
-              scope.date.year = parts[2];
+            var parts = typeof ngModel.$viewValue === 'string'
+              ? ngModel.$viewValue.split('/')
+              : ngModel.$viewValue;
+            if ((parts instanceof Array) && parts.length === 3) {
+              scope.date.day = Number(parts[(scope.component.dayFirst ? 0 : 1)]);
+              scope.date.month = parts[(scope.component.dayFirst ? 1 : 0)];
+              scope.date.year = Number(parts[2]);
             }
           }
         });
 
         var padLeft = function padLeft(nr, n, str) {
-          return Array(n - String(nr.toString()).length + 1).join(str || '0') + nr.toString();
+          nr = (nr || '').toString();
+          if (nr.length > n) {
+            return nr.substr(0, n);
+          }
+
+          return Array((n - nr.length) + 1).join(str || '0') + nr;
         };
 
         scope.onChange = function() {
-          ngModel.$setViewValue(padLeft(scope.date.day, 2) + '/' + padLeft(scope.date.month, 2) + '/' + padLeft(scope.date.year, 4));
+          var day = padLeft(scope.date.day, 2);
+          var month = padLeft(scope.date.month, 2);
+          var year = padLeft(scope.date.year, 4);
+          var value = scope.component.dayFirst ? day : month;
+          value += '/';
+          value += scope.component.dayFirst ? month : day;
+          value += '/' + year;
+          ngModel.$setViewValue(value);
         };
 
         ngModel.$validators.day = function(modelValue, viewValue) {
@@ -129,7 +162,7 @@ module.exports = function(app) {
           key: 'dayField',
           fields: {
             day: {
-              type: 'text',
+              type: 'number',
               placeholder: '',
               required: false
             },
@@ -139,7 +172,7 @@ module.exports = function(app) {
               required: false
             },
             year: {
-              type: 'text',
+              type: 'number',
               placeholder: '',
               required: false
             }
@@ -147,6 +180,8 @@ module.exports = function(app) {
           dayFirst: false,
           protected: false,
           persistent: true,
+          hidden: false,
+          clearOnHide: true,
           validate: {
             custom: ''
           }

@@ -14,33 +14,17 @@ module.exports = function(app) {
           angular.forEach(component.values, function(v) {
             values[v.value] = v.label;
           });
-          angular.forEach(component.questions, function(question) {
-            view += '<tr>';
-            view += '<th>' + question.label + '</th>';
-            view += '<td>' + values[data[question.value]] + '</td>';
-            view += '</tr>';
-          });
+          if (data) {
+            angular.forEach(component.questions, function(question) {
+              view += '<tr>';
+              view += '<th>' + question.label + '</th>';
+              view += '<td>' + values[data[question.value]] + '</td>';
+              view += '</tr>';
+            });
+          }
           view += '</tbody></table>';
           return view;
         },
-        controller: ['$scope', '$timeout', function($scope, $timeout) {
-          // FOR-71
-          if ($scope.builder) return;
-          // @todo: Figure out why the survey values are not defaulting correctly.
-          var reset = false;
-          $scope.$watch('data.' + $scope.component.key, function(value) {
-            if (value && !reset) {
-              reset = true;
-              $scope.data[$scope.component.key] = {};
-              $timeout((function(value) {
-                return function() {
-                  $scope.data[$scope.component.key] = value;
-                  $timeout($scope.$apply.bind($scope));
-                };
-              })(value));
-            }
-          });
-        }],
         settings: {
           input: true,
           tableView: true,
@@ -51,6 +35,8 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           persistent: true,
+          hidden: false,
+          clearOnHide: true,
           validate: {
             required: false,
             custom: '',
