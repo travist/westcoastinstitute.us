@@ -6,36 +6,6 @@ chapter: oneday
 ---
 <div class="row">
     <div class="col col-sm-6">
-        <div class="row">
-            <div class="col-sm-12">
-                <p>This small-group workshop will build and strengthen attendees’ skills and theoretical understanding of the Gestalt approach to play therapy with children and adolescents. An overview of the history and development of Gestalt therapy will lead attendees through the theoretical underpinnings that guide our work with children. This workshop is experiential and provides practicum sessions to support integration of theory and practice. Attendees will be guided through the application of Gestalt therapy principles as represented in the work of Violet Oaklander, Ph.D.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Presenter:</h3>
-                <p><strong>Valente Orozco, LCSW, RPT-S, PPS</strong> currently works in private practice in Clovis California and offers training, supervision, and consultation in Gestalt Therapy with Children and Adolescents. He has worked with children in a variety of settings including school-based mental health, child welfare, and outpatient mental health. Valente served as the 2015 President of the Central Valley Chapter of the California Association for Play Therapy. He has trained with the Pacific Gestalt Institute in Los Angeles and is a Certified Gestalt Therapist with Children and Adolescents. Mr. Orozco is a core faculty member with the West Coast Institute for Gestalt Therapy with Children and Adolescents.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <strong>Workshop Fee's</strong>
-                <ul>
-                    <li>One Day Introductory Workshop: $180</li>
-                    <li>A non-refundable registration fee of $50 is due with registration.</li>
-                    <li>The group is limited to 10 attendees.</li>
-                </ul>
-                <strong>CEU's</strong>
-                <ul>
-                    <li>6 contact hours. The West Coast Institute for Gestalt Therapy with Children and Adolescents is approved 	by the Association for Play Therapy, APT Approved Provider Number 04-152 to offer continuing education specific to play therapy.</li>
-                    <li>WCI is approved by the California Association of Marriage and Family Therapists to 	sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs as required by the California Board of Behavioral Sciences. Provider Number 008931.</li>
-                    <li>A Certificate of Completion will be given upon receipt of the evaluation for the program. No partial credit can be provided. A non-refundable registration fee of $50 is due with registration.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="col col-sm-6">
-
         <div class="panel panel-default">
             <div class="panel panel-heading">
                 <h3 class="panel-title header-title">February 3rd, 2018</h3>
@@ -43,12 +13,13 @@ chapter: oneday
             <div class="panel-body">
                 <p style="font-size: 1.2em;"><strong>Introduction to Gestalt Play Therapy Oaklander Approach</strong></p>
                 <hr/>
+                <p>This small-group workshop will build and strengthen attendees’ skills and theoretical understanding of the Gestalt approach to play therapy with children and adolescents. An overview of the history and development of Gestalt therapy will lead attendees through the theoretical underpinnings that guide our work with children. This workshop is experiential and provides practicum sessions to support integration of theory and practice. Attendees will be guided through the application of Gestalt therapy principles as represented in the work of Violet Oaklander, Ph.D.</p>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Location:</strong> - Clovis, CA</li>
                     <li class="list-group-item"><strong>Fees: - $180</strong></li>
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
-                        <li>Valente Orozco, LCSW, RPT-S</li>
+                        <li><a href="/faculty">Valente Orozco, LCSW, RPT-S</a></li>
                       </ul>
                     </li>
                     <li class="list-group-item"><strong>CEUs:</strong> 6 contact hours</li>
@@ -58,6 +29,8 @@ chapter: oneday
                 <a href="/register" class="btn btn-primary btn-block">Register Now</a>
             </div>
         </div>
+    </div>
+    <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
                 <h3 class="panel-title header-title">March 16th, 2018</h3>
@@ -65,12 +38,13 @@ chapter: oneday
             <div class="panel-body">
                 <p style="font-size: 1.2em;"><strong>Introduction to Gestalt Play Therapy Oaklander Approach</strong></p>
                 <hr/>
+                <p>This small-group workshop will build and strengthen attendees’ skills and theoretical understanding of the Gestalt approach to play therapy with children and adolescents. An overview of the history and development of Gestalt therapy will lead attendees through the theoretical underpinnings that guide our work with children. This workshop is experiential and provides practicum sessions to support integration of theory and practice. Attendees will be guided through the application of Gestalt therapy principles as represented in the work of Violet Oaklander, Ph.D.</p>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Location:</strong> - Santa Barbara, CA</li>
                     <li class="list-group-item"><strong>Fees: - $180</strong></li>
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
-                        <li>Stephanie Pawlowicz, LMFT, RPT</li>
+                        <li><a href="/faculty">Stephanie Pawlowicz, LMFT, RPT</a></li>
                       </ul>
                     </li>
                     <li class="list-group-item"><strong>CEUs:</strong> 6 contact hours</li>
