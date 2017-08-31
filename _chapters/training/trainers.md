@@ -8,7 +8,7 @@ chapter: trainers
     <div class="col col-sm-6">
         <p><img src="/assets/img/trainers1.jpg" class="img-responsive img-thumbnail" /></p>
         <p><img src="/assets/img/trainers2.jpg" class="img-responsive img-thumbnail" /></p>
-        <p>Participants from the 1rst Symposium were from the USA, Mexico, Singapore, South Korea, and Uruguay.</p>
+        <p>Participants from the 1st Symposium were from the USA, Mexico, Singapore, South Korea, and Uruguay.</p>
     </div>
     <div class="col col-sm-6">
         <div class="panel panel-default">
