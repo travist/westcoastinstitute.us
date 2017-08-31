@@ -39,7 +39,7 @@ chapter: trainers
                 <a href="/register" class="btn btn-primary btn-block">Register Now</a>
             </div>
         </div>
-        <p><img src="/assets/img/trainers3.jpg" class="img-responsive img-thumbnail" /></p>
+        <p><img src="/assets/img/trainers4.jpg" class="img-responsive img-thumbnail" /></p>
     </div>
 </div>
 
