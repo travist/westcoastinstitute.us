@@ -15,7 +15,7 @@ weight: 5
             <div class="well text-center" style="color: #C94804">
               <h3><strong>KNOWING WHAT TO DO AND WHY YOU ARE DOING IT</strong></h3>
               <h5 class="header-title" style="font-size:1.8em; margin-top:30px;">Develop a specialization in child and adolescent psychotherapy</h5>
-              <p style="color: #333;font-size:1.2em;">West Coast Institute has been recognized as a model program by the <a href="http://www.a4pt.org">Association of Play Therapy</a>. Individuals working toward the Registered Play Therapist credential can acquire all 150 training hours through the programs of WCI.</p>
+              <p style="color: #333;font-size:1.2em;">West Coast Institute has been recognized as a model program by the <a href="http://www.a4pt.org">Association for Play Therapy</a>. Individuals working toward the Registered Play Therapist credential can acquire all 150 training hours through the programs of WCI.</p>
             </div>
             <div class="well">
                 <p>Click on one of the following links for information about our Training opportunities.</p>
@@ -33,7 +33,7 @@ weight: 5
                             <a href="#winter" class="btn btn-block btn-success">Winter Intensive Training</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="#oneday" class="btn btn-block btn-success">One Day Introductory Workshop</a>
+                            <a href="#intro" class="btn btn-block btn-success">Introductory Workshop</a>
                         </li>                                                                                  
                     </ul>
                 </div>

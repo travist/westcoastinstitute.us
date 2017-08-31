@@ -6,7 +6,7 @@ chapter: weekender
 ---
 <div class="row">
     <div class="col col-sm-6">
-        <p><img src="/assets/img/weekender.jpg" class="img-responsive img-thumbnail" /></p>
+        <p><img src="/assets/img/weekender2.jpg" class="img-responsive img-thumbnail" /></p>
     </div>
     <div class="col col-sm-6">
         <div class="panel panel-default">

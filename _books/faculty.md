@@ -10,7 +10,7 @@ weight: 1
         <img src="/assets/img/fc-content-sm.jpeg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
-        <h3>Felicia Carroll, MEd, MA</h3>
+        <h3>Felicia Carroll, MEd, MA, LMFT, RPT-S</h3>
         <div class="row">
             <div class="col-sm-8">
                 <p>Felicia Carroll has studied and been a training co-leader and colleague with Violet Oaklander, Ph.D. for more than 30 years. She has been recognized for her work with children and adolescents as a keynote speaker and presenter at conferences on Gestalt Therapy. She is published in several books and articles on child psychotherapy and teaches internationally at major post-graduate Gestalt institutes. Since 1991, Felicia has conducted on-going training programs in Gestalt Therapy with children as well as supervision of trainees and licensed clinicians. Prior to her clinical practice, Felicia was a classroom teacher for twelve years and a social studies curriculum supervisor. She has two master’s degrees, one in educational psychology from the University of Oklahoma, the other in early childhood education and counseling psychology from the University of California Santa Barbara. In addition to offering training programs, she also teaches university classes at local graduate programs as adjunct faculty. Felicia is the Founder-Director and Advanced Trainer at the West Coast Institute for Gestalt Therapy with Children and Adolescents.</p>
@@ -64,10 +64,10 @@ weight: 1
 </div>
 <div class="row">
     <div class="col-sm-3">
-        <img src="http://via.placeholder.com/300x300" class="img-responsive img-thumbnail" />
+        <img src="/assets/img/rana.jpg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
-        <h3>Rana Hong, Ph.D.</h3>
-        <p></p>
+        <h3>Rana Hong, PhD., LCSW, RPT-S</h3>
+        <p>Rana has a private practice in Des Plaines, Illinois while working at Loyola University Chicago as an Adjunct Faculty and Senior Research Associate.  With her expertise in attachment-based models (Theraplay © and Parent-Child Interaction Therapy © PCIT), she utilizes trauma-informed Gestalt approaches in working with severely disrupted children and adolescents.  She served as a Training Director of Illinois Association for Play Therapy from 2006-2008 and is a current Vice President at The Theraplay Institute.  She is an approved trainer and completing her certification as a Gestalt Therapist with Children and Adolescents from WCI</p>
     </div>
 </div>

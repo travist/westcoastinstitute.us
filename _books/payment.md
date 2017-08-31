@@ -19,9 +19,21 @@ weight: 10
                   </label>
                 </div>
                 <div class="checkbox">
+                  <label>
+                    <input id="winter" type="checkbox" value="">
+                    Winter Intensive Training - <strong>$<span id="winter-value">2400</span></strong>
+                  </label>
+                </div>
+                <div class="checkbox">
                     <label>
-                      <input id="oneday" type="checkbox" value="">
-                      One Day Introductory Training - <strong>$180 | $<span id="oneday-value">50</span></strong> due on registration.
+                      <input id="intro" type="checkbox" value="">
+                      Introductory Workshop - <strong>$<span id="intro-value">180</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input id="fourdayintro" type="checkbox" value="">
+                      4-day Introductory Workshop - <strong>$<span id="fourdayintro-value">1000</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">
