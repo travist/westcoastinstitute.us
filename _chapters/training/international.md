@@ -37,7 +37,7 @@ chapter: international
         <ul>
             <li>Prague, Czech Republic - TBD</li>
             <li>Slovenia - March 22 - 25th, 2018</li>
-            <li>Nuremberg, Germany - May 9 - 13th, 2018</li>
+            <li>Nurnberg, Germany - May 9 - 13th, 2018</li>
             <li>Singapore City, Singapore - TBD</li>
         </ul>
         <p>Many more dates are being planned for 2018.</p>
