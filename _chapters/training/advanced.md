@@ -25,6 +25,7 @@ chapter: advanced
         <blockquote>
           <p>Well thought through, lots of depth. Responded to requests to relate more concretely to working with child clients.</p>
         </blockquote>
+        <p class="text-center"><img src="/assets/img/advanced2.jpg" class="img-responsive img-thumbnail" style="width:70%" /></p>
     </div>
     <div class="col col-sm-6">
         <div class="panel panel-default">
