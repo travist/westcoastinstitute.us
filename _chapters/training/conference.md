@@ -18,7 +18,7 @@ chapter: conference
             <ul class="list-group">
               <li class="list-group-item">
                 <p><img src="/assets/img/korea.png" class="img-responsive img-thumbnail" /></p>
-                <h4>Korea Play Therapy Association (KAPT) Conference</h4>
+                <h4><strong>Korea Play Therapy Association (KAPT) Conference</strong></h4>
                 <h5>Felicia Carroll will be the Keynote and Conference presenter at the Korea Play Therapy Association (KAPT) Conference: September 7-8, 2018 in Seoul, South Korea. An advanced training will follow the conference.  Attendees are encouraged to attend both programs. For the advanced training contact Rana Hong at <a href="http://www.playfulhealingcenter.org">www.playfulhealingcenter.org</a></h5>
               </li>
             </ul>
