@@ -27,10 +27,10 @@ weight: 5
                             <a href="#conference" class="btn btn-block btn-success">Conference Presentations</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="#summer" class="btn btn-block btn-success">Summer Intensive Training</a>
+                            <a href="#winter" class="btn btn-block btn-success">Winter Intensive Training</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="#winter" class="btn btn-block btn-success">Winter Intensive Training</a>
+                            <a href="#summer" class="btn btn-block btn-success">Summer Intensive Training</a>
                         </li>
                         <li class="list-group-item">
                             <a href="#intro" class="btn btn-block btn-success">Introductory Workshop</a>

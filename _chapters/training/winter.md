@@ -1,7 +1,7 @@
 ---
 title: Winter Intensive Training
 book: training
-weight: 11
+weight: 10
 chapter: winter
 ---
 <div class="row">

@@ -41,10 +41,10 @@ weight: 8
         </ul>
     </div>
     <div class="col col-sm-6">
-        <h3 class="header-sm-title">Supervision / Case Consultation</h3>
-        <p>Supervision/Case Consultation can provide an opportunity to develop a foundation in Gestalt theoretical principles and methods for clinical practice. The Gestalt perspective emphasizes the nature of the relational elf and the qualities of the therapeutic alliance. Gestalt Therapy offers the child therapist an alternative way of working relationally and creatively with her young clients. Gestalt Therapy continues to influence the theory and practice of most contemporary schools in psychotherapy as well as challenge the aassumptions of others. The fundamental principles of Gestalt Therapy are confirmed by attachment theory, relational neurobiology and neuroscience. The integration of these recent developments with contemporary Gestalt Therapy shape the perspective of the supervisory/consulting discussion.</p>
+        <h3 class="header-sm-title">Case Consultation</h3>
+        <p>Case Consultation can provide an opportunity to develop a foundation in Gestalt theoretical principles and methods for clinical practice. The Gestalt perspective emphasizes the nature of the relational elf and the qualities of the therapeutic alliance. Gestalt Therapy offers the child therapist an alternative way of working relationally and creatively with her young clients. Gestalt Therapy continues to influence the theory and practice of most contemporary schools in psychotherapy as well as challenge the aassumptions of others. The fundamental principles of Gestalt Therapy are confirmed by attachment theory, relational neurobiology and neuroscience. The integration of these recent developments with contemporary Gestalt Therapy shape the perspective of the supervisory/consulting discussion.</p>
         <p>There are currently over 20 participants in the Certification program of WCI.</p>
-        <p>All faculty of WCI are available for supervision consultation through WCI. See <a href="/faculty">Faculty</a> tab.</p>
+        <p>All faculty of WCI are available for consultation through WCI. See <a href="/faculty">Faculty</a> tab.</p>
     </div>
 </div>
 <div class="row">
@@ -67,8 +67,7 @@ weight: 8
       <p class="well"><strong>Lillian Freeman, LCSW</strong> is in private practice in West Los Angeles. She has work for over 30 years with children, adolescents, and families. She has taught as adjunct faculty at major graduate institutions teaching the Treatment of Children. She has been a supervisor for 15 years with private interns. She is a founding member of the VSOFoundation. She can be reached at: lillianfreemanlcsw@earthlink.net</p>
       <p class="well"><strong>Patric White, Ph. D.</strong> is a Certified Gestalt Therapist in private practice in West Los Angeles He specializes in working with children, adolescents, and families. He provides supervision for interns and conducts training workshops on the Oaklander Approach to child therapy. He has been a consultant to numerous school districts in the mental health treatment of children within the school setting. He has worked with Violet Oaklander since 1979 and is a founding member of the VSOFoundation. He can be reached at Wpatricwhit@aol.com</p>
       <p class="well"><strong>Sarah Williams, PsyD, RPT-S</strong> is a licensed clinical psychologist, Registered Play Therapist Supervisor and Certified Gestalt Therapist with Children and Adolescents in Maui. She has completed postgraduate training courses with the Gestalt Institute of Cleveland and West Coast Institute for Gestalt Therapy with Children and Adolescents. A published author and founder of Lehualani Center, Dr. Williams has conducted presentations throughout the United States and internationally, most recently at the 11th annual GANZ Conference in Melbourne, Australia.</p>
-      <p class="well"><strong>Andrea Acosta, Ph. D. Uruguay</strong></p>
-      <p class="well"><strong>Sock Kuan Lee, Singapore</strong></p>
+      <p class="well"><strong>Denise Richman, MS, LMFT</strong> has expertise in somatic / movements and dramatic therapies as clinician and business management outreach and program development. She is a frequent presenter at Fox Studios child development center. She developed and presented the workshop fostering creativity in young children for parents who work at the studio. She is in private practice and is a workshop facilitator and guest lecturer. She is a Certified Gestalt Therapist with Children and Adolescents. She can be reached at ddb4@earthlink.net</p>
     </div>
    </div>
    <div class="col col-sm-4">

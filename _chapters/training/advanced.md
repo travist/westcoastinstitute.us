@@ -30,29 +30,6 @@ chapter: advanced
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">October 15 - 22nd, 2017</h3>
-            </div>
-            <div class="panel-body">
-                <p style="font-size: 1.2em;"><strong>ORIGINS: Theoretical and Philosophical Roots of Gestalt Therapy and Gestalt Therapy with Children and Adolescents/The Oaklander Approach</strong></p>
-                <hr/>
-                <p>This advanced training is planned for those who have completed the Basic Training in Gestalt Therapy with Children and Adolescents/ The Oaklander Approach.  This course will delve into the original theoretical perspectives of the 20th Century which evolved into the integrated system of Gestalt Therapy which will include classical psychoanalysis, phenomenology, holism, Gestalt psychology, and existentialism.  We will examine the Gestalt perspective of child development, both healthy and interrupted.  Principles of 21st C. neuroscience, which confirms the fundamental principles of Gestalt Therapy, will be examined.      In this training the therapy process and use of treatment modalities of the Oaklander Approach will be experienced through the understanding of the psychological and philosophical principles of Gestalt Therapy both past and present.</p>
-                <ul class="list-group">
-                    <li class="list-group-item"><strong>Location:</strong> - Solvang, CA</li>
-                    <li class="list-group-item"><strong>Fees: - $1600</strong> | $300 due on registration</li>
-                    <li class="list-group-item"><strong>Presenter:</strong>
-                      <ul>
-                        <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S</li>
-                      </ul>
-                    </li>
-                    <li class="list-group-item"><strong>CEUs:</strong> 40 contact hours</li>
-                </ul>
-            </div>
-            <div class="panel-footer">
-                <a href="/register" class="btn btn-primary btn-block">Register Now</a>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel panel-heading">
                 <h3 class="panel-title header-title">June 21 - 24th, 2018</h3>
             </div>
             <div class="panel-body">

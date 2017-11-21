@@ -10,6 +10,7 @@ weight: 0
     <h3 class="header-sm-title header-title-red">Knowing what to do and why you are doing it</h3>
   </div>
   <p style="font-size: 1.2em;">The West Coast Institute for Gestalt Therapy with Children LLC was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
+  <p style="font-size: 1.2em;">The programs of the West Coast Institute are designed to support the use of creative and playful therapeutic interventions that foster the rightful path toward integration of each client regardless of age. Although the focus is on individual psychotherapy of children and adolescents, programs provide learning experiences which develop appropriate parenting, family life of all compositions, and school and community advocacy for healthful growth and development of all its members. All teaching adheres to the all legal, ethical and professional standards.</p>
   <div class="col-sm-6 col-sm-offset-6" style="margin-top:75px">
     <ul>
       <li>Small group interactive learning experiences</li>
@@ -69,6 +70,16 @@ weight: 0
       </div>
       <div class="col-sm-3">
         <img src="/assets/img/gestalt-journal.jpg" class="img-responsive" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-9">
+        <strong>PLAY THERAPY IN ASIA (2017)</strong>
+        <p>Angela F.Y. Siu and Alicia K. L. Pon, Editors</p>
+        <p>First book on the practice of Play Therapy in various countries throughout Asia. Chapters written by Sock Kuan Lee in Singapore and Rana Hong in S. Korea represent their work through West Coast Institute. Felicia Carroll was honored to be invited to write the Foreword to this landmark book and major contribution to the field of psychotherapy with children and adolescents. Published by The Chinese University Press.</p>
+      </div>
+      <div class="col-sm-3">
+        <img src="/assets/img/play-therapy-in-asia.jpg" class="img-responsive" />
       </div>
     </div>
   </div>

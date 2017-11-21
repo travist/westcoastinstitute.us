@@ -1,7 +1,7 @@
 ---
 title: Summer Intensive Training
 book: training
-weight: 10
+weight: 11
 chapter: summer
 ---
 <div class="row">
