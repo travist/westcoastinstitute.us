@@ -12,7 +12,7 @@ chapter: conference
         <h3>Rio De Janerio, Brazil - 2014</h3>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title header-title">September 6-7th, 2018</h3>
+            <h3 class="panel-title header-title">September 7th - 8th, 2018</h3>
           </div>
           <div class="panel-body">
             <ul class="list-group">

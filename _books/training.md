@@ -40,9 +40,6 @@ weight: 5
                 <div class="col col-sm-6">
                     <ul class="list-group text-center">
                         <li class="list-group-item">
-                            <a href="#weekender" class="btn btn-block btn-success">The Weekender Workshop</a>
-                        </li>
-                        <li class="list-group-item">
                             <a href="#advanced" class="btn btn-block btn-success">Advanced Training</a>
                         </li>
                         <li class="list-group-item">

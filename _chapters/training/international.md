@@ -32,7 +32,8 @@ chapter: international
             <li>Slovenia - March 22 - 25th, 2018</li>
             <li>Nurnberg, Germany - May 9 - 13th, 2018</li>
             <li>Singapore City, Singapore - TBD</li>
-            <li>Seoul, South Korea - September 6th - 9th, 2018</li>
+            <li>Seoul, South Korea - September 3rd - 5th, 2018</li>
+            <li>Seoul, South Korea - Korea Play Therapy Association (KAPT) Conference, September 7th - 8th, 2018</li>
         </ul>
         <p>Many more dates are being planned for 2018.</p>
         <p><a href="/contact">Contact Felicia</a> for more details.</p>
