@@ -22,10 +22,7 @@ weight: 5
         </li>
         <li>
             <a href="#advanced">Advanced Training (June 21 - 24th)</a>
-        </li> 
-        <li>
-            <a href="#advanced">Advanced Training (June 21 - 24th)</a>
-        </li>                                                                                
+        </li>                                                                              
     </ul><br/>
     <a href="/register" class="btn btn-danger">Register Now</a>
   </div>
