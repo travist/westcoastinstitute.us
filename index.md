@@ -6,7 +6,7 @@ weight: 0
 <div class="row section-hero" style="margin-bottom: 0; padding-bottom: 0">
     <div class="col col-sm-7 col-sm-offset-1" style="padding-bottom: 30px;">
         <h2 class="header-title">Develop a specialization in child and adolescent psychotherapy</h2>
-        <p>We offer unique <strong>accredited <a href="/trainings">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. We use the Oaklander approach.</p>
+        <p>We offer unique <strong>accredited <a href="/training">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. We use the Oaklander approach.</p>
         <ul style="margin-bottom: 30px;">
             <li><a href="/ceus">Earn CEU</a> credits: APA, CAMFT, APT</li>
             <li>Small group interactive learning experiences.</li>
