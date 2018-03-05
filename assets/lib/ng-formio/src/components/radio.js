@@ -16,14 +16,16 @@ module.exports = function(app) {
           return data;
         },
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
           inputType: 'radio',
-          label: '',
-          key: 'radioField',
+          label: 'Radio',
+          key: 'radio',
           values: [],
           defaultValue: '',
           protected: false,
+          fieldSet:false,
           persistent: true,
           hidden: false,
           clearOnHide: true,

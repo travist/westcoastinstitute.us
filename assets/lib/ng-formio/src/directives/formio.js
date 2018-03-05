@@ -13,7 +13,7 @@ module.exports = function() {
       requireComponents: '=?',
       disableComponents: '=?',
       formioOptions: '=?',
-      options: '=?'
+      options: '<'
     },
     controller: [
       '$scope',
@@ -23,6 +23,7 @@ module.exports = function() {
       'Formio',
       'FormioUtils',
       '$q',
+      '$timeout',
       function(
         $scope,
         $http,
@@ -30,7 +31,8 @@ module.exports = function() {
         FormioScope,
         Formio,
         FormioUtils,
-        $q
+        $q,
+        $timeout
       ) {
         var iframeReady = $q.defer();
         $scope.options = $scope.options || {};
@@ -52,7 +54,7 @@ module.exports = function() {
         $scope.getIframeSrc = function(pdf) {
           var iframeSrc = pdf.src + '.html';
           var params = [];
-          if ($scope.form.builder) {
+          if ($scope.options && $scope.options.building) {
             params.push('builder=1');
           }
           if ($scope.readOnly) {
@@ -66,7 +68,7 @@ module.exports = function() {
 
         $scope.downloadUrl = '';
         $scope.setDownloadUrl = function(form) {
-          if (!$scope.formio) {
+          if (!$scope.formio || $scope.options.noDownload) {
             return;
           }
           $scope.formio.getDownloadUrl(form).then(function(url) {
@@ -109,13 +111,17 @@ module.exports = function() {
 
         var cancelFormLoadEvent = $scope.$on('formLoad', function(event, form) {
           cancelFormLoadEvent();
-          $scope.setDownloadUrl(form);
-          sendIframeMessage({name: 'form', data: form});
+          $timeout(function() {
+            $scope.setDownloadUrl(form);
+            sendIframeMessage({name: 'form', data: form});
+          });
         });
 
         $scope.$on('submissionLoad', function(event, submission) {
-          submission.readOnly = $scope.readOnly;
-          sendIframeMessage({name: 'submission', data: submission});
+          $timeout(function() {
+            submission.readOnly = $scope.readOnly;
+            sendIframeMessage({name: 'submission', data: submission});
+          });
         });
 
         // Submit the form from the iframe.
@@ -137,7 +143,7 @@ module.exports = function() {
         };
 
         // FOR-71
-        if (!$scope._src && !$scope.builder) {
+        if (!$scope._src && !$scope.options.building) {
           $scope.$watch('src', function(src) {
             if (!src) {
               return;
@@ -211,6 +217,136 @@ module.exports = function() {
           $scope.$emit('formSubmission', submission);
         };
 
+        var alertsWatcher = null;
+
+        $scope.submitUrl = function (url,component) {
+          var settings = {
+            headers: {}
+          };
+          if (url) {
+            // Create a sanitized submission object.
+            var submissionData = {data: {}};
+            if ($scope.submission._id) {
+              submissionData._id = $scope.submission._id;
+            }
+            if ($scope.submission.owner) {
+              submissionData.owner = $scope.submission.owner;
+            }
+            if ($scope.submission.data._id) {
+              submissionData._id = $scope.submission.data._id;
+            }
+
+            var grabIds = function(input) {
+              if (!input) {
+                return [];
+              }
+
+              if (!(input instanceof Array)) {
+                input = [input];
+              }
+
+              var final = [];
+              input.forEach(function(element) {
+                if (element && element._id) {
+                  final.push(element._id);
+                }
+              });
+
+              return final;
+            };
+
+            var defaultPermissions = {};
+            FormioUtils.eachComponent($scope.form.components, function(component) {
+              if (component.type === 'resource' && component.key && component.defaultPermission) {
+                defaultPermissions[component.key] = component.defaultPermission;
+              }
+              if ($scope.submission.data.hasOwnProperty(component.key)) {
+                var value = $scope.submission.data[component.key];
+                if (component.type === 'number' && (value !== null)) {
+                  submissionData.data[component.key] = value ? parseFloat(value) : 0;
+                }
+                else {
+                  submissionData.data[component.key] = value;
+                }
+              }
+            }, true);
+
+            angular.forEach($scope.submission.data, function(value, key) {
+              if (value && !value.hasOwnProperty('_id')) {
+                submissionData.data[key] = value;
+              }
+
+              // Setup the submission access.
+              var perm = defaultPermissions[key];
+              if (perm) {
+                submissionData.access = submissionData.access || [];
+
+                // Coerce value into an array for plucking.
+                if (!(value instanceof Array)) {
+                  value = [value];
+                }
+
+                // Try to find and update an existing permission.
+                var found = false;
+                submissionData.access.forEach(function(permission) {
+                  if (permission.type === perm) {
+                    found = true;
+                    permission.resources = permission.resources || [];
+                    permission.resources.concat(grabIds(value));
+                  }
+                });
+
+                // Add a permission, because one was not found.
+                if (!found) {
+                  submissionData.access.push({
+                    type: perm,
+                    resources: grabIds(value)
+                  });
+                }
+              }
+            });
+            if (component.action === 'url' && component.type === 'button'){
+              if (component.headers && component.headers.length > 0) {
+                component.headers.forEach(function(e) {
+                  if (e.header !== '' && e.value !== '') {
+                    settings.headers[e.header] = e.value;
+                  }
+                });
+              }
+            }
+            $http.post(url, submissionData, settings).then(function(response) {
+              Formio.clearCache();
+              $scope.$emit('formSubmission', response.data);
+
+              $scope.form.submitting = false;
+            }, function (err) {
+              $scope.formioAlerts.push({
+                type: 'danger',
+                message: err.message
+              });
+
+              $scope.form.submitting = false;
+            })
+              .finally(function() {
+                if ($scope.form) {
+
+                  $scope.form.submitting = false;
+                }
+              });
+          }
+          else {
+            $scope.formioAlerts.push({
+              type: 'danger',
+              message: 'Please add an URL to the action.'
+            });
+          }
+        };
+
+        $scope.$on('submitUrl',function(event,args){
+          // Allow custom action urls.
+          $scope.submitUrl(args.url,args.component);
+        });
+
         $scope.submitForm = function(submissionData, form) {
           // Allow custom action urls.
           if ($scope.action) {
@@ -234,8 +370,13 @@ module.exports = function() {
           // If they wish to submit to the default location.
           else if ($scope.formio && !$scope.formio.noSubmit) {
             // copy to remove angular $$hashKey
+            var submissionMethod = submissionData._id ? 'put' : 'post';
             $scope.formio.saveSubmission(submissionData, $scope.formioOptions).then(function(submission) {
-              onSubmitDone(submission.method, submission, form);
+              // If submission saved propagate method to ngFormioHelper for correct message
+              if (typeof submission === 'object') {
+                submission.method = submissionMethod;
+              }
+              onSubmitDone(submissionMethod, submission, form);
             }, FormioScope.onError($scope, $element)).finally(function() {
               if (form) {
                 form.submitting = false;
@@ -255,10 +396,9 @@ module.exports = function() {
           return FormioUtils.isRequired(component, $scope.requireComponents);
         };
 
-        var alertsWatcher = null;
-
         // Called when the form is submitted.
         $scope.onSubmit = function(form) {
+
           $scope.formioAlerts = [];
           if ($scope.checkErrors(form)) {
             $scope.formioAlerts.push({
@@ -279,6 +419,7 @@ module.exports = function() {
           }
 
           form.submitting = true;
+
           FormioUtils.alter('submit', $scope, $scope.submission, function(err) {
             if (err) {
               form.submitting = false;
@@ -289,6 +430,9 @@ module.exports = function() {
             var submissionData = {data: {}};
             if ($scope.submission._id) {
               submissionData._id = $scope.submission._id;
+            }
+            if ($scope.submission.owner) {
+              submissionData.owner = $scope.submission.owner;
             }
             if ($scope.submission.data._id) {
               submissionData._id = $scope.submission.data._id;

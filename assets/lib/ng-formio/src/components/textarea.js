@@ -1,5 +1,20 @@
 var fs = require('fs');
 module.exports = function(app) {
+  app.directive('formioCkeditor', function($parse, $timeout) {
+    return {
+      restrict: 'A',
+      require: ['ckeditor', 'ngModel'],
+      link: function(scope, element, attr, ctrl) {
+        var ckeditor = ctrl[0];
+        var ngModelCtrl= ctrl[1];
+
+        // FOR-975 - overwrite CKEditor default values
+        ngModelCtrl.$viewValue = undefined;
+        ngModelCtrl.$$lastCommittedViewValue = undefined;
+        ngModelCtrl.$setPristine(true);
+      }
+    };
+  });
   app.config([
     'formioComponentsProvider',
     function(formioComponentsProvider) {
@@ -23,6 +38,7 @@ module.exports = function(app) {
                 {name: 'tools', groups: ['tools']}
               ],
               extraPlugins: 'justify,font',
+              disableNativeSpellChecker: false,
               removeButtons: 'Cut,Copy,Paste,Underline,Subscript,Superscript,Scayt,About',
               uiColor: '#eeeeee',
               height: '400px',
@@ -31,8 +47,10 @@ module.exports = function(app) {
             if ($scope.component.wysiwyg === true) {
               $scope.component.wysiwyg = defaults;
             }
-            else {
-              $scope.component.wysiwyg = angular.extend(defaults, $scope.component.wysiwyg);
+
+            // FOR-929 - Remove spell check attribute
+            if (!$scope.component.spellcheck){
+              delete $scope.component.wysiwyg.disableNativeSpellChecker;
             }
             return 'formio/components/texteditor.html';
           }
@@ -49,7 +67,7 @@ module.exports = function(app) {
             return 'formio/componentsView/content.html';
           }
           else {
-            return 'formio/components/textarea.html';
+            return 'formio/element-view.html';
           }
         },
         viewController: [
@@ -75,10 +93,11 @@ module.exports = function(app) {
           }
         ],
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
-          label: '',
-          key: 'textareaField',
+          label: 'Text Area',
+          key: 'textarea',
           placeholder: '',
           prefix: '',
           suffix: '',
@@ -90,6 +109,7 @@ module.exports = function(app) {
           hidden: false,
           wysiwyg: false,
           clearOnHide: true,
+          spellcheck: true,
           validate: {
             required: false,
             minLength: '',

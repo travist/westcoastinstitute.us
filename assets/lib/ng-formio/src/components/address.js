@@ -10,7 +10,7 @@ module.exports = function(app) {
           return $scope.component.multiple ? 'formio/components/address-multiple.html' : 'formio/components/address.html';
         },
         controller: ['$scope', '$http', function($scope, $http) {
-          if ($scope.builder) return;
+          if ($scope.options && $scope.options.building) return;
           $scope.address = {};
           $scope.addresses = [];
           $scope.refreshAddress = function(address) {
@@ -48,10 +48,11 @@ module.exports = function(app) {
         },
         group: 'advanced',
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
-          label: '',
-          key: 'addressField',
+          label: 'Address',
+          key: 'address',
           placeholder: '',
           multiple: false,
           protected: false,

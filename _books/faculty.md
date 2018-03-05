@@ -4,13 +4,13 @@ layout: default
 link: faculty
 weight: 1
 ---
-<h3>Advanced Trainer</h3>
+<h2 class="header-title">Advanced Trainer</h2>
 <div class="row">
     <div class="col-sm-3">
         <img src="/assets/img/fc-content-sm.jpeg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
-        <h3>Felicia Carroll, MEd, MA, LMFT, RPT-S</h3>
+        <h3 class="color-primary">Felicia Carroll, MEd, MA, LMFT, RPT-S</h3>
         <div class="row">
             <div class="col-sm-8">
                 <p>Felicia Carroll has studied and been a training co-leader and colleague with Violet Oaklander, Ph.D. for more than 30 years. She has been recognized for her work with children and adolescents as a keynote speaker and presenter at conferences on Gestalt Therapy. She is published in several books and articles on child psychotherapy and teaches internationally at major post-graduate Gestalt institutes. Since 1991, Felicia has conducted on-going training programs in Gestalt Therapy with children as well as supervision of trainees and licensed clinicians. Prior to her clinical practice, Felicia was a classroom teacher for twelve years and a social studies curriculum supervisor. She has two master’s degrees, one in educational psychology from the University of Oklahoma, the other in early childhood education and counseling psychology from the University of California Santa Barbara. In addition to offering training programs, she also teaches university classes at local graduate programs as adjunct faculty. Felicia is the Founder-Director and Advanced Trainer at the West Coast Institute for Gestalt Therapy with Children and Adolescents.</p>
@@ -23,7 +23,7 @@ weight: 1
     </div>
 </div>
 <div class="row separator"></div>
-<h3>Core Faculty</h3>
+<h3 class="color-primary">Core Faculty</h3>
 <div class="row">
     <div class="col-sm-3">
         <img src="/assets/img/Valente-Orozco.jpeg" class="img-responsive img-thumbnail" />

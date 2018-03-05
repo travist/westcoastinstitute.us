@@ -13,23 +13,12 @@ module.exports = function(app) {
         model: '=ngModel',
         gridRow: '=',
         gridCol: '=',
-        builder: '=?'
+        options: '=?'
       },
       templateUrl: 'formio/components/selectboxes-directive.html',
       link: function($scope, el, attrs, ngModel) {
-        if ($scope.builder) return;
-        // Initialize model
-        var model = {};
-        angular.forEach($scope.component.values, function(v) {
-          model[v.value] = ngModel.$viewValue.hasOwnProperty(v.value)
-            ? !!ngModel.$viewValue[v.value]
-            : false;
-        });
-        // FA-835 - Update the view model with our defaults.
-        // FA-921 - Attempt to load a current model, if present before the defaults.
-        ngModel.$setViewValue($scope.model || model);
+        if ($scope.options && $scope.options.building) return;
 
-        ngModel.$setPristine(true);
         ngModel.$isEmpty = function(value) {
           if (typeof value === 'undefined') {
             return true;
@@ -40,12 +29,40 @@ module.exports = function(app) {
           });
         };
 
+        // Initialize model
+        var model = {};
+        angular.forEach($scope.component.values, function(v) {
+          model[v.value] = ngModel.$viewValue.hasOwnProperty(v.value)
+            ? !!ngModel.$viewValue[v.value]
+            : false;
+        });
+
+        var modelValue = $scope.model || model;
+        if (!ngModel.$isEmpty(modelValue)) {
+          // FA-835 - Update the view model with our defaults.
+          // FA-921 - Attempt to load a current model, if present before the defaults.
+          ngModel.$setViewValue(modelValue);
+          ngModel.$setPristine(true);
+        }
+
         $scope.toggleCheckbox = function(value) {
           var _model = angular.copy(ngModel.$viewValue || {});
           _model[value] = !_model[value];
           ngModel.$setViewValue(_model);
         };
-      }
+      },
+      controller: [
+        '$scope',
+        'FormioUtils',
+        function(
+          $scope,
+          FormioUtils
+        ) {
+          $scope.topOrLeftOptionLabel = FormioUtils.optionsLabelPositionWrapper(FormioUtils.topOrLeftOptionLabel);
+          $scope.getOptionLabelStyles = FormioUtils.optionsLabelPositionWrapper(FormioUtils.getOptionLabelStyles);
+          $scope.getOptionInputStyles = FormioUtils.optionsLabelPositionWrapper(FormioUtils.getOptionInputStyles);
+        }
+      ]
     };
   }]);
 
@@ -73,10 +90,11 @@ module.exports = function(app) {
           .join(', ');
         },
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
-          label: '',
-          key: 'selectboxesField',
+          label: 'Select Boxes',
+          key: 'selectboxes',
           values: [],
           inline: false,
           protected: false,

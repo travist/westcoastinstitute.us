@@ -5,6 +5,7 @@ var _isEqual = require('lodash/isEqual');
 var _assign = require('lodash/assign');
 var _set = require('lodash/set');
 var _cloneDeep = require('lodash/cloneDeep');
+var _mapValues = require('lodash/mapValues');
 module.exports = function(app) {
   app.directive('formioSelectItem', [
     '$compile',
@@ -17,7 +18,7 @@ module.exports = function(app) {
           select: '='
         },
         link: function(scope, element) {
-          if (scope.builder) return;
+          if (scope.options && scope.options.building) return;
           if (scope.template) {
             element.append($compile(angular.element(scope.template))(scope));
           }
@@ -30,7 +31,7 @@ module.exports = function(app) {
     return {
       require: 'ngModel',
       link: function(scope, element, attrs, ngModel) {
-        if (scope.builder) return;
+        if (scope.options && scope.options.building) return;
         var oldIsEmpty = ngModel.$isEmpty;
         ngModel.$isEmpty = function(value) {
           return (Array.isArray(value) && value.length === 0) || oldIsEmpty(value);
@@ -45,14 +46,18 @@ module.exports = function(app) {
       require: 'uiSelect',
       restrict: 'A',
       link: function($scope, el, attrs, uiSelect) {
-        if ($scope.builder) return;
+        if ($scope.options && $scope.options.building) return;
         var focuscount = -1;
-
         angular.element(uiSelect.focusser).on('focus', function() {
           if (focuscount-- < 0) {
             uiSelect.activate();
           }
         });
+        angular.element(el).on('blur keydown', function(e) {
+            if(e.keyCode === 9 || e.key === "Tab") {
+              uiSelect.clear(e);
+            }
+        })
 
         // Disable the auto open when this select element has been activated.
         $scope.$on('uis:activate', function() {
@@ -152,8 +157,8 @@ module.exports = function(app) {
             $q,
             $timeout
           ) {
-            // FOR-71 - Skip functionality in the builder view.
-            if ($scope.builder) return;
+            // FOR-71 - Skip functionality in the options.building view.
+            if ($scope.options && $scope.options.building) return;
             var settings = $scope.component;
             var options = {};
             $scope.nowrap = true;
@@ -210,13 +215,21 @@ module.exports = function(app) {
               else {
                 refreshing = false;
                 $scope.$emit('selectLoaded', $scope.component);
+                var index = $scope.selectItems.indexOf(tempData);
+                if (index !== -1) {
+                  $scope.selectItems.splice(index, 1);
+                }
               }
             };
 
             // Ensures that the value is within the select items.
-            var ensureValue = function() {
-              var value = $scope.data[settings.key];
+            var ensureValue = function(value) {
+              value = value || $scope.data[settings.key];
               if (!value || (Array.isArray(value) && value.length === 0)) {
+                return;
+              }
+              if (Array.isArray(value)) {
+                value.forEach(ensureValue);
                 return;
               }
               // Iterate through the list of items and see if our value exists...
@@ -271,7 +284,6 @@ module.exports = function(app) {
                   initialized.promise.then(function() {
                     dataWatch();
                     ensureValue();
-                    refreshValue();
                   });
                 }
               });
@@ -354,8 +366,9 @@ module.exports = function(app) {
                       var value = $interpolate($scope.component.template)({item: item}).replace(/<(?:.|\n)*?>/gm, '');
                       switch ($scope.component.filter) {
                         case 'startsWith':
-                          return value.toLowerCase().indexOf(input.toLowerCase()) !== -1;
+                          return value.toLowerCase().lastIndexOf(input.toLowerCase(), 0) === 0;
                         case 'contains':
+                          return value.toLowerCase().indexOf(input.toLowerCase()) !== -1;
                         default:
                           return value.toLowerCase().lastIndexOf(input.toLowerCase(), 0) === 0;
                       }
@@ -410,10 +423,16 @@ module.exports = function(app) {
                     options.headers['Cache-Control'] = undefined;
                   }
                 }
+                else if ($scope.formio) {
+                  url = $scope.formio.formsUrl + '/' + settings.data.resource + '/submission';
+                }
                 else {
                   url = baseUrl;
                   if (settings.data.project) {
-                    url += '/project/' + settings.data.project;
+                    if (settings.data.project.match(/^[0-9a-fA-F]{24}$/)) {
+                      url += '/project';
+                    }
+                    url += '/' + settings.data.project;
                   }
                   url += '/form/' + settings.data.resource + '/submission';
                 }
@@ -473,7 +492,7 @@ module.exports = function(app) {
                     // Add the other filter.
                     if (settings.filter) {
                       // This changes 'a=b&c=d' into an object and assigns to params.
-                      _assign(options.params, _.mapValues(JSON.parse('{"' + decodeURI(settings.filter).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}'), function(value) {
+                      _assign(options.params, _mapValues(JSON.parse('{"' + decodeURI(settings.filter).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}'), function(value) {
                         return $interpolate(value)({
                           data: $scope.submission ? $scope.submission.data : {},
                           row: $scope.data
@@ -503,7 +522,7 @@ module.exports = function(app) {
                         $scope.selectItems = $scope.selectItems.concat(data);
                       }
                       else {
-                        $scope.selectItems = data;
+                        $scope.selectItems = _cloneDeep(data);
                       }
 
                       // Ensure the value is set to what it should be set to.
@@ -512,7 +531,7 @@ module.exports = function(app) {
 
                     var promise;
                     if (settings.dataSrc === 'resource') {
-                      promise = (new Formio(newUrl)).loadSubmissions(options);
+                      promise = (new Formio(newUrl, {base: baseUrl})).loadSubmissions(options);
                     }
                     else {
                       // Add in headers if specified
@@ -561,7 +580,6 @@ module.exports = function(app) {
                   };
                   $scope.refreshItems(true);
                 }
-                ensureValue();
                 break;
               default:
                 $scope.selectItems = [];
@@ -570,10 +588,11 @@ module.exports = function(app) {
           }
         ],
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
-          label: '',
-          key: 'selectField',
+          label: 'Select',
+          key: 'select',
           placeholder: '',
           data: {
             values: [],

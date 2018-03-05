@@ -8,6 +8,7 @@ module.exports = function(app) {
         template: 'formio/components/file.html',
         group: 'advanced',
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
           label: '',
@@ -20,7 +21,10 @@ module.exports = function(app) {
           protected: false,
           persistent: true,
           hidden: false,
-          clearOnHide: true
+          clearOnHide: true,
+          filePattern: '*',
+          fileMinSize: '0KB',
+          fileMaxSize: '1GB'
         },
         viewTemplate: 'formio/componentsView/file.html'
       });
@@ -40,7 +44,7 @@ module.exports = function(app) {
       controller: [
         '$scope',
         function($scope) {
-          if ($scope.builder) return;
+          if ($scope.options && $scope.options.building) return;
           $scope.removeFile = function(event, index) {
             var component = $scope.$parent.component;
             if (component.storage === 'url') {
@@ -72,7 +76,7 @@ module.exports = function(app) {
       controller: [
         '$scope',
         function($scope) {
-          if ($scope.builder) return;
+          if ($scope.options && $scope.options.building) return;
           $scope.removeFile = function(event, index) {
             var component = $scope.$parent.component;
             if (component.storage === 'url') {
@@ -106,7 +110,7 @@ module.exports = function(app) {
           $scope,
           Formio
         ) {
-          if ($scope.builder) return;
+          if ($scope.options && $scope.options.building) return;
           $scope.getFile = function(evt) {
             evt.preventDefault();
             $scope.form = $scope.form || $rootScope.filePath;
@@ -149,7 +153,7 @@ module.exports = function(app) {
           $scope,
           Formio
         ) {
-          if ($scope.builder) return;
+          if ($scope.options && $scope.options.building) return;
           $scope.form = $scope.form || $rootScope.filePath;
           $scope.options = $scope.options || {};
           var baseUrl = $scope.options.baseUrl || Formio.getBaseUrl();
@@ -173,13 +177,62 @@ module.exports = function(app) {
       $interpolate,
       FormioUtils
     ) {
-      if ($scope.builder) return;
+      if ($scope.options && $scope.options.building) return;
       $scope.fileUploads = {};
       $scope.removeUpload = function(index) {
         delete $scope.fileUploads[index];
       };
 
-      $scope.upload = function(files) {
+      // Defaults for unlimited components
+      if (!$scope.component.filePattern) {
+        $scope.component.filePattern = '*';
+      }
+      if (!$scope.component.fileMinSize) {
+        $scope.component.fileMinSize = '0KB';
+      }
+      if (!$scope.component.fileMaxSize) {
+        $scope.component.fileMaxSize = '1GB';
+      }
+
+      $scope.$watch('data.' + $scope.component.key, function(value) {
+        // For some reason required validation doesn't fire properly after removing an item from an array which results
+        // in an empty array that is marked as valid. Fix by removing the empty array.
+        if (Array.isArray(value) && value.length === 0) {
+          delete $scope.data[$scope.component.key];
+        }
+      }, true)
+
+      $scope.invalidFiles = [];
+      $scope.currentErrors = [];
+      $scope.upload = function(files, invalidFiles) {
+        if (invalidFiles.length) {
+          angular.forEach(invalidFiles, function(fileError) {
+            if (fileError.$error === 'pattern') {
+              fileError.$error = 'custom';
+              $scope.component.customError = 'File extension does not match the pattern ' + $scope.component.filePattern;
+            }
+            if (fileError.$error === 'maxSize') {
+              fileError.$error = 'custom';
+              $scope.component.customError = 'File size is larger than the allowed ' + $scope.component.fileMaxSize;
+            }
+            if (fileError.$error === 'minSize') {
+              fileError.$error = 'custom';
+              $scope.component.customError = 'File size is smaller than the allowed ' + $scope.component.fileMinSize;
+            }
+
+            $scope.currentErrors.push(fileError.$error);
+            $scope.formioForm[$scope.componentId].$setValidity(fileError.$error, false);
+            $scope.formioForm[$scope.componentId].$setDirty();
+          });
+          return;
+        }
+        else {
+          angular.forEach($scope.currentErrors, function(err) {
+            $scope.formioForm[$scope.componentId].$setValidity(err, true);
+          });
+          $scope.currentErrors = [];
+        }
+
         if ($scope.component.storage && files && files.length) {
           angular.forEach(files, function(file) {
             // Get a unique name for this file to keep file collisions from occurring.

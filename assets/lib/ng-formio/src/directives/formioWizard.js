@@ -1,5 +1,6 @@
 var isNaN = require('lodash/isNAN');
 var isFinite = require('lodash/isFinite');
+var isEmpty = require('lodash/isEmpty');
 
 module.exports = function() {
   return {
@@ -116,12 +117,31 @@ module.exports = function() {
               $scope.clear();
             }
 
+            // Handle Local Storage Definition
             if ($scope.storage && !$scope.readOnly) {
-              localStorage.setItem($scope.storage, angular.toJson({
-                page: $scope.currentPage,
-                data: $scope.submission.data
-              }));
+              // If there is no localStorage object - make a new object schema
+              if (!localStorage.getItem($scope.storage)) {
+                localStorage.setItem($scope.storage, angular.toJson({
+                  page: $scope.currentPage,
+                  data: $scope.submission.data
+                }));
+              }
+
+              // if there is a localStorage object && submission.data is blank then bind localStorage to $scope
+              if(localStorage.getItem($scope.storage) && isEmpty($scope.submission.data) == true){
+                var storageToScope = JSON.parse(localStorage.getItem($scope.storage));
+                $scope.submission.data = storageToScope.data
+              }
+
+              // if there is a localStorage object | && it is data | merge the two
+              if(localStorage.getItem($scope.storage) && isEmpty($scope.submission.data) == false){
+                localStorage.setItem($scope.storage, angular.toJson({
+                  page: $scope.currentPage,
+                  data: $scope.submission.data
+                }));
+              }
             }
+
 
             $scope.page.components = $scope.pages[$scope.currentPage].components;
             $scope.activePage = $scope.pages[$scope.currentPage];
@@ -337,14 +357,19 @@ module.exports = function() {
         };
 
         $scope.cancel = function() {
-          $scope.clear();
-          FormioUtils.alter('cancel', $scope, function(err) {
-            if (err) {
-              return this.showAlerts(err.alerts);
-            }
-            showPage(true);
-            $scope.$emit('cancel');
-          }.bind(this));
+          if(confirm('Are you sure you want to cancel?')){
+            $scope.clear();
+            FormioUtils.alter('cancel', $scope, function(err) {
+              if (err) {
+                return this.showAlerts(err.alerts);
+              }
+              showPage(true);
+              $scope.$emit('cancel');
+            }.bind(this));
+          }
+          else {
+            return;
+          }
         };
 
         $scope.pageHasErrors = {};
@@ -414,6 +439,7 @@ module.exports = function() {
         $scope.next = function() {
           var errors = $scope.checkErrors();
           if (errors) {
+            $scope.$emit('formError');
             $scope.pageHasErrors[$scope.currentPage] = true;
             if (!$scope.formioOptions.wizardFreeNavigation) {
               return;
@@ -445,17 +471,8 @@ module.exports = function() {
 
         // Move onto the previous page.
         $scope.prev = function() {
-          var errors = $scope.checkErrors();
-          if (errors) {
-            $scope.pageHasErrors[$scope.currentPage] = true;
-            if (!$scope.formioOptions.wizardFreeNavigation) {
-              return;
-            }
-          }
-          else {
-            $scope.pageHasErrors[$scope.currentPage] = false;
-          }
-
+          // var errors = $scope.checkErrors();
+          $scope.pageHasErrors[$scope.currentPage] = false;
           var prev = $scope.history.pop();
           $scope.currentPage = prev;
           FormioUtils.alter('prevPage', $scope, function(err) {
@@ -526,7 +543,7 @@ module.exports = function() {
           });
 
           // FOR-71
-          if (!$scope.builder) {
+          if (!$scope.options.building) {
             $scope.$watch('submission.data', function(data) {
               if (hasConditionalPages) {
                 var newPages = [];
@@ -558,7 +575,7 @@ module.exports = function() {
         };
 
         // FOR-71
-        if (!$scope.builder) {
+        if (!$scope.options.building) {
           $scope.$watch('form', function(form) {
             if (
               $scope.src ||

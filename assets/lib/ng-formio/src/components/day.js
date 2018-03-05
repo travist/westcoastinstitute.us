@@ -12,11 +12,11 @@ module.exports = function(app) {
         ngModel: '=',
         gridRow: '=',
         gridCol: '=',
-        builder: '=?'
+        options: '=?'
       },
       templateUrl: 'formio/components/day-input.html',
       controller: ['$scope', function($scope) {
-        if ($scope.builder) return;
+        if ($scope.options && $scope.options.building) return;
         $scope.months = [
           {value: '00', label: $scope.component.fields.month.placeholder},
           {value: '01', label: 'January'},
@@ -34,7 +34,7 @@ module.exports = function(app) {
         ];
 
         function isLeapYear(year) {
-          // Year is leap if it evenly divisible by 400 or evenly divisible by 4 and not evenly divisible by 100.
+          // Year is leap if it is evenly divisible by 400 or evenly divisible by 4 and not evenly divisible by 100.
           return !(year % 400) || (!!(year % 100) && !(year % 4));
         }
 
@@ -56,11 +56,11 @@ module.exports = function(app) {
             case 2:     // February
               return isLeapYear(year) ? 29 : 28;
             default:
-              return 0;
+              return 31;
           }
         }
 
-        $scope.maxDay = 0;
+        $scope.maxDay = 31;
         $scope.$watch(function() {
           return $scope.date.month + '/' + $scope.date.year;
         }, function() {
@@ -81,7 +81,7 @@ module.exports = function(app) {
         };
       }],
       link: function(scope, elem, attrs, ngModel) {
-        if (scope.builder) return;
+        if (scope.options && scope.options.building) return;
         // Set the scope values based on the current model.
         scope.$watch('ngModel', function() {
           // Only update on load.
@@ -145,6 +145,50 @@ module.exports = function(app) {
           }
           return true;
         };
+
+        scope.getLabelStyles = function(component) {
+          var labelPosition = component.inputsLabelPosition;
+
+          if (labelPosition === 'left') {
+            return {
+              float: 'left',
+              width: '30%',
+              'margin-right': '3%',
+              'text-align': 'left'
+            };
+          }
+
+          if (labelPosition === 'right') {
+            return {
+              float: 'right',
+              width: '30%',
+              'margin-left': '3%',
+              'text-align': 'right'
+            };
+          }
+        };
+
+        scope.getInputStyles = function(component) {
+          var labelPosition = component.inputsLabelPosition;
+
+          if ([
+            'left',
+            'right'
+          ].indexOf(labelPosition) !== -1) {
+            var styles = {
+              width: '67%'
+            };
+
+            if (labelPosition === 'left') {
+              styles['margin-left'] = '33%';
+            }
+            else {
+              styles['margin-right'] = '33%';
+            }
+
+            return styles;
+          }
+        };
       }
     };
   });
@@ -156,10 +200,11 @@ module.exports = function(app) {
         template: 'formio/components/day.html',
         group: 'advanced',
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
-          label: '',
-          key: 'dayField',
+          label: 'Day',
+          key: 'day',
           fields: {
             day: {
               type: 'number',

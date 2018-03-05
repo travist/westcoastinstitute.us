@@ -15,7 +15,7 @@ module.exports = function(app) {
           if (!tableChild) {
             view += '<thead><tr>';
             angular.forEach(component.components, function(component) {
-              view += '<th>' + (component.label || '') + ' (' + component.key + ')</th>';
+              view += '<th>' + (component.label || '( '+component.key+')')+'</th>';
             });
             view += '</tr></thead>';
           }
@@ -24,11 +24,6 @@ module.exports = function(app) {
           angular.forEach(data, function(row) {
             view += '<tr>';
             formioUtils.eachComponent(component.components, function(component) {
-              // Don't render disabled fields, or fields with undefined data.
-              if (!component.tableView || row[component.key] === undefined) {
-                return;
-              }
-
               // If the component has a defined tableView, use that, otherwise try and use the raw data as a string.
               var info = componentInfo.components.hasOwnProperty(component.type) ? componentInfo.components[component.type] : {};
               if (info.tableView) {
@@ -53,11 +48,12 @@ module.exports = function(app) {
           return view;
         },
         settings: {
+          autofocus: false,
           input: true,
           tree: true,
           components: [],
           tableView: true,
-          label: '',
+          label: 'Data Grid',
           key: 'datagrid',
           protected: false,
           persistent: true,
@@ -71,7 +67,7 @@ module.exports = function(app) {
     '$scope',
     'FormioUtils',
     function($scope, FormioUtils) {
-      if ($scope.builder) return;
+      if ($scope.options && $scope.options.building) return;
       // Ensure each data grid has a valid data model.
       $scope.data = $scope.data || {};
       $scope.data[$scope.component.key] = $scope.data[$scope.component.key] || [{}];
@@ -96,8 +92,8 @@ module.exports = function(app) {
         }
       }
       // If more than maxLength, remove extra rows.
-      if ($scope.component.validate && $scope.component.validate.hasOwnProperty('maxLength') && $scope.rows.length < $scope.component.validate.maxLength) {
-        $scope.rows = $scope.rows.slice(0, $scope.component.validate.maxLength);
+      if ($scope.component.validate && $scope.component.validate.hasOwnProperty('maxLength') && $scope.rows.length > $scope.component.validate.maxLength) {
+        $scope.rows.splice($scope.component.validate.maxLength);
       }
       $scope.cols = $scope.component.components;
       $scope.localKeys = $scope.component.components.map(function(component) {

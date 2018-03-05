@@ -3,26 +3,34 @@ layout: default
 link: home
 weight: 0
 ---
-<div class="front-description">
-  <div style="text-align: center;">
-    <h2 class="header-title header-title-red" style="margin-top:0">TRAINING - CONSULTATION - CERTIFICATION</h2>
-    <h4 class="header-title">the Oaklander Approach</h4>
-    <h3 class="header-sm-title header-title-red">Knowing what to do and why you are doing it</h3>
-  </div>
-  <p style="font-size: 1.2em;">The West Coast Institute for Gestalt Therapy with Children LLC was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
-  <p style="font-size: 1.2em;">The programs of the West Coast Institute are designed to support the use of creative and playful therapeutic interventions that foster the rightful path toward integration of each client regardless of age. Although the focus is on individual psychotherapy of children and adolescents, programs provide learning experiences which develop appropriate parenting, family life of all compositions, and school and community advocacy for healthful growth and development of all its members. All teaching adheres to the all legal, ethical and professional standards.</p>
-  <div class="col-sm-6 col-sm-offset-6" style="margin-top:75px">
-    <ul>
-      <li>Small group interactive learning experiences</li>
-      <li>Theory based instruction</li>
-      <li>Credit toward professional licensing and APT credentials</li>
-    </ul>
-  </div>
-  <blockquote class="blockquote-reverse" style="float:right; padding-left: 30px;">
-    <p><strong>This was the best training program I have ever attended!</strong></p>
-    <footer><cite>Summer Participant</cite></footer>
-  </blockquote>
-  <img class="watermark" style="width:400px;margin-bottom: -150px;" src="/assets/img/sunlogo.png" />
+<div class="row section-hero" style="margin-bottom: 0; padding-bottom: 0">
+    <div class="col col-sm-7 col-sm-offset-1" style="padding-bottom: 30px;">
+        <h2 class="header-title">Develop a specialization in child and adolescent psychotherapy</h2>
+        <p>We offer unique <strong>accredited <a href="/trainings">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. We use the Oaklander approach.</p>
+        <ul style="margin-bottom: 30px;">
+            <li><a href="/ceus">Earn CEU</a> credits: APA, CAMFT, APT</li>
+            <li>Small group interactive learning experiences.</li>
+            <li>Theory-based instruction.</li>
+            <li>Use creative modalities to grow your skills.</li>
+        </ul>
+        <a class="btn btn-default" href="/trainings">Learn about our Trainings</a> or <a href="/register" class="btn btn-danger">REGISTER NOW</a>
+        <p style="margin-top: 30px;">
+            <img src="/assets/img/international1.jpg" class="img-responsive img-thumbnail" style="width: 49%" />
+            <img src="/assets/img/trainers2.jpg" class="img-responsive img-thumbnail" style="width: 49%" />
+        </p>
+        <h4 class="color-primary" style="margin-top: 30px;"><strong>The Oaklander Approach:</strong> Knowing what to do and why you are doing it</h4>
+        <p style="font-size: 1.2em;">The West Coast Institute for Gestalt Therapy with Children LLC was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
+        <p style="font-size: 1.2em;">The programs of the West Coast Institute are designed to support the use of creative and playful therapeutic interventions that foster the rightful path toward integration of each client regardless of age. Although the focus is on individual psychotherapy of children and adolescents, programs provide learning experiences which develop appropriate parenting, family life of all compositions, and school and community advocacy for healthful growth and development of all its members. All teaching adheres to the all legal, ethical and professional standards.</p>
+    </div>
+    <div class="col col-sm-3" style="margin-top: 60px;">
+        <blockquote style="float:right; padding-left: 30px;">
+            <p><strong>This was the best training program I have ever attended!</strong></p>
+            <footer><cite>Summer Participant</cite></footer>
+        </blockquote>
+    </div>
+    <div class="col col-sm-12" style="position:relative;overflow: hidden; height: 250px; margin-top: -250px;">
+        <img class="watermark" style="width:400px;margin-bottom: -150px; right: 0; left: inherit;" src="/assets/img/sunlogo.png" />
+    </div>
 </div>
 <div class="row companies">
   <div class="col-sm-2 text-center" style="padding:0 5px;">
@@ -58,6 +66,8 @@ weight: 0
     <h3 class="header-sm-title">Advanced Trainer</h3>
     <p><strong>Felicia Carroll, Licensed Marriage, Family Therapist (MFC23315) and Registered Play Therapist –Supervisor</strong>, is also a California Association of Marriage, Family Therapists Certified Supervisor, a Certified Grief Recovery Specialist, and a Certified Gestalt Therapist by the Gestalt Therapy Institute of Los Angeles (1995).</p>
     <p>Felicia teaches at Gestalt institutes and Play Therapy training programs globally. Her travels have taken her to Germany, Greece, Morocco, Brazil, Singapore, Czech Republic, Mexico, Hong Kong, South Korea, Slovakia, Poland, and Romania as well as being keynote speaker at Play Therapy Conferences. <a href="/contact">Please contact Felicia</a> if you would like to invite her to present in your program.</p>
+    <h3 class="color-primary">Publications</h3>
+    <hr />
     <div class="row">
       <div class="col-sm-9">
         <strong>International Gestalt Journal</strong>

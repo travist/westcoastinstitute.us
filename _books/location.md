@@ -5,8 +5,8 @@ link: location
 weight: 2
 ---
 <div class="row" style="text-align:center;margin-bottom: 30px;">
-    <div class="header-title">Welcome to Solvang, California!</div>
-    <div class="header-sm-title">Danish capital of America</div>
+    <h2 class="header-title">Welcome to Solvang, California!</h2>
+    <h3 class="color-primary">Danish capital of America</h3>
     <div class="col-sm-8 col-sm-offset-2">
         <img src="/assets/img/solvang.jpg" class="img-responsive img-thumbnail" />
     </div>

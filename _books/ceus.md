@@ -4,6 +4,12 @@ layout: default
 link: ceus
 weight: 6
 ---
+<div class="row section-hero">
+  <div class="col col-sm-10 col-sm-offset-1">
+    <h3 class="header-title">Earn professsional licensing and APT credentials</h3>
+    <p>All trainings are designed to further the clinical understanding and skills in working with children and adolescents from the perspective of Gestalt Therapy of licensed mental health professionals, interns, and graduate students.</p>
+  </div>
+</div>
 <div class="row">
   <div class="col col-sm-8 col-sm-offset-2">
     <table class="table table-bordered" style="font-size:1.3em;background-color:#fff;">
@@ -20,7 +26,6 @@ weight: 6
         <td>WCI is sponsored by Serra Institute for Contemporary Gestalt Therapy to provide CEU’s for psychologists.</td>
       </tr>
     </table>
-    <p>All trainings are designed to further the clinical understanding and skills in working with children and adolescents from the perspective of Gestalt Therapy of licensed mental health professionals, interns, and graduate students.</p>
   </div>
 </div>
 <div class="row">

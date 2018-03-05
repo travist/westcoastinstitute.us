@@ -51,7 +51,6 @@
   <script src="../assets/lib/angular-moment/angular-moment.js"></script>
   <script src="../assets/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="../assets/lib/bootstrap-ui-datetime-picker/dist/datetime-picker.js"></script>
-  <script src="../assets/lib/angular-ui-mask/dist/mask.js"></script>
   <script src="../assets/lib/blob-polyfill/Blob.js"></script>
   <script src="../assets/lib/file-saver.js/FileSaver.js"></script>
   <script src="../assets/lib/angular-file-saver/dist/angular-file-saver.bundle.js"></script>

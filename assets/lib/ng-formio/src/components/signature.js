@@ -14,7 +14,7 @@ module.exports = function(app) {
         settings: {
           input: true,
           tableView: true,
-          label: '',
+          label: 'Signature',
           key: 'signature',
           placeholder: '',
           footer: 'Sign above',
@@ -44,7 +44,7 @@ module.exports = function(app) {
       },
       require: '?ngModel',
       link: function(scope, element, attrs, ngModel) {
-        if (scope.builder) return;
+        if (scope.options && scope.options.building) return;
         if (!ngModel) {
           return;
         }

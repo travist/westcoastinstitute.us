@@ -21,7 +21,6 @@ module.exports = [
         readOnly: '=',
         gridRow: '=',
         gridCol: '=',
-        builder: '=?',
         options: '=?'
       },
       templateUrl: 'formio/component.html',
@@ -48,7 +47,8 @@ module.exports = [
           FormioUtils,
           $timeout
         ) {
-          $scope.builder = $scope.builder || false;
+          $scope.options = $scope.options || {};
+
           // Options to match jquery.maskedinput masks
           $scope.uiMaskOptions = {
             maskDefinitions: {
@@ -61,9 +61,16 @@ module.exports = [
             silentEvents: ['click', 'focus']
           };
 
+          // Determine if the label should be visible.
+          $scope.labelVisible = function() {
+            return $scope.component.inDataGrid ?
+              !!$scope.component.dataGridLabel :
+              ($scope.component.label && !$scope.component.hideLabel);
+          };
+
           // See if this component is visible or not.
           $scope.isVisible = function(component, row) {
-            if ($scope.builder) return true;
+            if ($scope.options && $scope.options.building) return true;
             return FormioUtils.isVisible(
               component,
               row,
@@ -97,6 +104,90 @@ module.exports = [
             return FormioUtils.isRequired(component);
           };
 
+          function labelOnTheLeft(position) {
+            return [
+              'left-left',
+              'left-right'
+            ].indexOf(position) !== -1;
+          }
+
+          function labelOnTheRight(position) {
+            return [
+              'right-left',
+              'right-right'
+            ].indexOf(position) !== -1;
+          }
+
+          function labelOnTheLeftOrRight(position) {
+            return labelOnTheLeft(position) || labelOnTheRight(position);
+          }
+
+          function getLabelTextAlign(position) {
+            return position.match('-right') ? 'right': 'left';
+          }
+
+          function getComponentLabelWidth(component) {
+            if (angular.isUndefined(component.labelWidth)) {
+              component.labelWidth = 30;
+            }
+
+            return component.labelWidth;
+          }
+
+          function getComponentLabelMargin(component) {
+            if (angular.isUndefined(component.labelMargin)) {
+              component.labelMargin = 3;
+            }
+
+            return component.labelMargin;
+          }
+
+          $scope.getLabelStyles = function(component) {
+            var labelPosition = _get(component, 'labelPosition');
+
+            if (labelOnTheLeft(labelPosition)) {
+              return {
+                float: 'left',
+                width: getComponentLabelWidth(component) + '%',
+                'margin-right': getComponentLabelMargin(component) + '%',
+                'text-align': getLabelTextAlign(labelPosition)
+              };
+            }
+
+            if (labelOnTheRight(labelPosition)) {
+              return {
+                float: 'right',
+                width: getComponentLabelWidth(component) + '%',
+                'margin-left': getComponentLabelMargin(component) + '%',
+                'text-align': getLabelTextAlign(labelPosition)
+              };
+            }
+          };
+
+          $scope.getInputGroupStyles = function(component) {
+            var labelPosition = _get(component, 'labelPosition');
+
+            if (labelOnTheLeftOrRight(labelPosition)) {
+              var totalLabelWidth = getComponentLabelWidth(component) + getComponentLabelMargin(component);
+              var styles = {
+                width: (100 - totalLabelWidth) + '%'
+              };
+
+              if (labelOnTheLeft(labelPosition)) {
+                styles['margin-left'] = totalLabelWidth + '%';
+              }
+               else {
+                styles['margin-right'] = totalLabelWidth + '%';
+              }
+
+              return styles;
+            }
+          };
+
+          $scope.topOrLeftOptionLabel = FormioUtils.optionsLabelPositionWrapper(FormioUtils.topOrLeftOptionLabel);
+          $scope.getOptionLabelStyles = FormioUtils.optionsLabelPositionWrapper(FormioUtils.getOptionLabelStyles);
+          $scope.getOptionInputStyles = FormioUtils.optionsLabelPositionWrapper(FormioUtils.getOptionInputStyles);
+
           // Survey components haves questions.
           // We want to make the survey component label marked with error if any
           // of the questions is in invalid state.
@@ -105,6 +196,10 @@ module.exports = [
           // class to the survey component.
           // Note: Chek that this method is used in the template.
           $scope.invalidQuestions = function(formioForm) {
+            if (!formioForm) {
+              return false;
+            }
+
             var errorInQuestions = false;
             if (!$scope.component.questions) {
               errorInQuestions = false;
@@ -129,7 +224,7 @@ module.exports = [
 
           // FOR-71 - Dont watch in the builder view.
           // Calculate value when data changes.
-          if (!$scope.builder && ($scope.component.calculateValue || _get($scope.component, 'validate.json'))) {
+          if (!$scope.options.building && ($scope.component.calculateValue || _get($scope.component, 'validate.json'))) {
             $scope.$watch('data', function() {
               FormioUtils.checkCalculated($scope.component, $scope.submission, $scope.data);
 
@@ -242,7 +337,7 @@ module.exports = [
           }
 
           // FOR-71 - Dont watch in the builder view.
-          if (!$scope.builder) {
+          if (!$scope.options.building) {
             $scope.$watch('component.multiple', function() {
               $scope.data = $scope.data || {};
               FormioUtils.checkDefaultValue($scope.component, $scope.submission, $scope.data, $scope);

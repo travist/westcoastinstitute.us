@@ -1,16 +1,12 @@
 ---
-title: Registration
+title: Register
 layout: default
-weight: 9
+weight: 20
 link: register
+linkClass: register-main
 controller: RegistrationController
 ---
-<div class="row">
-    <div class="col-sm-12" style="text-align: center;">
-        <h3 class="header-sm-title">West Coast Institute for Gestalt Therapy</h3>
-        <h3 class="header-sm-title">with Children & Adolescents</h3>
-    </div>
-</div>
+<h3 class="header-title" style="margin-bottom: 30px;">Register for our programs today!</h3>
 <div class="row">
     <div class="col col-sm-8">
         <div class="panel panel-default">

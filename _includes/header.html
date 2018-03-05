@@ -22,7 +22,7 @@
             <li class="{% if page.link == 'home' %}active{% endif %}"><a href="/">Home</a></li>
             {% assign books = (site.books | sort: "weight" reversed) %}
             {% for book in books %}
-                <li class="{% if book.link == page.link %}active{% endif %}"><a href="/{{ book.link }}">{{ book.title }}</a></li>
+                <li class="{% if book.link == page.link %}active{% endif %}"><a class="{{ book.linkClass }}" href="/{{ book.link }}">{{ book.title }}</a></li>
             {% endfor %}
         </ul>
     </div>

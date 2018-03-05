@@ -744,6 +744,37 @@ body > .ui-select-bootstrap.open {
   min-width: 200px;
 }
 
+/* FOR-873 */
+.btn-disable{
+  outline: none !important;
+  cursor: not-allowed !important;
+  background-color: #7DC4EE !important;
+  border: #7DC4EE !important;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* No */
+}
+
+.btn-disable:hover{
+  outline: none !important;
+  background-color: #7DC4EE !important;
+  border: #7DC4EE !important;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* No */
+}
+
+.btn-disable:active{
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
 /* FOR-109 */
 .input-group .form-control {
   z-index: inherit;
@@ -827,9 +858,6 @@ input[type="password"][draggable="true"] {
 .input-group {
   width: 100%;
 }
-.form-field-type-datagrid .input-group {
-  width: auto;
-}
 
 .form-field-type-datagrid .form-group {
   margin-bottom: 0;
@@ -870,6 +898,15 @@ input[type="password"][draggable="true"] {
   margin-right: 10px;
 }
 
+.tooltip-inner {
+  white-space: pre-wrap;
+}
+
+.control-label--bottom {
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+
 /*Form Wizard*/
 .bs-wizard {border-bottom: solid 1px #e0e0e0; padding: 0 0 10px 0;line-height: 1em;}
 .bs-wizard > .bs-wizard-step {padding: 0; position: relative;}
@@ -893,3 +930,32 @@ input[type="password"][draggable="true"] {
 .bs-wizard > .bs-wizard-step:last-child  > .progress {width: 50%;}
 .bs-wizard > .bs-wizard-step.disabled a.bs-wizard-dot{ pointer-events: none; }
 /*END Form Wizard*/
+
+@media (max-width: 767px) {
+  .col-sm-1.bs-wizard-step,
+  .col-sm-2.bs-wizard-step,
+  .col-sm-3.bs-wizard-step,
+  .col-sm-4.bs-wizard-step,
+  .col-sm-5.bs-wizard-step,
+  .col-sm-6.bs-wizard-step,
+  .col-sm-7.bs-wizard-step,
+  .col-sm-8.bs-wizard-step,
+  .col-sm-9.bs-wizard-step,
+  .col-sm-10.bs-wizard-step,
+  .col-sm-11.bs-wizard-step,
+  .col-sm-12.bs-wizard-step {
+    float: left !important;
+  }
+
+  .col-sm-2.bs-wizard-step {
+    width: 16.66667%;
+  }
+
+  .col-sm-1.bs-wizard-step {
+    width: 8.33333%;
+  }
+
+  /*.bs-wizard > .bs-wizard-step:first-child {*/
+  /*margin-left: 24.999999995%; */
+  /*}*/
+}

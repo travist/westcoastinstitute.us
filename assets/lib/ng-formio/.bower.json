@@ -1,6 +1,6 @@
 {
   "name": "ng-formio",
-  "version": "2.21.3",
+  "version": "2.30.1",
   "authors": [
     "Travis Tidwell <travis@form.io>"
   ],
@@ -15,14 +15,13 @@
     "form"
   ],
   "dependencies": {
-    "angular": "^1.6.5",
+    "angular": "^1.6.9",
     "ng-file-upload": "^12.2.13",
-    "angular-sanitize": "^1.6.5",
+    "angular-sanitize": "^1.6.9",
     "ng-dialog": "^1.4.0",
-    "angular-moment": "^1.0.1",
+    "angular-moment": "^1.1.0",
     "bootstrap": "^3.3.7",
     "bootstrap-ui-datetime-picker": "^2.6.0",
-    "angular-ui-mask": "formio/ui-mask#1.8.8-beta.1",
     "angular-file-saver": "^1.1.3",
     "angular-ui-ace": "^0.2.3",
     "angular-ui-select": "^0.19.8",
@@ -38,14 +37,14 @@
     "tests"
   ],
   "homepage": "https://github.com/formio/ngFormio",
-  "_release": "2.21.3",
+  "_release": "2.30.1",
   "_resolution": {
     "type": "version",
-    "tag": "v2.21.3",
-    "commit": "7618484e12aa3e9c34fda45fa9cc2d6dfa936912"
+    "tag": "v2.30.1",
+    "commit": "d85100e13f9644aab0a3f1e48f518c6eb29f9c92"
   },
   "_source": "https://github.com/formio/ngFormio.git",
-  "_target": "^2.21.3",
+  "_target": "^2.30.1",
   "_originalSource": "ng-formio",
   "_direct": true
 }

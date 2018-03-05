@@ -16,7 +16,7 @@ module.exports = function(app) {
           return $scope.component.multiple ? 'formio/components/resource-multiple.html' : 'formio/components/resource.html';
         },
         controller: ['$scope', 'Formio', 'ngDialog', '$location', function($scope, Formio, ngDialog, $location) {
-          if ($scope.builder) return;
+          if ($scope.options && $scope.options.building) return;
           var settings = $scope.component;
           var params = settings.params || {};
           $scope.selectItems = [];
@@ -30,14 +30,18 @@ module.exports = function(app) {
           }
           if (settings.resource) {
             var baseUrl = $scope.options.baseUrl || Formio.getBaseUrl();
-            var url = baseUrl;
-            if (settings.project) {
-              url += '/project/' + settings.project;
+            var url = '';
+            if ($scope.formio) {
+              url = $scope.formio.formsUrl + '/' + settings.resource;
             }
-            else if ($scope.formio && $scope.formio.projectUrl) {
-              url  = $scope.formio.projectUrl;
+            else {
+              url = baseUrl;
+              if (settings.project) {
+                url += '/project/' + settings.project;
+              }
+              url += '/form/' + settings.resource;
             }
-            url += '/form/' + settings.resource;
+
             var formio = new Formio(url, {base: baseUrl});
 
             // Refresh the items.
@@ -180,10 +184,11 @@ module.exports = function(app) {
         }],
         group: 'advanced',
         settings: {
+          autofocus: false,
           input: true,
           tableView: true,
-          label: '',
-          key: 'resourceField',
+          label: 'Resource',
+          key: 'resource',
           placeholder: '',
           resource: '',
           project: '',

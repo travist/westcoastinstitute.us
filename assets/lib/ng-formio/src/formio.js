@@ -5,8 +5,8 @@ var app = angular.module('formio', [
   'ngSanitize',
   'ui.bootstrap',
   'ui.bootstrap.datetimepicker',
+  'ui.bootstrap.popover',
   'ui.select',
-  'ui.mask',
   'angularMoment',
   'ngDialog',
   'ngFileUpload',
@@ -47,6 +47,8 @@ app.directive('formioComponent', require('./directives/formioComponent'));
 
 app.directive('formioComponentView', require('./directives/formioComponentView'));
 
+app.directive('formioComponentTooltip', require('./directives/formioComponentTooltip'));
+
 app.directive('formioElement', require('./directives/formioElement'));
 
 app.directive('formioWizard', require('./directives/formioWizard'));
@@ -54,6 +56,12 @@ app.directive('formioWizard', require('./directives/formioWizard'));
 app.directive('formioBindHtml', require('./directives/formioBindHtml.js'));
 
 app.directive('formioScriptEditor', require('./directives/formioScriptEditor'));
+
+app.directive('formioMask', require('./directives/formioMask'));
+
+app.directive('formioMin', require('./directives/formioMin'));
+
+app.directive('formioMax', require('./directives/formioMax'));
 
 /**
  * Filter to flatten form components.
@@ -65,6 +73,7 @@ app.filter('tableFieldView', require('./filters/tableFieldView'));
 app.filter('safehtml', require('./filters/safehtml'));
 app.filter('formioTranslate', require('./filters/translate'));
 app.filter('trustAsResourceUrl', require('./filters/trusturl'));
+app.filter('shortcut', require('./filters/shortcut'));
 app.config([
   '$httpProvider',
   '$injector',
