@@ -13,7 +13,7 @@ weight: 0
             <li>Theory-based instruction.</li>
             <li>Use creative modalities to grow your skills.</li>
         </ul>
-        <a class="btn btn-default" href="/trainings">Learn about our Trainings</a> or <a href="/register" class="btn btn-danger">REGISTER NOW</a>
+        <a class="btn btn-default" href="/training">Learn about our Trainings</a> or <a href="/register" class="btn btn-danger">REGISTER NOW</a>
         <p style="margin-top: 30px;">
             <img src="/assets/img/international1.jpg" class="img-responsive img-thumbnail" style="width: 49%" />
             <img src="/assets/img/trainers2.jpg" class="img-responsive img-thumbnail" style="width: 49%" />
