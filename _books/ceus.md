@@ -15,11 +15,11 @@ weight: 6
     <table class="table table-bordered" style="font-size:1.3em;background-color:#fff;">
       <tr>
         <th class="text-right">APT</th>
-        <td>The West Coast Institute for Gestalt Therapy with Children and Adolescents is approved 	by the Association for Play Therapy, APT Approved Provider Number 04-152 to offer continuing education specific to play therapy.</td>
+        <td>The West Coast Institute for Gestalt Therapy with Children and Adolescents is approved by the Association for Play Therapy, APT Approved Provider 04-152 to offer continuing education specific to play therapy.</td>
       </tr>
       <tr>
         <th class="text-right">CAMFT</th>
-        <td>WCI is approved by the California Association of Marriage and Family Therapists to sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs as required by the California Board of Behavioral Sciences. Provider Number 008931.</td>
+        <td>WCI is approved by the California Association of Marriage and Family Therapists to sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs as required by the California Board of Behavioral Sciences. Approved Provider 008931.</td>
       </tr>
       <tr>
         <th class="text-right">APA</th>

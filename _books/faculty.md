@@ -55,15 +55,6 @@ weight: 1
 <h3>Adjunct Faculty</h3>
 <div class="row">
     <div class="col-sm-3">
-        <img src="/assets/img/Christine_Orpen.jpg" class="img-responsive img-thumbnail" />
-    </div>
-    <div class="col-sm-9">
-        <h3>Christine Orpen, MA, LMFT</h3>
-        <p>Christine has a private practice in Santa Barbara working with children, adolescents, adults and families. She was born and raised in Johannesburg, South Africa. She moved to Florence, Italy to study fine arts at the Academia Dei Belli Arte. She then moved to New York and later to Santa Barbara where she practices as a Fine Artist. She incorporates her experience with the creative process when using projective modalities with clients. She is a member of the Violet Solomon Oaklander Board of Directors.</p>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
         <img src="/assets/img/rana.jpg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">

@@ -29,7 +29,7 @@ chapter: conference
     <div class="col col-sm-6">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title header-title">March 9th, 2018</h3>
+            <h3 class="panel-title header-title">September 28-29, 2018</h3>
           </div>
           <div class="panel-body">
             <ul class="list-group">
@@ -41,7 +41,7 @@ chapter: conference
             </ul>
           </div>
           <div class="panel-footer">
-            <a class="btn btn-primary btn-block" href="https://www.gestaltcleveland.org/register/" target="_blank">Register Now</a>
+            <a class="btn btn-danger btn-block" href="https://www.gestaltcleveland.org/register/" target="_blank">Register Now</a>
           </div>
         </div>
         <div class="panel panel-default">
@@ -59,7 +59,7 @@ chapter: conference
             </ul>
           </div>
           <div class="panel-footer">
-            <a class="btn btn-primary btn-block" href="https://www.gestaltcleveland.org/register/" target="_blank">Register Now</a>
+            <a class="btn btn-danger btn-block" href="https://www.gestaltcleveland.org/register/" target="_blank">Register Now</a>
           </div>
         </div>
     </div>

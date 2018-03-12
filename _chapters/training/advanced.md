@@ -49,7 +49,7 @@ chapter: advanced
                 </ul>
             </div>
             <div class="panel-footer">
-                <a href="/register" class="btn btn-primary btn-block">Register Now</a>
+                <a href="/register" class="btn btn-danger btn-block">Register Now</a>
             </div>
         </div>
     </div>

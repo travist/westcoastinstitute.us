@@ -72,7 +72,9 @@ weight: 2
     <div class="col-sm-6">
         <img src="/assets/img/solvanghotel.jpg" class="img-responsive img-thumbnail" />
     </div>
-    <div class="col-sm-6">Visit <a href="http://solvanginnandcottages.com/">Solvang Inn and Cottages</a> and give them a call to receive an especially reduced rate for WCI participants. Daily rate includes continental breakfast at a local Danish bakery. Ask about available transportation from LAX, Santa Barbara airport, and other airports in the region.</div>
+    <div class="col-sm-6">
+        <p>Participants can decide on their own accommodations, or visit <a href="http://solvanginnandcottages.com/">Solvang Inn and Cottages</a> and give them a call to receive an especially reduced rate for WCI participants. Daily rate includes continental breakfast at a local Danish bakery. Ask about available transportation from LAX, Santa Barbara airport, and other airports in the region.</p>
+    </div>
 </div>
 <div class="row" style="text-align:center;margin-bottom: 30px;">
     <div class="header-title">Lodging in Other Locations</div>
