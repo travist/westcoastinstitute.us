@@ -19,12 +19,6 @@ weight: 10
                   </label>
                 </div>
                 <div class="checkbox">
-                  <label>
-                    <input id="winter" type="checkbox" value="">
-                    Winter Intensive Training - <strong>$<span id="winter-value">2400</span></strong>
-                  </label>
-                </div>
-                <div class="checkbox">
                     <label>
                       <input id="intro" type="checkbox" value="">
                       Introductory Workshop - <strong>$<span id="intro-value">180</span></strong>
@@ -32,20 +26,14 @@ weight: 10
                 </div>
                 <div class="checkbox">
                     <label>
-                      <input id="fourdayintro" type="checkbox" value="">
-                      4-day Introductory Workshop - <strong>$<span id="fourdayintro-value">1000</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="advanced" type="checkbox" value="">
-                      Advanced Training 2017 - <strong>$<span id="advanced-value">1600</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
                       <input id="advanced2" type="checkbox" value="">
                       Advanced Training 2018 - <strong>$<span id="advanced2-value">1000</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input id="modalities" type="checkbox" value="">
+                      Modalities Workshops 2018 - <strong>$<span id="modalities-value">250</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">
@@ -58,6 +46,12 @@ weight: 10
                     <label>
                         <input id="deposit" type="checkbox" value="">
                         Deposit - <strong>$<span id="deposit-value">300</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input id="deposit50" type="checkbox" value="">
+                        Deposit - <strong>$<span id="deposit50-value">50</span></strong>
                     </label>
                 </div>
             </form>
