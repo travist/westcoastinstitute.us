@@ -1,13 +1,13 @@
 ---
-title: Advanced Training
+title: Advanced Trainings
 book: training
 weight: 30
 chapter: advanced
 ---
 <div class="row">
     <div class="col col-sm-6">
-        <p><img src="/assets/img/intensive.jpg" class="img-responsive img-thumbnail" /></p>
-        <p><strong>The Advanced Fall Intensive Training</strong> is planned for those wanting to continue with the work of the Summer Intensive and reunite with friends while doing so.</p>
+        <p><img src="/assets/img/profile.png" style="width: 100%;" class="img-responsive img-thumbnail" /></p>
+        <p><strong>The Advanced Training</strong> is planned for those wanting to continue with the work of the Summer Intensive and reunite with friends while doing so.</p>
         <ul>
             <li>WCI is approved by the California Association of Marriage and Family Therapists to 	sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs as required by the California Board of Behavioral Sciences. Provider Number 008931.</li>
             <li>WCI is sponsored by Serra Institute for Contemporary Gestalt Therapy to provide CEU’s for psychologists.</li>
@@ -25,23 +25,44 @@ chapter: advanced
         <blockquote>
           <p>Well thought through, lots of depth. Responded to requests to relate more concretely to working with child clients.</p>
         </blockquote>
-        <p class="text-center"><img src="/assets/img/advanced2.jpg" class="img-responsive img-thumbnail" style="width:70%" /></p>
     </div>
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">June 21 - 24th, 2018</h3>
+                <h3 class="panel-title header-title">November 9th - 12th, 2019</h3>
             </div>
             <div class="panel-body">
-                <p style="font-size: 1.2em;"><strong>ORIGINS: Neurobiology of Gestalt Play Therapy</strong></p>
+                <p style="font-size: 1.2em;"><strong>ORIGINS: Gestalt Play Therapy Theory and Practice and Perspectives in Child Development</strong></p>
                 <hr/>
-                <p>This advanced training is planned for those who have completed the Basic Training in Gestalt Therapy with Children and Adolescents/ The Oaklander Approach.  This course will delve into the original theoretical perspectives of the 20th Century which evolved into the integrated system of Gestalt Therapy which will include classical psychoanalysis, phenomenology, holism, Gestalt psychology, and existentialism.  We will examine the Gestalt perspective of child development, both healthy and interrupted.  Principles of 21st C. neuroscience, which confirms the fundamental principles of Gestalt Therapy, will be examined.      In this training the therapy process and use of treatment modalities of the Oaklander Approach will be experienced through the understanding of the psychological and philosophical principles of Gestalt Therapy both past and present.</p>
+                <p>This advanced seminar is planned for those who have completed the Basic Training in Gestalt Play Therapy OR are interested in learning about the scientific, philosophical, and creative origins of Gestalt Therapy with children and adolescents. This course will delve into the original theoretical perspectives which evolved into the integrated, unifying system of Gestalt Therapy. The therapy process and use of treatment modalities in Gestalt Play Therapy will be experienced through the understanding of the psychological and philosophical principles of Gestalt Therapy. Focus will be on assessment, diagnosis, and treatment planning. A goal will be to connect the scientific and philosophical foundations of the original work in Gestalt Therapy to the science and philosophy of current neuroscience, attachment theory, and narrative therapy.</p>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>Location:</strong> - Chicago, IL</li>
+                    <li class="list-group-item"><strong>Location:</strong> - Solvang, CA</li>
                     <li class="list-group-item"><strong>Fees: - $1000</strong></li>
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
-                        <li>Rana Hong, Ph.D. - RPT-S</li>
+                        <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S</li>
+                      </ul>
+                    </li>
+                    <li class="list-group-item"><strong>CEU's</strong> - 24 contact hours</li>
+                </ul>
+            </div>
+            <div class="panel-footer">
+                <a href="/register" class="btn btn-danger btn-block">Register Now</a>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel panel-heading">
+                <h3 class="panel-title header-title">June 5th - 8th, 2019</h3>
+            </div>
+            <div class="panel-body">
+                <p style="font-size: 1.2em;"><strong>ADVANCED TRAINING in Gestalt Play Therapy: Healing the Torment Within</strong></p>
+                <hr/>
+                <p>The Advanced Intensive Training is planned for those wanting to continue with the work of the Basic Intensive and reunite with friends while doing so. The focus of the 2019 Advanced Training will be on Integrative processes such as working with children and adolescents on core issues of shame and disruptive beliefs about self and others and one’s place in the world.  These “introjects” shape the trajectory of a child’s life. The processes of self-nurturing and self-compassion and the writing of a life/trauma narrative can provide a foundation for healing and greater neural integration.  How to effectively use these processes in Gestalt Play Therapy with teens as well as younger children will be the focus of this four day training.</p>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Location:</strong> - Solvang, CA</li>
+                    <li class="list-group-item"><strong>Fees: - $1000</strong></li>
+                    <li class="list-group-item"><strong>Presenter:</strong>
+                      <ul>
                         <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S</li>
                       </ul>
                     </li>

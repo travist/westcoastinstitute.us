@@ -1,14 +1,14 @@
 ---
 title: Introductory Workshops
 book: training
-weight: 20
+weight: 60
 chapter: intro
 ---
 <div class="row">
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">March 16th, 2018</h3>
+                <h3 class="panel-title header-title">March 9th, 2019</h3>
             </div>
             <div class="panel-body">
                 <p style="font-size: 1.2em;"><strong>Introduction to Gestalt Play Therapy Oaklander Approach</strong></p>
@@ -33,7 +33,7 @@ chapter: intro
     <div class="col col-sm-6">
             <div class="panel panel-default">
                 <div class="panel panel-heading">
-                    <h3 class="panel-title header-title">April 21st, 2018</h3>
+                    <h3 class="panel-title header-title">March 16th, 2019</h3>
                 </div>
                 <div class="panel-body">
                     <p style="font-size: 1.2em;"><strong>Introduction to Gestalt Play Therapy Oaklander Approach</strong></p>
@@ -60,7 +60,7 @@ chapter: intro
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">November 10, 2018</h3>
+                <h3 class="panel-title header-title">November 8th, 2019</h3>
             </div>
             <div class="panel-body">
                 <p style="font-size: 1.2em;"><strong>Introduction to Gestalt Play Therapy Oaklander Approach</strong></p>

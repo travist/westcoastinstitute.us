@@ -27,7 +27,7 @@ chapter: conference
         </div>
     </div>
     <div class="col col-sm-6">
-        <div class="panel panel-default">
+        <!--<div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title header-title">September 28-29, 2018</h3>
           </div>
@@ -61,7 +61,7 @@ chapter: conference
           <div class="panel-footer">
             <a class="btn btn-danger btn-block" href="https://www.gestaltcleveland.org/register/" target="_blank">Register Now</a>
           </div>
-        </div>
+        </div>-->
     </div>
 </div>
 

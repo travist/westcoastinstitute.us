@@ -18,7 +18,7 @@ chapter: winter
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">February 17 - 25th, 2018</h3>
+                <h3 class="panel-title header-title">February 16 - 23rd, 2019</h3>
             </div>
             <div class="panel-body">
                 <ul class="list-group">
@@ -26,7 +26,7 @@ chapter: winter
                     <li class="list-group-item"><strong>Fees: - $2400</strong></li>
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
-                        <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S</li>
+                        <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S and Core Faculty</li>
                       </ul>
                     </li>
                     <li class="list-group-item"><strong>CEUs:</strong> 60 contact hours</li>

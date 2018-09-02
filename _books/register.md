@@ -11,7 +11,7 @@ controller: RegistrationController
     <div class="col col-sm-8">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title header-sm-title">Online Registration</h3>
+            <h3 class="panel-title header-sm-title">Online Registration: Please complete information in English</h3>
           </div>
           <div class="panel-body">
             <formio src="'https://feliciacarroll.form.io/register'"></formio>

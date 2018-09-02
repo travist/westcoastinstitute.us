@@ -1,7 +1,7 @@
 ---
 title: Summer Intensive Training
 book: training
-weight: 11
+weight: 20
 chapter: summer
 ---
 <div class="row">
@@ -10,13 +10,20 @@ chapter: summer
         <strong>2017 Summer Intensive</strong></p>
         <p><img src="/assets/img/2016training.jpg" class="img-responsive img-thumbnail" />
         <strong>2016 Summer Intensive</strong></p>
-        <p><img src="/assets/img/2015SummerIntensive.jpg" class="img-responsive img-thumbnail" />
-        <strong>2015 Summer Intensive</strong></p>
+        <blockquote>
+          <p>I appreciated having this office setting rather than an impersonal conference room.</p>
+        </blockquote>
+        <blockquote>
+          <p>The training was well organized and paced. Felicia is a wonderful teaching. She was so available to further my professional and personal development. I highly recommend this training.</p>
+        </blockquote>
+        <blockquote>
+          <p>I would recommend this course for any mental health professional working with change. This intensive course was a life changing experience for me.</p>
+        </blockquote>
     </div>
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">July 21 - 29th, 2018</h3>
+                <h3 class="panel-title header-title">July 27th - August 3rd, 2019</h3>
             </div>
             <div class="panel-body">
                 <p>The Summer Training provides an opportunity for participants to enjoy a summer vacation combined with an intensive learning experience. Each day of the workshop will have didactic discussion, experiential practicum with feedback, and case presentations. Video of sessions with children and power point assisted slides will illustrate work with children. If possible, demonstrations with children may be used. Emphasis in this training is on learning concepts and skills that will enhance the therapeutic practice of those working with children/adolescents and not on the personal development of participants. However, participants will find the practicums and demonstrations to be personally and professionally rewarding. The focus of the Basic Training Programs is the integration of theoretical understanding, skill development using various play modalities, and clinical practice.</p>
@@ -31,7 +38,7 @@ chapter: summer
                     </li>
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
-                        <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S</li>
+                        <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S and Core Faculty</li>
                       </ul>
                     </li>
                     <li class="list-group-item"><strong>CEUs:</strong> 60 contact hours</li>
@@ -50,15 +57,6 @@ chapter: summer
         </blockquote>
         <blockquote>
           <p>Very well done, and worth the 3200 mile travel.</p>
-        </blockquote>
-        <blockquote>
-          <p>I appreciated having this office setting rather than an impersonal conference room.</p>
-        </blockquote>
-        <blockquote>
-          <p>The training was well organized and paced. Felicia is a wonderful teaching. She was so available to further my professional and personal development. I highly recommend this training.</p>
-        </blockquote>
-        <blockquote>
-          <p>I would recommend this course for any mental health professional working with change. This intensive course was a life changing experience for me.</p>
         </blockquote>
     </div>
 </div>

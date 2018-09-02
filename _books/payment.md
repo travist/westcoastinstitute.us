@@ -15,25 +15,55 @@ weight: 10
                 <div class="checkbox">
                   <label>
                     <input id="summer" type="checkbox" value="">
+                    Winter Intensive Training - <strong>$<span id="summer-value">2400</span></strong>
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input id="summer" type="checkbox" value="">
                     Summer Intensive Training - <strong>$<span id="summer-value">2400</span></strong>
                   </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                      <input id="intro" type="checkbox" value="">
-                      Introductory Workshop - <strong>$<span id="intro-value">180</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
                       <input id="advanced2" type="checkbox" value="">
-                      Advanced Training 2018 - <strong>$<span id="advanced2-value">1000</span></strong>
+                      Advanced Training - <strong>$<span id="advanced2-value">1000</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
                       <input id="modalities" type="checkbox" value="">
-                      Modalities Workshops 2018 - <strong>$<span id="modalities-value">250</span></strong>
+                      Modalities Workshops - <strong>$<span id="modalities-value">250</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input id="modalities" type="checkbox" value="">
+                      Modalities Lego Workshop - <strong>$<span id="modalities-value">180</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input id="supervision" type="checkbox" value="">
+                      Supervision Training - <strong>$<span id="supervision-value">300</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input id="trainers" type="checkbox" value="">
+                      Trainers Symposium - <strong>$<span id="trainers-value">1200</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input id="trainersplusadvanced" type="checkbox" value="">
+                      Trainers Symposium + Advanced Training - <strong>$<span id="trainersplusadvanced-value">2100</span></strong>
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                      <input id="intro" type="checkbox" value="">
+                      Introductory Workshop - <strong>$<span id="intro-value">180</span></strong>
                     </label>
                 </div>
                 <div class="checkbox">
