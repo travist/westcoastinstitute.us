@@ -22,13 +22,13 @@ weight: 5
     <h4 class="color-primary"><strong>2018 Trainings</strong></h4>
     <ul>
         <li>
-            <a class="text-muted" href="#origins">Origins Training</a>
+            <a class="text-muted" href="#advanced">Origins Training</a>
         </li>
         <li>
             <a class="text-muted" href="#modalities">Modalities Workshop</a>
             <ul>
-                <li><a href="#soundandmusic">Sound and Music (Sept. 15th - 16th, 2018)</a></li>
-                <li><a href="#sandtray">Sand Tray Workshop (Oct. 19th - 20th, 2018)</a></li>
+                <li><a href="#modalities">Sound and Music (Sept. 15th - 16th, 2018)</a></li>
+                <li><a href="#modalities">Sand Tray Workshop (Oct. 19th - 20th, 2018)</a></li>
             </ul>
         </li>                                                                            
     </ul><br/>
