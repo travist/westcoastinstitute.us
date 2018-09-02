@@ -6,10 +6,10 @@ chapter: summer
 ---
 <div class="row">
     <div class="col col-sm-6">
+        <p><img src="/assets/img/2018.jpeg" class="img-responsive img-thumbnail" />
+        <strong>2018 Summer Intensive</strong></p>
         <p><img src="/assets/img/2017SummerIntensive.jpg" class="img-responsive img-thumbnail" />
         <strong>2017 Summer Intensive</strong></p>
-        <p><img src="/assets/img/2016training.jpg" class="img-responsive img-thumbnail" />
-        <strong>2016 Summer Intensive</strong></p>
         <blockquote>
           <p>I appreciated having this office setting rather than an impersonal conference room.</p>
         </blockquote>
