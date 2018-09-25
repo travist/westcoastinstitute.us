@@ -39,6 +39,8 @@ chapter: trainers
         <p><img src="/assets/img/trainers4.jpg" class="img-responsive img-thumbnail" /></p>
     </div>
 </div>
+<div class="row separator"></div>
+<h2>Disclaimer Statements</h2>
 <div style="font-size: 0.8em;">
     <hr>
     <div class="row">

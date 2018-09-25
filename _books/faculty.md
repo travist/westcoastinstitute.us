@@ -23,14 +23,14 @@ weight: 1
     </div>
 </div>
 <div class="row separator"></div>
-<h3 class="color-primary">Core Faculty</h3>
+<h2 class="header-title">Core Faculty</h2>
 <div class="row">
     <div class="col-sm-3">
         <img src="/assets/img/Valente-Orozco.jpeg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">
         <h3>Valente Orozco, LCSW, RPT-S, PPS</h3>
-        <p>Valente currently works in private practice in Clovis California and offers training, supervision, and consultation in Gestalt Therapy with Children and Adolescents. He has worked with children in a variety of settings including school-based mental health, child welfare, and outpatient mental health. Valente served as the 2015 President of the Central Valley Chapter of the California Association for Play Therapy. He has trained with the Pacific Gestalt Institute in Los Angeles and is a Certified Gestalt Therapist with Children and Adolescents.</p>
+        <p>Valente currently works in private practice in Clovis, California and offering training, supervision, and consultation in Gestalt Therapy with Children and Adolescents. He has worked with children in a variety of settings including school-based mental health, child welfare, and outpatient mental health. Valente served as the 2015 President of the Central Valley Chapter of the California Association for Play Therapy. He has trained with the Pacific Gestalt Institute in Los Angeles and is a Certified Gestalt Therapist through PGI. He is also a Certified Gestalt Therapist with Children and Adolescents. He has recently been an international trainer in Mexico and S. Korea.</p>
     </div>
 </div>
 <div class="row">
@@ -39,7 +39,7 @@ weight: 1
     </div>
     <div class="col-sm-9">
         <h3>Stephanie Pawlowicz, LMFT, RPT</h3>
-        <p>Stephanie has a private practice in Santa Barbara, CA where she specializes with children, adolescents, and couples. She is adjunct faculty at Pacifica Graduate Institute where she teaches child psychotherapy from the Gestalt Oaklander Approach. She has led parent education / support groups and groups for single mothers living at St. Vincent DePaul, Santa Barbara. She is a Certified Gestalt Therapist with Children and Adolescents.</p>
+        <p>Stephanie has a private practice in Santa Barbara, California where she specializes with children, adolescents, and couples. She also specializes in therapeutic interventions with adolescents and adults recovering from addictions. She is adjunct faculty at Pacifica Graduate Institute where she teaches child psychotherapy and developmental theories and community mental health. She is also adjunct faculty at Antioch University SB where she teaches contemporary psychotherapy. She has led parent education/support groups and groups for single mothers living at St. Vincent DePaul, Santa Barbara. She is a Certified Gestalt Therapist with children and Adolescents.</p>
     </div>
 </div>
 <div class="row">
@@ -48,11 +48,20 @@ weight: 1
     </div>
     <div class="col-sm-9">
         <h3>Denise Richman, MS, LMFT</h3>
-        <p>Denise has expertise in somatic / movements and dramatic therapies as clinician and business management outreach and program development. She is a frequent presenter at Fox Studios child development center. She developed and presented the workshop fostering creativity in young children for parents who work at the studio. She is in private practice and is a workshop facilitator and guest lecturer. She is a Certified Gestalt Therapist with Children and Adolescents.</p>
+        <p>Denise has expertise in somatic movements and dramatic therapies as a clinician and also with business management outreach and program development.  She is also an early childhood specialist birth to five years.  She is a frequent presenter at Fox Studios child development center.  She developed and presented the workshop fostering creativity in young children for parents who work at the studio.  She is in private practice and is a workshop facilitator and guest lecturer. Denise has recently been an international trainer in Mexico and Australia.</p>
     </div>
 </div>
 <div class="row separator"></div>
-<h3>Adjunct Faculty</h3>
+<h2 class="header-title">Adjunct Faculty</h2>
+<div class="row">
+    <div class="col-sm-3">
+        <img src="/assets/img/rachel.jpg" class="img-responsive img-thumbnail" />
+    </div>
+    <div class="col-sm-9">
+        <h3>Rachel McSpadden Tarver, LMFT, RPT-S</h3>
+        <p>Rachel works at Martha’s Place Children’s Center in San Luis Obispo, California providing clinical assessment and direct therapy services for children ages birth to five and their families. She also provides individual and group supervision to supervisees working with youth within the public mental health setting. Rachel is participating in the Certification Program through WCI.</p>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-3">
         <img src="/assets/img/rana.jpg" class="img-responsive img-thumbnail" />

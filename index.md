@@ -18,13 +18,29 @@ weight: 0
             <img src="/assets/img/international1.jpg" class="img-responsive img-thumbnail" style="width: 49%" />
             <img src="/assets/img/trainers2.jpg" class="img-responsive img-thumbnail" style="width: 49%" />
         </p>
-        <h4 class="color-primary" style="margin-top: 30px;"><strong>The Oaklander Approach:</strong> Knowing what to do and why you are doing it</h4>
+        <h4 class="color-primary" style="margin-top: 30px;"><strong>The Oaklander Approach:</strong> A Unifying Therapeutic Approach</h4>
         <p style="font-size: 1.2em;">The West Coast Institute for Gestalt Therapy with Children LLC was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
         <p style="font-size: 1.2em;">The programs of the West Coast Institute are designed to support the use of creative and playful therapeutic interventions that foster the rightful path toward integration of each client regardless of age. Although the focus is on individual psychotherapy of children and adolescents, programs provide learning experiences which develop appropriate parenting, family life of all compositions, and school and community advocacy for healthful growth and development of all its members. All teaching adheres to the all legal, ethical and professional standards.</p>
     </div>
     <div class="col col-sm-3" style="margin-top: 60px;">
-        <blockquote style="float:right; padding-left: 30px;">
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
             <p><strong>This was the best training program I have ever attended!</strong></p>
+            <footer><cite>Summer Participant</cite></footer>
+        </blockquote>
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
+            <p><strong>This training was more than I expected!</strong></p>
+            <footer><cite>Summer Participant</cite></footer>
+        </blockquote>
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
+            <p><strong>Fun!</strong></p>
+            <footer><cite>Summer Participant</cite></footer>
+        </blockquote>
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
+            <p><strong>Variety of Modalities, Engaging Presenters, Humor, and Liveliness.</strong></p>
+            <footer><cite>Summer Participant</cite></footer>
+        </blockquote>
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
+            <p><strong>Learning Play Therapy Techniques, Why How and What makes them Gestalt. Knowing why we use them.</strong></p>
             <footer><cite>Summer Participant</cite></footer>
         </blockquote>
     </div>
@@ -63,7 +79,7 @@ weight: 0
   </div>
   <div class="col-sm-8">
     <h2 class="header-title">Felicia Carroll, M.Ed., MA</h2>
-    <h3 class="header-sm-title">Advanced Trainer</h3>
+    <h3 class="header-sm-title">Director and Advanced Trainer</h3>
     <p><strong>Felicia Carroll, Licensed Marriage, Family Therapist (MFC23315) and Registered Play Therapist –Supervisor</strong>, is also a California Association of Marriage, Family Therapists Certified Supervisor, a Certified Grief Recovery Specialist, and a Certified Gestalt Therapist by the Gestalt Therapy Institute of Los Angeles (1995).</p>
     <p>Felicia teaches at Gestalt institutes and Play Therapy training programs globally. Her travels have taken her to Germany, Greece, Morocco, Brazil, Singapore, Czech Republic, Mexico, Hong Kong, South Korea, Slovakia, Poland, and Romania as well as being keynote speaker at Play Therapy Conferences. <a href="/contact">Please contact Felicia</a> if you would like to invite her to present in your program.</p>
     <h3 class="color-primary">Publications</h3>

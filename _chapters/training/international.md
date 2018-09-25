@@ -33,7 +33,7 @@ chapter: international
             <li>Slovenia - Advanced Training, April 12th - 14th, 2019</li>
             <li>Sydney, Australia - Basic Training, Sept 23rd - 27th, 2019</li>
             <li>Antarctica!, October 2nd - 5th</li>
-            <li>Caxius de Sul, Brazil - Basic and Advanced, November 3rd - 10th, 2019</li>           
+            <li>Caxias do Sul, Brasil - Basic and Advanced, November 3rd - 10th, 2019</li>           
         </ul>
         <p>Many more dates are being planned for 2019.</p>
         <p><a href="/contact">Contact Felicia</a> for more details.</p>

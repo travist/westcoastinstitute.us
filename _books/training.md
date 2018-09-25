@@ -29,6 +29,7 @@ weight: 5
             <ul>
                 <li><a href="#modalities">Sound and Music (Sept. 15th - 16th, 2018)</a></li>
                 <li><a href="#modalities">Sand Tray Workshop (Oct. 19th - 20th, 2018)</a></li>
+                <li><a href="#intro">Introductory Workshop (Nov. 9th, 2018)</a></li>
             </ul>
         </li>                                                                            
     </ul><br/>
@@ -36,7 +37,7 @@ weight: 5
   </div>
   <div class="row">
     <div class="col col-sm-10 col-sm-offset-1">
-        <div class="well">Click on one of the following links for information about our Training opportunities.</div>
+        <div class="well">Click on one of the following links for information about our 2018 and 2019 Training opportunities.</div>
     </div>
   </div>
   <div class="row">

@@ -29,7 +29,7 @@ chapter: advanced
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">November 9th - 12th, 2019</h3>
+                <h3 class="panel-title header-title">November 9th - 12th, 2018</h3>
             </div>
             <div class="panel-body">
                 <p style="font-size: 1.2em;"><strong>ORIGINS: Gestalt Play Therapy Theory and Practice and Perspectives in Child Development</strong></p>
@@ -56,6 +56,7 @@ chapter: advanced
             </div>
             <div class="panel-body">
                 <p style="font-size: 1.2em;"><strong>ADVANCED TRAINING in Gestalt Play Therapy: Healing the Torment Within</strong></p>
+                <img src="/assets/img/crayons.jpg" style="width: 100%;" class="img-responsive img-thumbnail" />
                 <hr/>
                 <p>The Advanced Intensive Training is planned for those wanting to continue with the work of the Basic Intensive and reunite with friends while doing so. The focus of the 2019 Advanced Training will be on Integrative processes such as working with children and adolescents on core issues of shame and disruptive beliefs about self and others and one’s place in the world.  These “introjects” shape the trajectory of a child’s life. The processes of self-nurturing and self-compassion and the writing of a life/trauma narrative can provide a foundation for healing and greater neural integration.  How to effectively use these processes in Gestalt Play Therapy with teens as well as younger children will be the focus of this four day training.</p>
                 <ul class="list-group">

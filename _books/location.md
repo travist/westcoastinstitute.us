@@ -77,6 +77,19 @@ weight: 2
     </div>
 </div>
 <div class="row" style="text-align:center;margin-bottom: 30px;">
+    <h3 style="font-weight:400"><a href="https://thelandsby.com/">Landsby Hotel</a></h3>
+    <h4><a href="https://thelandsby.com/">https://thelandsby.com</a></h4>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <img src="/assets/img/landsby.png" class="img-responsive img-thumbnail" style="width:100%" />
+    </div>
+    <div class="col-sm-6">
+        <p>The Landsby Hotel also offers a reduced rate for WCI participants. Rate includes full breakfast at the hotel restaurant. The hotel is close to the Solvang Inn and Cottages and is within walking distance of the training venue. You will make your own reservation directly with the Hotel/Inn. Do not do this online as you will not receive the discounted rates. Please call and let the Hotel/Inn know that you are a participant with West Coast Institute/Felicia Carroll.</p>
+        <p>You can also reserve space at any location of your choice. There are many options available within the Santa Ynez Valley. Camping is also an option.</p>
+    </div>
+</div>
+<div class="row" style="text-align:center;margin-bottom: 30px;">
     <div class="header-title">Lodging in Other Locations</div>
     <p>Participants in workshops or trainings in other locations will be notified of lodging options with confirmation of registration.</p>
 </div>
