@@ -29,10 +29,10 @@ chapter: international
         <strong>2019 Trainings</strong>
         <ul>
             <li>Seoul, South Korea - Korea Play Therapy Association (KAPT) Conference, September 7th - 8th, 2018</li>
-            <li>Slovenia - Basic Training, April 6th - 9th, 2019</li>
+            <li>Slovenia - Basic Training, April 6th - 9th, 2019<br/><img src="/assets/img/slovenia.jpg" class="img-responsive img-thumbnail" /></li>
             <li>Slovenia - Advanced Training, April 12th - 14th, 2019</li>
-            <li>Sydney, Australia - Basic Training, Sept 23rd - 27th, 2019</li>
-            <li>Antarctica!, October 2nd - 5th</li>
+            <li>Sydney, Australia - Basic Training, Sept 23rd - 27th, 2019<br/><img src="/assets/img/sydney.jpg" class="img-responsive img-thumbnail" /></li>
+            <li>Antarctica!, October 2nd - 5th<br/><img src="/assets/img/Penguins.jpg" class="img-responsive img-thumbnail" /></li>
             <li>Caxias do Sul, Brasil - Basic and Advanced, November 3rd - 10th, 2019</li>           
         </ul>
         <p>Many more dates are being planned for 2019.</p>
