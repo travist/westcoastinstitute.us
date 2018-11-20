@@ -63,6 +63,7 @@
   <!-- endbower -->
   
   <script src="/assets/js/main.js"></script>
+  <!-- PayPal BEGIN --> <script> ;(function(a,t,o,m,s){a[m]=a[m]||[];a[m].push({t:new Date().getTime(),event:'snippetRun'});var f=t.getElementsByTagName(o)[0],e=t.createElement(o),d=m!=='paypalDDL'?'&m='+m:'';e.async=!0;e.src='https://www.paypal.com/tagmanager/pptm.js?id='+s+d;f.parentNode.insertBefore(e,f);})(window,document,'script','paypalDDL','ef145fbc-bec0-4d9a-9990-cc436fe22e6d'); </script> <!-- PayPal END -->
 </head>
 <body ng-app='formApp'{% if page.controller %} ng-controller='{{ page.controller }}'{% endif %}>
   <div id="content" class="container">

@@ -19,25 +19,11 @@ weight: 5
           <strong><small>CAMFT Approved Provider</small><br/><small>(008931)</small></strong>
       </div>
     </div>
-    <h4 class="color-primary"><strong>2018 Trainings</strong></h4>
-    <ul>
-        <li>
-            <a class="text-muted" href="#advanced">Origins Training</a>
-        </li>
-        <li>
-            <a class="text-muted" href="#modalities">Modalities Workshop</a>
-            <ul>
-                <li><a href="#modalities">Sound and Music (Sept. 15th - 16th, 2018)</a></li>
-                <li><a href="#modalities">Sand Tray Workshop (Oct. 19th - 20th, 2018)</a></li>
-                <li><a href="#intro">Introductory Workshop (Nov. 9th, 2018)</a></li>
-            </ul>
-        </li>                                                                            
-    </ul><br/>
     <a href="/register" class="btn btn-danger">Register Now</a>
   </div>
   <div class="row">
     <div class="col col-sm-10 col-sm-offset-1">
-        <div class="well">Click on one of the following links for information about our 2018 and 2019 Training opportunities.</div>
+        <div class="well">Click on one of the following links for information about our 2019 Training opportunities.</div>
     </div>
   </div>
   <div class="row">
