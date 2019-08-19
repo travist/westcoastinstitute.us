@@ -9,89 +9,163 @@ weight: 10
     <div class="col col-sm-6">
         <h2 id="registration" style="display:none">Thank you for registering!</h2>
         <div class="panel panel-default">
-          <div class="panel-heading">Please select which programs you will be paying for today.</div>
+            <div class="panel-heading">Please select which programs you will be paying for today.</div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Winter Intensive Training</div>
           <div class="panel-body">
-            <form>
-                <div class="checkbox">
-                  <label>
-                    <input id="summer" type="checkbox" value="">
-                    Winter Intensive Training - <strong>$<span id="summer-value">2400</span></strong>
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input id="summer" type="checkbox" value="">
-                    Summer Intensive Training - <strong>$<span id="summer-value">2400</span></strong>
-                  </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="advanced2" type="checkbox" value="">
-                      Advanced Training - <strong>$<span id="advanced2-value">1000</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="modalities" type="checkbox" value="">
-                      Modalities Workshops - <strong>$<span id="modalities-value">250</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="modalities" type="checkbox" value="">
-                      Modalities Lego Workshop - <strong>$<span id="modalities-value">180</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="supervision" type="checkbox" value="">
-                      Supervision Training - <strong>$<span id="supervision-value">300</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="trainers" type="checkbox" value="">
-                      Trainers Symposium - <strong>$<span id="trainers-value">1200</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="trainersplusadvanced" type="checkbox" value="">
-                      Trainers Symposium + Advanced Training - <strong>$<span id="trainersplusadvanced-value">2100</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                      <input id="intro" type="checkbox" value="">
-                      Introductory Workshop - <strong>$<span id="intro-value">180</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input id="certification" type="checkbox" value="">
-                        Certification Fee - <strong>$<span id="certification-value">350</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input id="deposit" type="checkbox" value="">
-                        Deposit - <strong>$<span id="deposit-value">300</span></strong>
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input id="deposit50" type="checkbox" value="">
-                        Deposit - <strong>$<span id="deposit50-value">50</span></strong>
-                    </label>
-                </div>
-            </form>
+            <div class="checkbox">
+              <label>
+                <input id="winter-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="winter-register-value">300</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="winter" type="checkbox" value="">
+                Training Fee - <strong>$<span id="winter-value">2100</span></strong>
+              </label>
+            </div>
           </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Summer Intensive Training</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="summer-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="summer-register-value">300</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="summer" type="checkbox" value="">
+                Training Fee - <strong>$<span id="summer-value">2100</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Advanced Trainings</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="advanced-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="advanced-register-value">125</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="advanced2" type="checkbox" value="">
+                Training Fee - <strong>$<span id="advanced2-value">875</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Modalities Workshops</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="modalities-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="modalities-register-value">75</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="modalities" type="checkbox" value="">
+                Training Fee - <strong>$<span id="modalities-value">225</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Supervision Training</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="supervision-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="supervision-register-value">75</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="supervision" type="checkbox" value="">
+                Training Fee - <strong>$<span id="supervision-value">225</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Trainers Symposium</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="trainers-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="trainers-register-value">200</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="trainers" type="checkbox" value="">
+                Training Fee - <strong>$<span id="trainers-value">1000</span></strong>
+              </label>
+            </div>
+          </div>
+        </div> 
+        <div class="panel panel-default">
+          <div class="panel-heading">Introductory Workshop</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="intro-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="intro-register-value">50</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="intro" type="checkbox" value="">
+                Training Fee - <strong>$<span id="intro-value">150</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>  
+        <div class="panel panel-default">
+          <div class="panel-heading">Introductory Workshop</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="intro-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="intro-register-value">50</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="intro" type="checkbox" value="">
+                Training Fee - <strong>$<span id="intro-value">150</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Certification Fee</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="certification" type="checkbox" value="">
+                Certification Fee - <strong>$<span id="certification-value">350</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>    
+        <div class="panel panel-default">
           <div class="panel-footer">Total: <strong>$<span id="total">0</span></strong></div>
         </div>
+        <h4>The non-refundable registration fee is required to confirm your registration to the workshop/training.</h4>
         <div class="panel panel-default">
           <div class="panel-heading">Refund Policy</div>
           <div class="panel-body">
-            <p>All refund requests must be made in writing and received 15 days prior the beginning of any training.  This allows others who are on a waiting list to make plans to attend.  If not received prior to the 15 days, no refund will be made.  No refunds will be made after the program begins.    WCI nor any of its trainers are responsible for loss of travel or lodging expenses for any cause.</p>
+            <p>The registration fee is non-refundable but can be applied to another WCI program. Cancellation notices must be received in advance of the program starting date.  For the all trainings, cancellations must be made within two weeks of the training. Notification must be in writing to WCI. With this notice other paid fees can be refunded or applied to a future program. If for any reason, WCI cancels a program all fees will be refunded. WCI is not responsible for any travel or lodging expenses due to cancellations.</p>
             <p>Registration fees will not be refunded unless WCI cancels the program. Paid fees can be applied toward a future training. Any scholarship funds will be returned to the grantor.</p>
             <p><strong>Please Note:</strong> International trainings are organized through local organizers.  Refunds or grievances  are not the responsibility of WCI or any WCI trainer. Please contact the organizer of the training in your respective location.</p>
           </div>

@@ -2,7 +2,7 @@
 title: CEUs
 layout: default
 link: ceus
-weight: 6
+weight: 7
 ---
 <div class="row section-hero">
   <div class="col col-sm-10 col-sm-offset-1">
@@ -14,15 +14,21 @@ weight: 6
   <div class="col col-sm-8 col-sm-offset-2">
     <table class="table table-bordered" style="font-size:1.3em;background-color:#fff;">
       <tr>
-        <th class="text-right">APT</th>
+        <th class="text-center">
+            APT
+            <p><img src="/assets/img/apt.jpg" class="img-responsive" /></p>
+        </th>
         <td>The West Coast Institute for Gestalt Therapy with Children and Adolescents is approved by the Association for Play Therapy, APT Approved Provider 04-152 to offer continuing education specific to play therapy.</td>
       </tr>
       <tr>
-        <th class="text-right">CAMFT</th>
+        <th class="text-center">
+            CAMFT
+            <p><img src="/assets/img/cepa_approved.png" class="img-responsive" /></p>
+        </th>
         <td>WCI is approved by the California Association of Marriage and Family Therapists to sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs as required by the California Board of Behavioral Sciences. Approved Provider 008931.</td>
       </tr>
       <tr>
-        <th class="text-right">APA</th>
+        <th class="text-center">APA</th>
         <td>WCI is sponsored by Serra Institute for Contemporary Gestalt Therapy to provide CEU’s for psychologists.</td>
       </tr>
     </table>

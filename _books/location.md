@@ -9,6 +9,7 @@ weight: 2
     <h3 class="color-primary">Danish capital of America</h3>
     <div class="col-sm-8 col-sm-offset-2">
         <img src="/assets/img/solvang.jpg" class="img-responsive img-thumbnail" />
+        <p class="text-muted text-center">Most programs are held in Solvang, CA. Other locations include Santa Barbara, Clovis, Los Angeles, CA and Las Vegas, NV.</p>
     </div>
 </div>
 <div class="row">
@@ -82,10 +83,10 @@ weight: 2
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <img src="/assets/img/landsby.png" class="img-responsive img-thumbnail" style="width:100%" />
+        <img src="/assets/img/landsby.png" target="_blank" class="img-responsive img-thumbnail" style="width:100%" />
     </div>
     <div class="col-sm-6">
-        <p>The Landsby Hotel also offers a reduced rate for WCI participants. Rate includes full breakfast at the hotel restaurant. The hotel is close to the Solvang Inn and Cottages and is within walking distance of the training venue. You will make your own reservation directly with the Hotel/Inn. Do not do this online as you will not receive the discounted rates. Please call and let the Hotel/Inn know that you are a participant with West Coast Institute/Felicia Carroll.</p>
+        <p>Landsby Inn is recommended for those who want a more luxurious stay. Special rates may be available. Let WCI know that you are interested in lodging at the Landsby Inn.  Use “Contact” tab.</p>
         <p>You can also reserve space at any location of your choice. There are many options available within the Santa Ynez Valley. Camping is also an option.</p>
     </div>
 </div>

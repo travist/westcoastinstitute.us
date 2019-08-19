@@ -3,6 +3,6 @@ title: Lectures
 layout: book
 book: lectures
 link: lectures
-weight: 7
+weight: 8
 ---
 
