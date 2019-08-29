@@ -13,7 +13,7 @@ chapter: modalities
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0;">
-                <h3 class="panel-title header-title">Sound and Music Workshop</h3>
+                <h3 class="panel-title header-title">Sound and Music: Capturing awareness and emotional expression</h3>
             </div>
             <div class="panel-body">
                 <p><img class="img-responsive img-thumbnail" src="/assets/img/music-instruments.jpg" /></p>
@@ -22,8 +22,8 @@ chapter: modalities
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
                         <ul>
-                            <li>September 15th - 16th, 2018</li>
                             <li>September 27th - 28th, 2019</li>
+                            <li>September 11th - 12th, 2020</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Location:</strong> - Clovis, CA</li>
@@ -42,16 +42,15 @@ chapter: modalities
         </div>
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0;">
-                <h3 class="panel-title header-title">Legos with Teens Workshop</h3>
+                <h3 class="panel-title header-title">Drawings and Clay: Strengthening sense of self through projective process</h3>
             </div>
             <div class="panel-body">
-                <p><img class="img-responsive img-thumbnail" src="/assets/img/legos.jpg" /></p>
+                <p><img class="img-responsive img-thumbnail" src="/assets/img/clay.jpg" /></p>
                 <hr/>
-                <p>Working with teens is challenging to keep the process interesting and engaging and not become just another talk therapy. This workshop will provide experiential practice in working with teens with a medium they understand and enjoy—LEGOS. In the act of creating and playing, participants will experience Gestalt Therapy’s focus on contact and   dialogic relational processes, embodied and lived in the moment.  Attendees will learn how LEGOS, when used as an expressive modality, can bring deeper meaning and experience to the therapy encounter with younger and older teens.</p>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
                         <ul>
-                            <li>January 18th - 19th, 2019</li>
+                            <li>October 9th - 10th, 2020</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Location:</strong> - Santa Barbara, California</li>
@@ -72,7 +71,7 @@ chapter: modalities
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0">
-                <h3 class="panel-title header-title">Sand Tray Workshop</h3>
+                <h3 class="panel-title header-title">Sand Tray: Strengthening sense of self through projective process</h3>
             </div>
             <div class="panel-body">
                 <p><img class="img-responsive img-thumbnail" src="/assets/img/sandtray.jpg" /></p>
@@ -81,8 +80,7 @@ chapter: modalities
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
                         <ul>
-                            <li>October 19th - 20th, 2018</li>
-                            <li>April 5th - 6th, 2019</li>
+                            <li>May 15th - 16th, 2020</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Location:</strong> - Santa Barbara, CA</li>
@@ -90,6 +88,35 @@ chapter: modalities
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
                         <li><a href="/faculty">Stephanie Pawlowicz, LMFT, RPT</a></li>
+                      </ul>
+                    </li>
+                    <li class="list-group-item"><strong>CEUs:</strong> 10 contact hours</li>
+                </ul>
+            </div>
+            <div class="panel-footer">
+                <a href="/register" class="btn btn-danger btn-block">Register Now</a>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel panel-heading" style="margin-bottom: 0">
+                <h3 class="panel-title header-title">Movement, Art, and Creative Experiment: Awakening the senses</h3>
+            </div>
+            <div class="panel-body">
+                <p><img class="img-responsive img-thumbnail" src="/assets/img/introductory1.jpg" /></p>
+                <hr/>
+                <p>"All our knowledge has its foundation in our senses" - Leonardo Da Vinci.</p>
+                <p>Through movement, art, and creative experiment, we will connect and make contact with ourselves and our environment in a safe space. We will explore and stimulate creativity for our own well being, and to expand our capabilities as healers. No movement or art experience is required.</p>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Dates:</strong>
+                        <ul>
+                            <li>August 15th - 16th, 2020</li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item"><strong>Location:</strong> - Los Angeles, CA</li>
+                    <li class="list-group-item"><strong>Fees: - $250 ($50 due with registration to hold place)</strong></li>
+                    <li class="list-group-item"><strong>Presenter:</strong>
+                      <ul>
+                        <li><a href="/faculty">Denise Richman, LMFT, LPCC, Movement Specialist</a></li>
                       </ul>
                     </li>
                     <li class="list-group-item"><strong>CEUs:</strong> 10 contact hours</li>

@@ -85,13 +85,13 @@ weight: 10
             <div class="checkbox">
               <label>
                 <input id="supervision-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="supervision-register-value">75</span></strong>
+                Registration Fee - <strong>$<span id="supervision-register-value">100</span></strong>
               </label>
             </div>
             <div class="checkbox">
               <label>
                 <input id="supervision" type="checkbox" value="">
-                Training Fee - <strong>$<span id="supervision-value">225</span></strong>
+                Training Fee - <strong>$<span id="supervision-value">400</span></strong>
               </label>
             </div>
           </div>
@@ -112,24 +112,7 @@ weight: 10
               </label>
             </div>
           </div>
-        </div> 
-        <div class="panel panel-default">
-          <div class="panel-heading">Introductory Workshop</div>
-          <div class="panel-body">
-            <div class="checkbox">
-              <label>
-                <input id="intro-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="intro-register-value">50</span></strong>
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input id="intro" type="checkbox" value="">
-                Training Fee - <strong>$<span id="intro-value">150</span></strong>
-              </label>
-            </div>
-          </div>
-        </div>  
+        </div>
         <div class="panel panel-default">
           <div class="panel-heading">Introductory Workshop</div>
           <div class="panel-body">

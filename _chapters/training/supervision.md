@@ -6,7 +6,7 @@ chapter: supervision
 ---
 <div class="panel panel-default">
     <div class="panel panel-heading">
-        <h3 class="panel-title header-title">Date: October 18th - 19th, 2019</h3>
+        <h3 class="panel-title header-title">Date: September 4th - 5th, 2020</h3>
     </div>
     <div class="panel-body" style="padding-top: 0;">
         <h3 style="margin-top: 0">The Supervisory Relationship as Collaborative Mentoring</h3>
@@ -23,7 +23,7 @@ chapter: supervision
         </div>
         <ul class="list-group">
             <li class="list-group-item"><strong>Location:</strong> - Solvang, CA</li>
-            <li class="list-group-item"><strong>Fees: - $300</strong></li>
+            <li class="list-group-item"><strong>Fees: - $500</strong></li>
             <li class="list-group-item"><strong>Presenter:</strong>
               <ul>
                 <li>Rachel McSpadden Tarver, LMFT and RPT-S</li>

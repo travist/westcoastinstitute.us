@@ -6,10 +6,10 @@ chapter: summer
 ---
 <div class="row">
     <div class="col col-sm-6">
-        <p><img src="/assets/img/2018.jpeg" class="img-responsive img-thumbnail" />
-        <strong>2018 Summer Intensive</strong></p>
-        <p><img src="/assets/img/2017SummerIntensive.jpg" class="img-responsive img-thumbnail" />
-        <strong>2017 Summer Intensive</strong></p>
+        <p><img src="/assets/img/2019SI1.jpg" class="img-responsive img-thumbnail" />
+        <strong>2019 Summer Intensive</strong></p>
+        <p><img src="/assets/img/2019SI2.jpg" class="img-responsive img-thumbnail" />
+        <strong>2019 Summer Intensive</strong></p>
         <blockquote>
           <p>I appreciated having this office setting rather than an impersonal conference room.</p>
         </blockquote>
@@ -23,7 +23,7 @@ chapter: summer
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">July 27th - August 4th, 2019</h3>
+                <h3 class="panel-title header-title">July 25th - August 2nd, 2020</h3>
             </div>
             <div class="panel-body">
                 <p>The Summer Training provides an opportunity for participants to enjoy a summer vacation combined with an intensive learning experience. Each day of the workshop will have didactic discussion, experiential practicum with feedback, and case presentations. Video of sessions with children and power point assisted slides will illustrate work with children. If possible, demonstrations with children may be used. Emphasis in this training is on learning concepts and skills that will enhance the therapeutic practice of those working with children/adolescents and not on the personal development of participants. However, participants will find the practicums and demonstrations to be personally and professionally rewarding. The focus of the Basic Training Programs is the integration of theoretical understanding, skill development using various play modalities, and clinical practice.</p>

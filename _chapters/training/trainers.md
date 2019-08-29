@@ -1,22 +1,56 @@
 ---
-title: 2nd International Trainers Symposium
+title: 3rd International Trainers Symposium 2021
 book: training
 weight: 80
 chapter: trainers
 ---
 <div class="row">
     <div class="col col-sm-6">
-        <p><img src="/assets/img/trainers1.jpg" class="img-responsive img-thumbnail" /></p>
         <p><img src="/assets/img/trainers2.jpg" class="img-responsive img-thumbnail" /></p>
         <p>Participants from the 1st Symposium were from the USA, Mexico, Singapore, South Korea, and Uruguay.</p>
+        <p><img src="/assets/img/trainers4.jpg" class="img-responsive img-thumbnail" /></p>
+        <div class="panel panel-default">
+            <div class="panel panel-heading" style="margin-bottom: 0;">
+                <h3 class="panel-title header-title">2019 2nd Trainers Symposium</h3>
+            </div>
+            <div class="panel-body">
+                <p><img src="/assets/img/groupsymposium.jpg" class="img-responsive img-thumbnail" /></p>
+                <p>
+                    <strong>2019 Countries Represented</strong>
+                    <ul>
+                        <li>Hong Kong</li>
+                        <li>Brazil</li>
+                        <li>Slovenia</li>
+                        <li>Singapore</li>
+                        <li>South Korea</li>
+                        <li>Mexico</li>
+                        <li>Uruguay</li>
+                        <li>Canada</li>
+                        <li>United States  </li>
+                    </ul>
+                </p>
+                <p>The 2019 Symposium was an international event and the focus was on updating our theory and training materials.   Gordon Wheeler, Ph. D. noted author and trainer who has contributed to Gestalt theory in child development and child clinical practice was the 2019 guest presenter.  In appreciation he received the first WCI Honorary Award as a Certified Gestalt Therapist with Children and Adolescents.   Violet Oaklander was contacted through SKYPE and each attendee spoke directly with her about how she had influenced their clinical work.    Another highlight was hearing from our colleague Anum Malik in Karachi, Pakistan about her training program with child therapists in Pakistan via SKYPE with Felicia Carroll.  The Symposium group enjoyed food, wine, countryside, and entertainment from the Santa Ynez Valley.</p>
+                <p>
+                    <div class="row">
+                        <div class="col col-sm-7">
+                            <img src="/assets/img/symposium1.jpg" class="img-responsive img-thumbnail" />
+                            <img src="/assets/img/symposium2.jpg" class="img-responsive img-thumbnail" />
+                        </div>
+                        <div class="col col-sm-5">
+                            <img src="/assets/img/symposium3.jpg" class="img-responsive img-thumbnail" />
+                        </div>
+                    </div>
+                </p>
+            </div>
+        </div>
     </div>
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0;">
-                <h3 class="panel-title header-title">May 31st - June 2nd, 2019</h3>
+                <h3 class="panel-title header-title">2021</h3>
             </div>
             <div class="panel-body">
-                <h3 style="margin-top: 0;">Guest Keynote: Gordon Wheeler, Ph.D.</h3>
+                <p>The mission of the West Coast Institute is to provide to qualified professionals training and support in Gestalt Therapy with Children and Adolescents. The Certification Process offers those who want to develop a specialization in Gestalt Therapy with Children and Adolescents the structure and guidance in studying theory and applying the perspectives of Gestalt Therapy to work with their younger clients and their families WCI also provides in-depth training and inspiration to encourage those who are WCI Certified therapists and practitioners to provide competent training programs in their countries, vicinities, towns, and villages. We welcome the diversity, creativity, and aliveness this brings to all of us. A Trainers’ Symposium is held every two years. We gather together to share ideas for training programs and new play and expressive interventions. Those who attend build an international network of dynamic and committed colleagues.</p>
                 <p>This symposium is offered to those who have attended the Intensive trainings or a full International program, and want support to become trainers in their own community/country. Preference will be given to those who are working towards certification through WCI. Participants will develop the following.</p>
                 <p>
                     <ul>
@@ -26,17 +60,14 @@ chapter: trainers
                     </ul>
                 </p>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>Location:</strong> - Santa Barbara, CA</li>
+                    <li class="list-group-item"><strong>Location:</strong> - TBA</li>
                     <li class="list-group-item"><strong>Fees:</strong> - $1200</li>
                     <li class="list-group-item"><strong>Hosted By:</strong> Felicia Carroll, MEd. MA, LMFT, and RPT-S</li>
                     <li class="list-group-item"><strong>CEU's:</strong> 18 contact hours (may not be accepted by APT towards RPT credentials)</li>
                 </ul>
             </div>
-            <div class="panel-footer">
-                <a href="/register" class="btn btn-danger btn-block">Register Now</a>
-            </div>
+            <div class="panel-footer"></div>
         </div>
-        <p><img src="/assets/img/trainers4.jpg" class="img-responsive img-thumbnail" /></p>
     </div>
 </div>
 <div class="row separator"></div>
@@ -81,7 +112,14 @@ chapter: trainers
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>CANCELLATIONS & REFUNDS</strong></h4>
-        <p>Notification of cancellation of registration and request for refund must be submitted to West Coast Institute prior to February 1, 2018 and July 1, 2018 respectively for Intensive Trainings.  Notification for other programs must be received in writing one week prior to the training beginning. Registration fees are nonrefundable, but can be applied to another WCI training.</p>
+        <p>The registration fee is non-refundable but can be applied to another WCI program. Cancellation notices must be received in advance of the program starting date.  For the all trainings, cancellations must be made within two weeks of the training.  Notification must be in writing to WCI. With this notice other paid fees can be refunded or applied to a future program. If for any reason, WCI cancels a program all fees will be refunded. WCI is not responsible for any travel or lodging expenses due to cancellations.</p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col col-sm-8 col-sm-offset-2">
+        <h4><strong>Conflict of Interest</strong></h4>
+        <p>The programs of the West Coast Institute have no conflict of interest with any parties nor receive any commercial support.</p>
       </div>
     </div>
     <hr>
