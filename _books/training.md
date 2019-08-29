@@ -23,7 +23,7 @@ weight: 5
   </div>
   <div class="row">
     <div class="col col-sm-10 col-sm-offset-1">
-        <div class="well">Click on one of the following links for information about our 2019 Training opportunities.</div>
+        <div class="well">Click on one of the following links for information about our 2020 Training opportunities.</div>
     </div>
   </div>
   <div class="row">
@@ -63,7 +63,7 @@ weight: 5
   <div class="row">
     <div class="col col-sm-8 col-sm-offset-2">
         <li class="list-group-item">
-            <a href="#trainers" class="btn btn-block btn-primary">2nd International Trainers Symposium</a>
+            <a href="#trainers" class="btn btn-block btn-primary">International Trainers Symposium</a>
         </li>
     </div>
   </div>

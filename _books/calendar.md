@@ -24,12 +24,12 @@ weight: 12
         <td>60</td>
     </tr>
     <tr>
-        <td>March 5-8</td>
+        <td>March 4-7</td>
         <td>
             <strong>Advanced Workshop</strong>: Gestalt Perspective on Child/Adolescent Development
             <p>Faculty: Felicia Carroll, LMFT and RPT-S</p>
         </td>
-        <td>18</td>
+        <td>24</td>
     </tr>
     <tr>
         <td>March 21</td>
@@ -69,7 +69,7 @@ weight: 12
             <strong>Movement, Art and Creative Experiment</strong>: Awakening the Senses
             <p>Faculty: Denise Richman, LMFT, LPCC</p>
         </td>
-        <td>60</td>
+        <td>10</td>
     </tr>
     <tr>
         <td>September 4-5</td>
