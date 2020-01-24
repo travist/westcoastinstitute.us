@@ -6,7 +6,7 @@ weight: 0
 <div class="row section-hero" style="margin-bottom: 0; padding-bottom: 0">
     <div class="col col-sm-7 col-sm-offset-1" style="padding-bottom: 30px;">
         <h2 class="header-title">Develop a specialization in child and adolescent psychotherapy</h2>
-        <p>We offer unique <strong>accredited <a href="/training">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. Emphasis in WCI workshops and trainings is the Gestalt Therapy perspective and approach developed by Violet Oaklander, Ph.D.    Current neuroscience, neurobiology, and understandings regarding child and adolescent development provide an in-depth contemporary view in all programs.</p>
+        <p>We offer unique <strong>accredited <a href="/training">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. Emphasis in WCI workshops and trainings is the Gestalt Play Therapy perspective and approach developed by Violet Oaklander, Ph.D. Current neuroscience, neurobiology, and understandings regarding child and adolescent development provide an in-depth contemporary view in all programs.</p>
         <ul style="margin-bottom: 30px;">
             <li><a href="/ceus">Earn CEU</a> credits: APA, CAMFT, APT</li>
             <li>Small group interactive learning experiences.</li>
@@ -19,7 +19,7 @@ weight: 0
             <img src="/assets/img/trainers2.jpg" class="img-responsive img-thumbnail" style="width: 49%" />
         </p>
         <h4 class="color-primary" style="margin-top: 30px;"><strong>The Oaklander Approach:</strong> A Unifying Therapeutic Approach</h4>
-        <p style="font-size: 1.2em;">The West Coast Institute for Gestalt Therapy with Children LLC was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
+        <p style="font-size: 1.2em;">The West Coast Institute for Gestalt Therapy with Children LLC was founded to further the therapeutic approach with children and adolescents as initially developed by Violet Oaklander, Ph.D. The work of many other leading therapists and research in child development is integrated into the teachings at WCI that encompass the depth and breadth of Gestalt Play Therapy. Small group learning experiences are combined with time for recreation and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p>
         <p style="font-size: 1.2em;">The programs of the West Coast Institute are designed to support the use of creative and playful therapeutic interventions that foster the rightful path toward integration of each client regardless of age. Although the focus is on individual psychotherapy of children and adolescents, programs provide learning experiences which develop appropriate parenting, family life of all compositions, and school and community advocacy for healthful growth and development of all its members. All teaching adheres to legal, ethical and professional standards.</p>
     </div>
     <div class="col col-sm-3" style="margin-top: 60px;">

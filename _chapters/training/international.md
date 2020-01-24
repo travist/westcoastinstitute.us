@@ -15,7 +15,7 @@ chapter: international
     </div>
     <div class="col col-sm-6">
         <p>The trainings of WCI are available internationally upon request of a local organizer. This is an exciting and educational exchange for everyone. The goal is to provide adequate training so that qualified persons at each location can eventually take on the training for professionals for their locales.</p>
-        <p>Felicia Carroll travels internationally providing workshops/trainings to groups of therapists interested in learning more about Gestalt Therapy with Children and Adolescents as developed by Violet Oaklander, Ph.D and other leading child clinicians. Many of these training programs evolve into training programs either through Gestalt Institutes around the world or more independent clinical programs.</p>
+        <p>Felicia Carroll travels internationally providing workshops/trainings to groups of therapists interested in learning more about Gestalt Play Therapy with Children and Adolescents as developed by Violet Oaklander, Ph.D and other leading child clinicians. Many of these training programs evolve into training programs either through Gestalt Institutes around the world or more independent clinical programs.</p>
         <p>Trainings include.
         <ul>
             <li>Basic Training: The Oaklander Model (4 days)</li>
@@ -30,8 +30,8 @@ chapter: international
         <ul>
             <li>Caxias do Sul, Brasil - Basic and Advanced, November 3rd - 10th, 2019<br/><img src="/assets/img/Brasil.jpg" class="img-responsive img-thumbnail" /></li>           
         </ul>
-        <p>Many more dates are being planned for 2019.</p>
-        <p><a href="/contact">Contact Felicia</a> for more details.</p>
+        <p>Many more dates are being planned for 2020.</p>
+        <p>Please <a href="/contact">contact Felicia</a> for more details.</p>
     </div>
 </div>
 <div class="docs-section">

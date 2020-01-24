@@ -50,11 +50,11 @@ chapter: trainers
                 <h3 class="panel-title header-title">2021</h3>
             </div>
             <div class="panel-body">
-                <p>The mission of the West Coast Institute is to provide to qualified professionals training and support in Gestalt Therapy with Children and Adolescents. The Certification Process offers those who want to develop a specialization in Gestalt Therapy with Children and Adolescents the structure and guidance in studying theory and applying the perspectives of Gestalt Therapy to work with their younger clients and their families WCI also provides in-depth training and inspiration to encourage those who are WCI Certified therapists and practitioners to provide competent training programs in their countries, vicinities, towns, and villages. We welcome the diversity, creativity, and aliveness this brings to all of us. A Trainers’ Symposium is held every two years. We gather together to share ideas for training programs and new play and expressive interventions. Those who attend build an international network of dynamic and committed colleagues.</p>
+                <p>The mission of the West Coast Institute is to provide to qualified professionals training and support in Gestalt Play Therapy with Children and Adolescents. The Certification Process offers those who want to develop a specialization in Gestalt Play Therapy with Children and Adolescents the structure and guidance in studying theory and applying the perspectives of Gestalt Play Therapy to work with their younger clients and their families WCI also provides in-depth training and inspiration to encourage those who are WCI Certified therapists and practitioners to provide competent training programs in their countries, vicinities, towns, and villages. We welcome the diversity, creativity, and aliveness this brings to all of us. A Trainers’ Symposium is held every two years. We gather together to share ideas for training programs and new play and expressive interventions. Those who attend build an international network of dynamic and committed colleagues.</p>
                 <p>This symposium is offered to those who have attended the Intensive trainings or a full International program, and want support to become trainers in their own community/country. Preference will be given to those who are working towards certification through WCI. Participants will develop the following.</p>
                 <p>
                     <ul>
-                        <li>Build international community with other Trainers and potential Trainers of Gestalt Therapy with Children and Adolescents.</li>
+                        <li>Build international community with other Trainers and potential Trainers of Gestalt Play Therapy with Children and Adolescents.</li>
                         <li>Share theoretical developments, research, therapeutic activities and modalities</li>
                         <li>Support program development</li>
                     </ul>
@@ -84,7 +84,7 @@ chapter: trainers
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>WHO SHOULD ATTEND</strong></h4>
-        <p>Marriage and Family Therapists, Social Workers,  Play Therapists, School Counselors, Psychologists, Students and Interns.  Also, any professional wanting to know more about Gestalt Therapy with Children and Adolescents. Training hours apply for licensure through BBS and registration as a Registered Play Therapist through APT.</p>
+        <p>Marriage and Family Therapists, Social Workers,  Play Therapists, School Counselors, Psychologists, Students and Interns.  Also, any professional wanting to know more about Gestalt Play Therapy with Children and Adolescents. Training hours apply for licensure through BBS and registration as a Registered Play Therapist through APT.</p>
       </div>
     </div>
     <hr>

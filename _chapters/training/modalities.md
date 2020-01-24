@@ -17,7 +17,7 @@ chapter: modalities
             </div>
             <div class="panel-body">
                 <p><img class="img-responsive img-thumbnail" src="/assets/img/music-instruments.jpg" /></p>
-                <p>Music is a universal form of communication, self-expression, and joining with others.  This workshop focuses on the use of simple musical instruments as a therapeutic tool for emotional expression, contact with self/other, and attuned communication.   Based in the principles of Gestalt Therapy, attendees will learn how sound and music can bring deeper meaning and experience to the therapeutic encounters with children and adolescents.   Learn something new while strengthening your skills in using music and musical instruments.</p>
+                <p>Music is a universal form of communication, self-expression, and joining with others.  This workshop focuses on the use of simple musical instruments as a therapeutic tool for emotional expression, contact with self/other, and attuned communication.   Based in the principles of Gestalt Play Therapy, attendees will learn how sound and music can bring deeper meaning and experience to the therapeutic encounters with children and adolescents.   Learn something new while strengthening your skills in using music and musical instruments.</p>
                 <hr/>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
@@ -76,7 +76,7 @@ chapter: modalities
             </div>
             <div class="panel-body">
                 <p><img class="img-responsive img-thumbnail" src="/assets/img/sandtray.jpg" /></p>
-                <p>Sand Tray is an indispensable resource in the therapeutic journey with children and adolescents.    This workshop focuses on using the non-analytical, phenomenological approach of Gestalt Therapy which deepens the child's awareness and strengthens the child's sense of self, essential elements in the integrative process.   This workshop is designed for both those new to sand tray as well as experienced therapists.</p>
+                <p>Sand Tray is an indispensable resource in the therapeutic journey with children and adolescents. This workshop focuses on using the non-analytical, phenomenological approach of Gestalt Play Therapy which deepens the child's awareness and strengthens the child's sense of self, essential elements in the integrative process. This workshop is designed for both those new to sand tray as well as experienced therapists.</p>
                 <hr/>
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
