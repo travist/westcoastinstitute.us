@@ -5,6 +5,9 @@ weight: 0
 ---
 <div class="row section-hero" style="margin-bottom: 0; padding-bottom: 0">
     <div class="col col-sm-7 col-sm-offset-1" style="padding-bottom: 30px;">
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/I2JxMA_sXig" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
         <h2 class="header-title">Develop a specialization in child and adolescent psychotherapy</h2>
         <p>We offer unique <strong>accredited <a href="/training">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. Emphasis in WCI workshops and trainings is the Gestalt Play Therapy perspective and approach developed by Violet Oaklander, Ph.D. Current neuroscience, neurobiology, and understandings regarding child and adolescent development provide an in-depth contemporary view in all programs.</p>
         <ul style="margin-bottom: 30px;">
