@@ -6,7 +6,7 @@ chapter: supervision
 ---
 <div class="panel panel-default">
     <div class="panel panel-heading">
-        <h3 class="panel-title header-title">Date: September 4th - 5th, 2020</h3>
+        <h3 class="panel-title header-title">Date: Rescheduled for 2021</h3>
     </div>
     <div class="panel-body" style="padding-top: 0;">
         <h3 style="margin-top: 0">The Supervisory Relationship as Collaborative Mentoring</h3>

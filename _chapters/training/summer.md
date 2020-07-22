@@ -23,18 +23,19 @@ chapter: summer
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading">
-                <h3 class="panel-title header-title">July 25th - August 2nd, 2020</h3>
+                <h3 class="panel-title header-title">Weekend Series begins</h3>
+                <h3 class="panel-title header-title">September 5th and 6th, 2020</h3>
+                <h3 class="panel-title"><a class="btn btn-default btn-block" href="/calendar">Go to Calendar for all dates <i class="fa fa-arrow-right"></i></a></h3>
             </div>
             <div class="panel-body">
                 <p>These Intensive programs are designed to build theoretical understanding and clinical skills in working with children/adolescents from the perspective of contemporary Gestalt Play Therapy. The programs of WCI incorporate the principles and practices of playful and creative therapeutic interventions that foster the growth of each client regardless of age. Recent research in neuroscience, attachment theory and relational psychotherapy are presented as confirmation and extension of the Gestalt play therapy approach. Each day includes didactic discussion and experiential practicum sessions which aim at integrating theory with practice while increasing competence in using modalities of expressive play therapy. The focus of this program is the application of Gestalt Play Therapy principles represented in the work of Violet Oaklander, PhD., author of Windows to our Children: A Gestalt Approach to Child and Adolescent Psychotherapy and Hidden Treasure: A Map to The Child’s Inner Self. An emphasis in this training will be on the dynamics of the therapeutic relationship as the heart of treatment and the processes of integration.</p>
                 <p>This program is limited to 12 participants which allows for interactive, experiential learning.</p>
                 <p>Participants are asked to read Dr. Oaklander’s books, Windows to Our Children and Hidden Treasure available through <a href="http://vsof.org">http://vsof.org</a>. Other readings will be made available to those attending the training(s).</p>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>Location:</strong> - Solvang, CA</li>
-                    <li class="list-group-item"><strong>Fees: - $2400</strong>
+                    <li class="list-group-item"><strong>Location:</strong> - Online</li>
+                    <li class="list-group-item"><strong>Fees: - $1800</strong>
                         <ul>
-                            <li>Information regarding financial assistance, schedule of trainings, lodging, and transportation to and from airports will be provided to all registrants with confirmation of registration.</li>
-                            <li>A deposit of $300 is necessary to reserve your space. After a deposit has been made, the remaining amount is due on or before the beginning of the training. Please note that the program is limited to 10 people.</li>
+                            <li>A deposit of $300 is necessary to reserve your space. After a deposit has been made, the remaining amount is due on or before the beginning of the training. Please note that the program is limited to 9 people.</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Presenter:</strong>
@@ -42,7 +43,7 @@ chapter: summer
                         <li>Felicia Carroll, MEd. MA, LMFT, and RPT-S and Core Faculty</li>
                       </ul>
                     </li>
-                    <li class="list-group-item"><strong>CEUs:</strong> 60 contact hours</li>
+                    <li class="list-group-item"><strong>CEUs:</strong> 60 contact hours. 2021 weekends may be non-contact hours</li>
                 </ul>
             </div>
             <div class="panel-footer">

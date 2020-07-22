@@ -12,24 +12,7 @@ weight: 10
             <div class="panel-heading">Please select which programs you will be paying for today.</div>
         </div>
         <div class="panel panel-default">
-          <div class="panel-heading">Winter Intensive Training</div>
-          <div class="panel-body">
-            <div class="checkbox">
-              <label>
-                <input id="winter-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="winter-register-value">300</span></strong>
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input id="winter" type="checkbox" value="">
-                Training Fee - <strong>$<span id="winter-value">2100</span></strong>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">Summer Intensive Training</div>
+          <div class="panel-heading">Summer Intensive Training Series</div>
           <div class="panel-body">
             <div class="checkbox">
               <label>
@@ -40,75 +23,75 @@ weight: 10
             <div class="checkbox">
               <label>
                 <input id="summer" type="checkbox" value="">
-                Training Fee - <strong>$<span id="summer-value">2100</span></strong>
+                Training Fee - <strong>$<span id="summer-value">1500</span></strong>
               </label>
             </div>
           </div>
         </div>
         <div class="panel panel-default">
-          <div class="panel-heading">Advanced Trainings</div>
+          <div class="panel-heading">Advanced Training: The adoption experience in Gestalt Play Therapy</div>
           <div class="panel-body">
             <div class="checkbox">
               <label>
-                <input id="advanced-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="advanced-register-value">125</span></strong>
+                <input id="advanced1-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="advanced1-register-value">50</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="advanced1" type="checkbox" value="">
+                Training Fee - <strong>$<span id="advanced1-value">100</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Advanced Training: Shame and Guilt</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="advanced2-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="advanced2-register-value">50</span></strong>
               </label>
             </div>
             <div class="checkbox">
               <label>
                 <input id="advanced2" type="checkbox" value="">
-                Training Fee - <strong>$<span id="advanced2-value">875</span></strong>
+                Training Fee - <strong>$<span id="advanced2-value">250</span></strong>
               </label>
             </div>
           </div>
         </div>
         <div class="panel panel-default">
-          <div class="panel-heading">Modalities Workshops</div>
+          <div class="panel-heading">Modalities Workshop: Drawings and Clay</div>
           <div class="panel-body">
             <div class="checkbox">
               <label>
-                <input id="modalities-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="modalities-register-value">75</span></strong>
+                <input id="modalities1-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="modalities1-register-value">50</span></strong>
               </label>
             </div>
             <div class="checkbox">
               <label>
-                <input id="modalities" type="checkbox" value="">
-                Training Fee - <strong>$<span id="modalities-value">225</span></strong>
+                <input id="modalities1" type="checkbox" value="">
+                Training Fee - <strong>$<span id="modalities1-value">200</span></strong>
               </label>
             </div>
           </div>
         </div>
         <div class="panel panel-default">
-          <div class="panel-heading">Supervision Training</div>
+          <div class="panel-heading">Modalities Workshop: Movement and Art</div>
           <div class="panel-body">
             <div class="checkbox">
               <label>
-                <input id="supervision-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="supervision-register-value">100</span></strong>
+                <input id="modalities2-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="modalities2-register-value">25</span></strong>
               </label>
             </div>
             <div class="checkbox">
               <label>
-                <input id="supervision" type="checkbox" value="">
-                Training Fee - <strong>$<span id="supervision-value">400</span></strong>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">Trainers Symposium</div>
-          <div class="panel-body">
-            <div class="checkbox">
-              <label>
-                <input id="trainers-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="trainers-register-value">200</span></strong>
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input id="trainers" type="checkbox" value="">
-                Training Fee - <strong>$<span id="trainers-value">1000</span></strong>
+                <input id="modalities2" type="checkbox" value="">
+                Training Fee - <strong>$<span id="modalities2-value">75</span></strong>
               </label>
             </div>
           </div>
@@ -125,7 +108,7 @@ weight: 10
             <div class="checkbox">
               <label>
                 <input id="intro" type="checkbox" value="">
-                Training Fee - <strong>$<span id="intro-value">150</span></strong>
+                Training Fee - <strong>$<span id="intro-value">100</span></strong>
               </label>
             </div>
           </div>

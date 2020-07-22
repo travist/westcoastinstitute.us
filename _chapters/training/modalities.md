@@ -22,8 +22,7 @@ chapter: modalities
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
                         <ul>
-                            <li>September 27th - 28th, 2019</li>
-                            <li>September 11th - 12th, 2020</li>
+                            <li>Rescheduled for 2021</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Location:</strong> - Clovis, CA</li>
@@ -54,41 +53,11 @@ chapter: modalities
                             <li>October 9th - 10th, 2020</li>
                         </ul>
                     </li>
-                    <li class="list-group-item"><strong>Location:</strong> - Santa Barbara, California</li>
-                    <li class="list-group-item"><strong>Fees: - $180 ($50 due with registration to hold place)</strong></li>
-                    <li class="list-group-item"><strong>Presenter:</strong>
-                      <ul>
-                        <li><a href="/faculty">Stephanie Pawlowicz, LMFT and RPT</a></li>
-                      </ul>
-                    </li>
-                    <li class="list-group-item"><strong>CEUs:</strong> 6 contact hours</li>
-                </ul>
-            </div>
-            <div class="panel-footer">
-                <a href="/register" class="btn btn-danger btn-block">Register Now</a>
-            </div>
-        </div>
-    </div>
-    <div class="col col-sm-6">
-        <div class="panel panel-default">
-            <div class="panel panel-heading" style="margin-bottom: 0">
-                <h3 class="panel-title header-title">Sand Tray: Strengthening sense of self through projective process</h3>
-            </div>
-            <div class="panel-body">
-                <p><img class="img-responsive img-thumbnail" src="/assets/img/sandtray.jpg" /></p>
-                <p>Sand Tray is an indispensable resource in the therapeutic journey with children and adolescents. This workshop focuses on using the non-analytical, phenomenological approach of Gestalt Play Therapy which deepens the child's awareness and strengthens the child's sense of self, essential elements in the integrative process. This workshop is designed for both those new to sand tray as well as experienced therapists.</p>
-                <hr/>
-                <ul class="list-group">
-                    <li class="list-group-item"><strong>Dates:</strong>
-                        <ul>
-                            <li>May 15th - 16th, 2020</li>
-                        </ul>
-                    </li>
-                    <li class="list-group-item"><strong>Location:</strong> - Santa Barbara, CA</li>
+                    <li class="list-group-item"><strong>Location:</strong> - Online</li>
                     <li class="list-group-item"><strong>Fees: - $250 ($50 due with registration to hold place)</strong></li>
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
-                        <li><a href="/faculty">Stephanie Pawlowicz, LMFT, RPT</a></li>
+                        <li><a href="/faculty">Stephanie Pawlowicz, LMFT and RPT</a></li>
                       </ul>
                     </li>
                     <li class="list-group-item"><strong>CEUs:</strong> 10 contact hours</li>
@@ -98,6 +67,8 @@ chapter: modalities
                 <a href="/register" class="btn btn-danger btn-block">Register Now</a>
             </div>
         </div>
+    </div>
+    <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0">
                 <h3 class="panel-title header-title">Movement, Art, and Creative Experiment: Awakening the senses</h3>
@@ -110,17 +81,17 @@ chapter: modalities
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
                         <ul>
-                            <li>August 15th - 16th, 2020</li>
+                            <li>August 15th, 2020</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Location:</strong> - Los Angeles, CA</li>
-                    <li class="list-group-item"><strong>Fees: - $250 ($50 due with registration to hold place)</strong></li>
+                    <li class="list-group-item"><strong>Fees: - $100 ($50 due with registration to hold place)</strong></li>
                     <li class="list-group-item"><strong>Presenter:</strong>
                       <ul>
                         <li><a href="/faculty">Denise Richman, LMFT, LPCC, Movement Specialist</a></li>
                       </ul>
                     </li>
-                    <li class="list-group-item"><strong>CEUs:</strong> 10 contact hours</li>
+                    <li class="list-group-item"><strong>CEUs:</strong> 4 contact hours</li>
                 </ul>
             </div>
             <div class="panel-footer">

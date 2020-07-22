@@ -8,6 +8,8 @@ weight: 0
         <div class="embed-responsive embed-responsive-16by9">
             <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/I2JxMA_sXig" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
+        <h2 class="header-title">2020 Trainings and Workshops Live Online</h2>
+        <p>In support of the ongoing interest and professional development in Gestalt Play Therapy with Children and Adolescents, WCI has adapted its 2020 programs for live, interactive, online formats. These programs will be the same high quality programs that professionals around the globe seek out wanting to develop their theoretical understanding and clinical skills of Gestalt Play Therapy.  In particular note the reformatting of the 2020 Summer Intensive to be a six session week-end series beginning in September 5, 2020. Please note the changes below and register now since all programs are limited to 9 participants.</p>
         <h2 class="header-title">Develop a specialization in child and adolescent psychotherapy</h2>
         <p>We offer unique <strong>accredited <a href="/training">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. Emphasis in WCI workshops and trainings is the Gestalt Play Therapy perspective and approach developed by Violet Oaklander, Ph.D. Current neuroscience, neurobiology, and understandings regarding child and adolescent development provide an in-depth contemporary view in all programs.</p>
         <ul style="margin-bottom: 30px;">
@@ -26,6 +28,17 @@ weight: 0
         <p style="font-size: 1.2em;">The programs of the West Coast Institute are designed to support the use of creative and playful therapeutic interventions that foster the rightful path toward integration of each client regardless of age. Although the focus is on individual psychotherapy of children and adolescents, programs provide learning experiences which develop appropriate parenting, family life of all compositions, and school and community advocacy for healthful growth and development of all its members. All teaching adheres to legal, ethical and professional standards.</p>
     </div>
     <div class="col col-sm-3" style="margin-top: 60px;">
+        <h4>What others have said about WCI Online Workshops</h4>
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
+            <p><strong>Everything was above and beyond my expectations, especially considering it was through Zoom.</strong></p>
+        </blockquote>
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
+            <p><strong>Zoom format worked surprisingly well for this experiential workshop!</strong></p>
+        </blockquote>
+        <blockquote style="float:right; padding-left: 30px;width:100%;">
+            <p><strong>I wish I had come across this approach and the application to play therapy much sooner!</strong></p>
+        </blockquote>
+        <h4>What others have said about WCI workshops</h4>
         <blockquote style="float:right; padding-left: 30px;width:100%;">
             <p><strong>This was the best training program I have ever attended!</strong></p>
             <footer><cite>Summer Participant</cite></footer>

@@ -5,119 +5,68 @@ book: calendar
 link: calendar
 weight: 12
 ---
-<h2 class="header-title text-center">WCI 2020 Calendar <a href="/register" class="btn btn-danger">Register Now</a></h2>
+<h2 class="header-title text-center">WCI 2020 Summer Intensive Series Calendar <a href="/register" class="btn btn-danger">Register Now</a></h2>
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
         <th>Date</th>
-        <th>Title/Faculty</th>
-        <th>Contact Hrs.</th>
+        <th>Day / Topic</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-        <td>February 22-March 1</td>
+        <td>September 5-6, 2020</td>
         <td>
-            <strong>Winter Intensive</strong>: Basic Training in Gestalt Play Therapy
-            <p>Faculty: Felicia Carroll, LMFT and RPT-S and WCI Faculty</p>
+            <ul>
+                <li><strong>Saturday</strong>: Introductions. Gestalt Therapy and other Play Therapy Approaches.  Theoretical Foundations and The Oaklander Approach. The Therapeutic Relationship.</li>
+                <li><strong>Sunday</strong>: Working with Expressive Projective Interventions.</li>
+            </ul>
         </td>
-        <td>60</td>
     </tr>
     <tr>
-        <td>March 4-7</td>
+        <td>October 3-4, 2020</td>
         <td>
-            <strong>Advanced Workshop</strong>: Gestalt Perspective on Child/Adolescent Development
-            <p>Faculty: Felicia Carroll, LMFT and RPT-S</p>
+            <ul>
+                <li><strong>Saturday</strong>: Contact and Contact Functions.  Contacting Process and Modifications to Contact.  A Child’s Way of Being.</li>
+                <li><strong>Sunday</strong>: Diagnosis and Treatment Planning.  Movement, Board Games, and Role Play.</li>
+            </ul>
         </td>
-        <td>24</td>
     </tr>
     <tr>
-        <td>March 21</td>
+        <td>November 7-8, 2020</td>
         <td>
-            <strong>Introductory Workshop</strong>: Gestalt Play Therapy
-            <p>Faculty: Stephanie Pawlowicz, LMFT and RPTS</p>
+            <ul>
+                <li><strong>Saturday</strong>: Self-Other Relational Perspective in Gestalt Therapy. Neuroscience and Gestalt Therapy. Building a Sense of Self and Self Support.</li>
+                <li><strong>Sunday</strong>: Defining the Self: Sand Tray</li>
+            </ul>
         </td>
-        <td>6</td>
     </tr>
     <tr>
-        <td>May 15-16</td>
+        <td>December 5-6, 2020</td>
         <td>
-            <strong>Sand Tray</strong>: Projective Process
-            <p>Faculty: Stephanie Pawlowicz, LMFT and RPT</p>
+            <ul>
+                <li><strong>Saturday</strong>: Aggressive Energy; Emotional Expression.  Significance of Anger and Expressive Emotions in Affect Regulation and Emotional Well-Being.</li>
+                <li><strong>Sunday</strong>: Working with Clay</li>
+            </ul>
         </td>
-        <td>10</td>
     </tr>
     <tr>
-        <td>June 26-28</td>
+        <td>January 8-9, 2021</td>
         <td>
-            <strong>Advanced Workshop</strong>: Neurobiology of Gestalt Play Therapy
-            <p>Faculty: Felicia Carroll, LMFT and RPT-S</p>
+            <ul>
+                <li><strong>Saturday</strong>: Relational Affects and Trauma.  Shame and Guilt.  Introjects and Self-Hatred.</li>
+                <li><strong>Sunday</strong>: Creating Metaphorical Stories Storytelling and Puppets</li>
+            </ul>
         </td>
-        <td>18</td>
     </tr>
     <tr>
-        <td>July 25-August 2</td>
+        <td>February 5-6, 2021  In-person session and closing dinner  (Let’s hope!) in Solvang, CA at West Coast Institute</td>
         <td>
-            <strong>Summer Intensive</strong>: Basic Training in Gestalt Play Therapy
-            <p>Faculty: Felicia Carroll, LMFT and RPT-S and WCI Faculty</p>
+            <ul>
+                <li><strong>Saturday</strong>: Integration and Development of Self Functions in Gestalt Therapy. Life Narratives Closing Dinner and “group oral exam”. Zingo!</li>
+                <li><strong>Sunday</strong>: Closure in Therapy. Bringing it all together.</li>
+            </ul>
         </td>
-        <td>60</td>
-    </tr> 
-    <tr>
-        <td>August 15-16</td>
-        <td>
-            <strong>Movement, Art and Creative Experiment</strong>: Awakening the Senses
-            <p>Faculty: Denise Richman, LMFT, LPCC</p>
-        </td>
-        <td>10</td>
-    </tr>
-    <tr>
-        <td>September 4-5</td>
-        <td>
-            <strong>Collaborative Supervision</strong>: Training
-            <p>Faculty: Rachel Tarver, LMFT and RPT and Felicia Carroll, LMFT and RPT-S</p>
-        </td>
-        <td>10</td>
-    </tr>
-    <tr>
-        <td>September 11-12</td>
-        <td>
-            <strong>Sound and Music</strong>: Capturing Awareness and Emotional Expression
-            <p>Faculty: Valente Orozco, LCSW and RPT-S</p>
-        </td>
-        <td>10</td>
-    </tr>  
-    <tr>
-        <td>September 15-16</td>
-        <td>
-            <strong>Advanced Workshop</strong>: Adoption Issues and Grief
-            <p>Faculty: Janet Nordine, LMFT and RPT</p>
-        </td>
-        <td>12</td>
-    </tr>
-    <tr>
-        <td>October 9-10</td>
-        <td>
-            <strong>Drawings and Clay</strong>: Projective Process
-            <p>Faculty: Stephanie Pawlowicz, LMFT and RPT</p>
-        </td>
-        <td>10</td>
-    </tr>  
-    <tr>
-        <td>October 23-25</td>
-        <td>
-            <strong>Advanced Workshop</strong>: Shame, Guilt, Introjects and Self Nurturing
-            <p>Faculty: Felicia Carroll, LMFT and RPT-S</p>
-        </td>
-        <td>18</td>
-    </tr>
-    <tr>
-        <td>November 6</td>
-        <td>
-            <strong>Introductory Workshop</strong>: Gestalt Play Therapy 
-            <p>Faculty: Valente Orozco, LCSW and RPT-S</p>
-        </td>
-        <td>6</td>
-    </tr>                          
+    </tr>                    
   </tbody>
 </table>
