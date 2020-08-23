@@ -50,7 +50,7 @@ chapter: modalities
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
                         <ul>
-                            <li>October 3rd, 2020</li>
+                            <li>October 9th - 10th, 2020</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Location:</strong> - Online</li>
@@ -81,7 +81,7 @@ chapter: modalities
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Dates:</strong>
                         <ul>
-                            <li>August 15th, 2020</li>
+                            <li>October 3rd, 2020</li>
                         </ul>
                     </li>
                     <li class="list-group-item"><strong>Location:</strong> - Los Angeles, CA</li>
