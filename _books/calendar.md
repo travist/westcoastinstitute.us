@@ -51,7 +51,7 @@ weight: 12
         </td>
     </tr>
     <tr>
-        <td>January 8-9, 2021</td>
+        <td>January 9-10, 2021</td>
         <td>
             <ul>
                 <li><strong>Saturday</strong>: Relational Affects and Trauma.  Shame and Guilt.  Introjects and Self-Hatred.</li>
@@ -60,7 +60,7 @@ weight: 12
         </td>
     </tr>
     <tr>
-        <td>February 5-6, 2021  In-person session and closing dinner  (Let’s hope!) in Solvang, CA at West Coast Institute</td>
+        <td>February 6-7, 2021  In-person session and closing dinner  (Let’s hope!) in Solvang, CA at West Coast Institute</td>
         <td>
             <ul>
                 <li><strong>Saturday</strong>: Integration and Development of Self Functions in Gestalt Therapy. Life Narratives Closing Dinner and “group oral exam”. Zingo!</li>
