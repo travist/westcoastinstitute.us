@@ -29,10 +29,10 @@ chapter: advanced
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0">
-                <h3 class="panel-title header-title">September 16th, 2020</h3>
+                <h3 class="panel-title header-title">November 13th, 2020</h3>
             </div>
             <div class="panel-body">
-                <p style="font-size: 1.2em;"><strong>The adoption experience in Gestalt Play Therapy</strong></p>
+                <p style="font-size: 1.2em;"><strong>The Adoption Experience in Gestalt Play Therapy</strong></p>
                 <hr/>
                 <img src="/assets/img/adoption.png" style="width: 20%; margin-right: 1em;" class="img-responsive img-thumbnail pull-left" />
                 <p>It is not uncommon for an adopted child’s grief to be unseen in therapy.  This workshop which is led by an a specialist in the therapy of foster families and adopted children (who herself is an adoptee) will focus on the many issues that become present in therapy, but especially how grief manifests in the behavior, emotions, and the beliefs of self.    The approach of Gestalt Play Therapy in this specialized area will be presented through research, theoretical perspective, and case presentation.</p>
