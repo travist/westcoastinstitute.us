@@ -5,7 +5,7 @@ book: calendar
 link: calendar
 weight: 12
 ---
-<h2 class="header-title text-center">WCI 2021 Summer Intensive Series Calendar <a href="/register" class="btn btn-danger">Register Now</a></h2>
+<h2 class="header-title text-center">WCI 2021 Calendar <a href="/register" class="btn btn-danger">Register Now</a></h2>
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
