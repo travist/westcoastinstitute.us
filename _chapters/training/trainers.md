@@ -47,7 +47,7 @@ chapter: trainers
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0;">
-                <h3 class="panel-title header-title">April 20th - May 2nd, 2021</h3>
+                <h3 class="panel-title header-title">April 30th - May 2nd, 2021</h3>
             </div>
             <div class="panel-body">
                 <p style="font-size: 1.2em;"><strong>Origins - Roots of Gestalt Theory, Developmental Theory, and Clinical Practice.</strong></p>
