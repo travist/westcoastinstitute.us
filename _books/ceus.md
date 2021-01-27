@@ -18,7 +18,7 @@ weight: 7
             APT
             <p><img src="/assets/img/apt.jpg" class="img-responsive" /></p>
         </th>
-        <td>The West Coast Institute for Gestalt Therapy with Children and Adolescents is approved by the Association for Play Therapy, APT Approved Provider 04-152 to offer continuing education specific to play therapy.</td>
+        <td>The West Coast Institute for Gestalt Therapy with Children and Adolescents LLC is approved by the Association for Play Therapy, APT Approved Provider 04-152 to offer continuing education specific to play therapy.</td>
       </tr>
       <tr>
         <th class="text-center">
