@@ -11,62 +11,79 @@ weight: 12
     <tr>
         <th>Date</th>
         <th>Day / Topic</th>
+        <th>Online / In-Person</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-        <td>September 5-6, 2020</td>
-        <td>
-            <ul>
-                <li><strong>Saturday</strong>: Introductions. Gestalt Therapy and other Play Therapy Approaches.  Theoretical Foundations and The Oaklander Approach. The Therapeutic Relationship.</li>
-                <li><strong>Sunday</strong>: Working with Expressive Projective Interventions.</li>
-            </ul>
-        </td>
+        <td>February 26th - 28th, 2021</td>
+        <td><strong>Advanced Training:</strong> Shame, Guilt, Negative lntrojects and Self - Nurturing</td>
+        <td>Online</td>
     </tr>
     <tr>
-        <td>October 3-4, 2020</td>
-        <td>
-            <ul>
-                <li><strong>Saturday</strong>: Contact and Contact Functions.  Contacting Process and Modifications to Contact.  A Child’s Way of Being.</li>
-                <li><strong>Sunday</strong>: Diagnosis and Treatment Planning.  Movement, Board Games, and Role Play.</li>
-            </ul>
-        </td>
+        <td>March 6th, 2021</td>
+        <td><strong>Introductory Workshop:</strong> Oaklander Approach to Gestalt Play Therapy</td>
+        <td>Online</td>
     </tr>
     <tr>
-        <td>November 7-8, 2020</td>
-        <td>
-            <ul>
-                <li><strong>Saturday</strong>: Self-Other Relational Perspective in Gestalt Therapy. Neuroscience and Gestalt Therapy. Building a Sense of Self and Self Support.</li>
-                <li><strong>Sunday</strong>: Defining the Self: Sand Tray</li>
-            </ul>
-        </td>
+        <td>April 10th - 11th, 2021</td>
+        <td><strong>Basic Intensive Series:</strong> Session #1 lntroductions</td>
+        <td>Online</td>
     </tr>
     <tr>
-        <td>December 5-6, 2020</td>
-        <td>
-            <ul>
-                <li><strong>Saturday</strong>: Aggressive Energy; Emotional Expression.  Significance of Anger and Expressive Emotions in Affect Regulation and Emotional Well-Being.</li>
-                <li><strong>Sunday</strong>: Working with Clay</li>
-            </ul>
-        </td>
+        <td>April 24th - 25th, 2021</td>
+        <td><strong>Basic Intensive Series:</strong> Session #2 Contact, Aggressive Energy</td>
+        <td>Online</td>
     </tr>
     <tr>
-        <td>January 9-10, 2021</td>
-        <td>
-            <ul>
-                <li><strong>Saturday</strong>: Relational Affects and Trauma.  Shame and Guilt.  Introjects and Self-Hatred.</li>
-                <li><strong>Sunday</strong>: Creating Metaphorical Stories Storytelling and Puppets</li>
-            </ul>
-        </td>
+        <td>April 30th - May 2nd, 2021</td>
+        <td><strong>Training the Trainers:</strong> Theoretical Applications</td>
+        <td>Online</td>
     </tr>
     <tr>
-        <td>February 6-7, 2021  In-person session and closing dinner  (Let’s hope!) in Solvang, CA at West Coast Institute</td>
-        <td>
-            <ul>
-                <li><strong>Saturday</strong>: Integration and Development of Self Functions in Gestalt Therapy. Life Narratives Closing Dinner and “group oral exam”. Zingo!</li>
-                <li><strong>Sunday</strong>: Closure in Therapy. Bringing it all together.</li>
-            </ul>
-        </td>
-    </tr>                    
+        <td>May 15th - May 16th, 2021</td>
+        <td><strong>Basic Intensive Series:</strong> Session #3 Emotional Expression</td>
+        <td>Online</td>
+    </tr>
+    <tr>
+        <td>May 29th - May 30th, 2021</td>
+        <td><strong>Basic Intensive Series:</strong> Session #4 Self-Other</td>
+        <td>Online</td>
+    </tr>
+    <tr>
+        <td>June 5th - June 6th, 2021</td>
+        <td><strong>Basic Intensive Series:</strong> Session #5 Shame, Self Nurturing</td>
+        <td>Online</td>
+    </tr>
+    <tr>
+        <td>June 26th - June 27th, 2021</td>
+        <td><strong>Basic Intensive Series:</strong> Session #6 Narrative, Closure</td>
+        <td>Online</td>
+    </tr>
+    <tr>
+        <td>July 24th - August 1st, 2021</td>
+        <td><strong>Intensive Training Program Eight-Day Program</strong></td>
+        <td>In-Person</td>
+    </tr>
+    <tr>
+        <td>August 6th, 2021</td>
+        <td><strong>Advanced Training:</strong> Adoption Issues in Gestalt Play Therapy </td>
+    <td>In-Person</td>
+    </tr>
+    <tr>
+        <td>Sept. 25th - 26th, 2021</td>
+        <td><strong>Modality Workshop:</strong> Sand Tray: Integrative Modal</td>
+        <td>In-Person</td>
+    </tr>
+    <tr>
+        <td>October 8th - 10th, 2021</td>
+        <td><strong>Advanced Training:</strong> Origins: Celebrating the Ancestors</td>
+        <td>In-Person</td>
+    </tr>
+    <tr>
+        <td>November 5th, 2021</td>
+        <td><strong>Introductory Workshop</strong></td>
+        <td>In-Person</td>
+    </tr>
   </tbody>
 </table>

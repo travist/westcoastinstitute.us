@@ -53,15 +53,6 @@ weight: 1
 </div>
 <div class="row">
     <div class="col-sm-3">
-        <img src="/assets/img/rachel.jpg" class="img-responsive img-thumbnail" />
-    </div>
-    <div class="col-sm-9">
-        <h3>Rachel McSpadden Tarver, LMFT, RPT-S</h3>
-        <p>Rachel works at Martha’s Place Children’s Center in San Luis Obispo, California providing clinical assessment and direct therapy services for children ages birth to five and their families. She also provides individual and group supervision to supervisees working with youth within the public mental health setting. Rachel is participating in the Certification Program through WCI.</p>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
         <img src="/assets/img/janet.jpg" class="img-responsive img-thumbnail" />
     </div>
     <div class="col-sm-9">

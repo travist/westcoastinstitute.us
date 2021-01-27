@@ -47,9 +47,11 @@ chapter: trainers
     <div class="col col-sm-6">
         <div class="panel panel-default">
             <div class="panel panel-heading" style="margin-bottom: 0;">
-                <h3 class="panel-title header-title">2021</h3>
+                <h3 class="panel-title header-title">April 20th - May 2nd, 2021</h3>
             </div>
             <div class="panel-body">
+                <p style="font-size: 1.2em;"><strong>Origins - Roots of Gestalt Theory, Developmental Theory, and Clinical Practice.</strong></p>
+                <hr/>
                 <p>The mission of the West Coast Institute is to provide to qualified professionals training and support in Gestalt Play Therapy with Children and Adolescents. The Certification Process offers those who want to develop a specialization in Gestalt Play Therapy with Children and Adolescents the structure and guidance in studying theory and applying the perspectives of Gestalt Play Therapy to work with their younger clients and their families WCI also provides in-depth training and inspiration to encourage those who are WCI Certified therapists and practitioners to provide competent training programs in their countries, vicinities, towns, and villages. We welcome the diversity, creativity, and aliveness this brings to all of us. A Trainers’ Symposium is held every two years. We gather together to share ideas for training programs and new play and expressive interventions. Those who attend build an international network of dynamic and committed colleagues.</p>
                 <p>This symposium is offered to those who have attended the Intensive trainings or a full International program, and want support to become trainers in their own community/country. Preference will be given to those who are working towards certification through WCI. Participants will develop the following.</p>
                 <p>
@@ -60,10 +62,10 @@ chapter: trainers
                     </ul>
                 </p>
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>Location:</strong> - TBA</li>
-                    <li class="list-group-item"><strong>Fees:</strong> - $1200</li>
+                    <li class="list-group-item"><strong>Location:</strong> - Online</li>
+                    <li class="list-group-item"><strong>Fees:</strong> - $600</li>
                     <li class="list-group-item"><strong>Hosted By:</strong> Felicia Carroll, MEd. MA, LMFT, and RPT-S</li>
-                    <li class="list-group-item"><strong>CEU's:</strong> 18 contact hours (may not be accepted by APT towards RPT credentials)</li>
+                    <li class="list-group-item"><strong>CE:</strong> 18 contact hours (may not be accepted by APT towards RPT credentials)</li>
                 </ul>
             </div>
             <div class="panel-footer"></div>
@@ -84,7 +86,7 @@ chapter: trainers
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>WHO SHOULD ATTEND</strong></h4>
-        <p>Marriage and Family Therapists, Social Workers,  Play Therapists, School Counselors, Psychologists, Students and Interns.  Also, any professional wanting to know more about Gestalt Play Therapy with Children and Adolescents. Training hours apply for licensure through BBS and registration as a Registered Play Therapist through APT.</p>
+        <p>Marriage and Family Therapists, Social Workers,  Play Therapists, School Counselors, Psychologists, Students and Interns.  Also, any professional wanting to know more about Gestalt Play Therapy with Children and Adolescents. Training hours apply for CAMFT licensure through BBS and registration as a Registered Play Therapist through APT.</p>
       </div>
     </div>
     <hr>
@@ -98,21 +100,21 @@ chapter: trainers
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>TRAINING FEE</strong></h4>
-        <p>Fees can be paid through the WCI website through PayPal or made out to West Coast Institute and mailed to 540 Alisal Rd. Ste. 1, Solvang, CA  93463.  Scholarship information will be sent upon request after registration to the training. A non-refundable deposit for each program needs to be paid with registration and in necessary to reserve your space. The remaining balance is due on or before the training begins.</p>
+        <p>Fees can be paid through the WCI website through PayPal or by check made out to West Coast Institute and mailed to 540 Alisal Rd. Ste. 1, Solvang, CA  93463.  Scholarship information will be sent upon request after registration to the training. A non-refundable deposit for each program needs to be paid with registration and is necessary to reserve your space. The remaining balance is due on or before the training begins.</p>
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>LODGING</strong></h4>
-        <p>Costs for travel, lodging, and food are not included in training fee.  Information regarding lodging will be sent to each registrant.</p>
+        <p>Costs for travel, lodging, and food (for in-person programs) are not included in training fee.  Information regarding lodging will be sent to each registrant.</p>
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>CANCELLATIONS & REFUNDS</strong></h4>
-        <p>The registration fee is non-refundable but can be applied to another WCI program. Cancellation notices must be received in advance of the program starting date.  For the all trainings, cancellations must be made within two weeks of the training.  Notification must be in writing to WCI. With this notice other paid fees can be refunded or applied to a future program. If for any reason, WCI cancels a program all fees will be refunded. WCI is not responsible for any travel or lodging expenses due to cancellations.</p>
+        <p>Cancellation notices must be received at least 2 weeks prior in advance of the program starting date. Notification must be in writing to WCI. With this notice, paid fees can be refunded or applied to a future program. If for any reason, WCI cancels a program all fees will be refunded. WCI is not responsible for any travel or lodging expenses due to cancellations.</p>
       </div>
     </div>
     <hr>
@@ -133,14 +135,14 @@ chapter: trainers
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>Grievance Policy</strong></h4>
-        <p>The West Coast Institute for Gestalt Therapy with Children and Adolescents (WCI) is fully committed to conducting all activities in strict compliance with all legal and ethical responsibilities to be non-discriminatory in promotional activities, program content and in treatment of program participants. If any registrant has special needs, please make those clear at the time of registration.   WCI will do its best to anticipate problems and, if they present themselves, will work to alleviate or resolve complaints as quickly as possible.  Direct communication of any difficulties to the workshop leader or the WCI assistant is requested and will be respectfully attended to.</p>
+        <p>The West Coast Institute for Gestalt Therapy with Children and Adolescents, LLC (WCI) is fully committed to conducting all activities in strict compliance with all legal and ethical responsibilities to be non-discriminatory in promotional activities, program content and in treatment of program participants. If any registrant has special needs, please make those clear at the time of registration.   WCI will do its best to anticipate problems and, if they present themselves, will work to alleviate or resolve complaints as quickly as possible.  Direct communication of any difficulties to the workshop leader or the WCI assistant is requested and will be respectfully attended to.</p>
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col col-sm-8 col-sm-offset-2">
         <h4><strong>Additional Information</strong></h4>
-        <p>Information regarding financial assistance, schedule of trainings, lodging, and transportation to and from airports will be provided to all registrants with confirmation of registration.</p>
+        <p>Information regarding financial assistance, schedule of trainings, lodging, and transportation to and from airports (for in-person programs) will be provided to all registrants with confirmation of registration.</p>
       </div>
     </div>
     <hr>

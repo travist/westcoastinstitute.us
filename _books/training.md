@@ -8,7 +8,7 @@ weight: 5
 <div class="row section-hero">
   <div class="col col-sm-10 col-sm-offset-1" style="margin-bottom: 30px;">
     <h2 class="header-title">Train with us and earn professional credit</h2>
-    <p>The West Coast Institute is recognized as a program that can meet the requirement for all (150) training hours by the Association for Play Therapy.  The same hours apply toward the required training hours (85) for Certification as a Gestalt Therapist with Children and Adolescents through WCI.  The same hours also apply toward licensure requirements for the BBS through CAMFT requirements.</p>
+    <p>The West Coast Institute is recognized as a program that can meet the requirement for all training hours required by the Association for Play Therapy for the RPT credential.  The same hours apply toward the required training hours (85) for Certification as a Gestalt Therapist with Children and Adolescents through WCI.  The same hours also apply toward licensure requirements for the BBS through CAMFT requirements.</p>
     <div class="row">
       <div class="col-sm-2 col-sm-offset-4 text-center" style="padding:0 5px;">
         <a href="http://www.a4pt.org/ps.index.cfm" target="_blank"><img src="/assets/img/APT_logo_small.jpg" class="img-responsive" style="width: 50%; margin:auto;" /></a>
@@ -23,7 +23,7 @@ weight: 5
   </div>
   <div class="row">
     <div class="col col-sm-10 col-sm-offset-1">
-        <div class="well">Click on one of the following links for information about our 2020 Training opportunities.</div>
+        <div class="well">Click on one of the following links for information about our 2021 Training opportunities.</div>
     </div>
   </div>
   <div class="row">
@@ -33,7 +33,7 @@ weight: 5
                 <a href="#conference" class="btn btn-block btn-success">Conference Presentations</a>
             </li>
             <li class="list-group-item">
-                <a href="#summer" class="btn btn-block btn-success">Summer Intensive Training</a>
+                <a href="#basic" class="btn btn-block btn-success">Basic Intensive Training</a>
             </li>
             <li class="list-group-item">
                 <a href="#advanced" class="btn btn-block btn-success">Advanced Trainings</a>
@@ -42,9 +42,6 @@ weight: 5
     </div>
     <div class="col col-sm-5">
         <ul class="list-group text-center">
-            <li class="list-group-item">
-                <a href="#supervision" class="btn btn-block btn-success">Supervision Trainings</a>
-            </li>
             <li class="list-group-item">
                 <a href="#modalities" class="btn btn-block btn-success">Modalities Workshops</a>
             </li>

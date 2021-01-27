@@ -1,5 +1,5 @@
 ---
-title: CEUs
+title: CE
 layout: default
 link: ceus
 weight: 7
@@ -26,10 +26,6 @@ weight: 7
             <p><img src="/assets/img/cepa_approved.png" class="img-responsive" /></p>
         </th>
         <td>WCI is approved by the California Association of Marriage and Family Therapists to sponsor continuing education for LMFTs, LCSWs, LPCCs, and/or LEPs as required by the California Board of Behavioral Sciences. Approved Provider 008931.</td>
-      </tr>
-      <tr>
-        <th class="text-center">APA</th>
-        <td>WCI is sponsored by Serra Institute for Contemporary Gestalt Therapy to provide CEU’s for psychologists.</td>
       </tr>
     </table>
   </div>

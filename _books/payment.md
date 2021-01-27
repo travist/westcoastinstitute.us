@@ -3,7 +3,7 @@ title: Payments
 layout: book
 book: payment
 link: payment
-weight: 10
+weight: 100
 ---
 <div class="row">
     <div class="col col-sm-6">
@@ -12,18 +12,35 @@ weight: 10
             <div class="panel-heading">Please select which programs you will be paying for today.</div>
         </div>
         <div class="panel panel-default">
-          <div class="panel-heading">Summer Intensive Training Series</div>
+          <div class="panel-heading">Basic Intensive Training - Online</div>
           <div class="panel-body">
             <div class="checkbox">
               <label>
-                <input id="summer-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="summer-register-value">300</span></strong>
+                <input id="basic-online-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="basic-online-register-value">300</span></strong>
               </label>
             </div>
             <div class="checkbox">
               <label>
-                <input id="summer" type="checkbox" value="">
-                Training Fee - <strong>$<span id="summer-value">1500</span></strong>
+                <input id="basic-online" type="checkbox" value="">
+                Training Fee - <strong>$<span id="basic-online-value">1500</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Basic Intensive Training - In-Person</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="basic-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="basic-register-value">300</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="basic" type="checkbox" value="">
+                Training Fee - <strong>$<span id="basic-value">2100</span></strong>
               </label>
             </div>
           </div>
@@ -40,7 +57,7 @@ weight: 10
             <div class="checkbox">
               <label>
                 <input id="advanced1" type="checkbox" value="">
-                Training Fee - <strong>$<span id="advanced1-value">100</span></strong>
+                Training Fee - <strong>$<span id="advanced1-value">140</span></strong>
               </label>
             </div>
           </div>
@@ -51,47 +68,47 @@ weight: 10
             <div class="checkbox">
               <label>
                 <input id="advanced2-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="advanced2-register-value">50</span></strong>
+                Registration Fee - <strong>$<span id="advanced2-register-value">100</span></strong>
               </label>
             </div>
             <div class="checkbox">
               <label>
                 <input id="advanced2" type="checkbox" value="">
-                Training Fee - <strong>$<span id="advanced2-value">250</span></strong>
+                Training Fee - <strong>$<span id="advanced2-value">450</span></strong>
               </label>
             </div>
           </div>
         </div>
         <div class="panel panel-default">
-          <div class="panel-heading">Modalities Workshop: Drawings and Clay</div>
+          <div class="panel-heading">Advanced Training: Origins Celebrating Ancestors</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="advanced3-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="advanced3-register-value">100</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="advanced3" type="checkbox" value="">
+                Training Fee - <strong>$<span id="advanced3-value">450</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Modalities Workshop: Sand Tray</div>
           <div class="panel-body">
             <div class="checkbox">
               <label>
                 <input id="modalities1-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="modalities1-register-value">50</span></strong>
+                Registration Fee - <strong>$<span id="modalities1-register-value">100</span></strong>
               </label>
             </div>
             <div class="checkbox">
               <label>
                 <input id="modalities1" type="checkbox" value="">
                 Training Fee - <strong>$<span id="modalities1-value">200</span></strong>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">Modalities Workshop: Movement and Art</div>
-          <div class="panel-body">
-            <div class="checkbox">
-              <label>
-                <input id="modalities2-register" type="checkbox" value="">
-                Registration Fee - <strong>$<span id="modalities2-register-value">25</span></strong>
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input id="modalities2" type="checkbox" value="">
-                Training Fee - <strong>$<span id="modalities2-value">75</span></strong>
               </label>
             </div>
           </div>
@@ -108,7 +125,24 @@ weight: 10
             <div class="checkbox">
               <label>
                 <input id="intro" type="checkbox" value="">
-                Training Fee - <strong>$<span id="intro-value">100</span></strong>
+                Training Fee - <strong>$<span id="intro-value">130</span></strong>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Trainers Symposium</div>
+          <div class="panel-body">
+            <div class="checkbox">
+              <label>
+                <input id="trainers-register" type="checkbox" value="">
+                Registration Fee - <strong>$<span id="trainers-register-value">100</span></strong>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input id="trainers" type="checkbox" value="">
+                Training Fee - <strong>$<span id="trainers-value">500</span></strong>
               </label>
             </div>
           </div>
@@ -123,17 +157,15 @@ weight: 10
               </label>
             </div>
           </div>
-        </div>    
+        </div>
         <div class="panel panel-default">
           <div class="panel-footer">Total: <strong>$<span id="total">0</span></strong></div>
         </div>
-        <h4>The non-refundable registration fee is required to confirm your registration to the workshop/training.</h4>
+        <h4>The registration fee is required to confirm your registration to the workshop/training.</h4>
         <div class="panel panel-default">
           <div class="panel-heading">Refund Policy</div>
           <div class="panel-body">
-            <p>The registration fee is non-refundable but can be applied to another WCI program. Cancellation notices must be received in advance of the program starting date.  For the all trainings, cancellations must be made within two weeks of the training. Notification must be in writing to WCI. With this notice other paid fees can be refunded or applied to a future program. If for any reason, WCI cancels a program all fees will be refunded. WCI is not responsible for any travel or lodging expenses due to cancellations.</p>
-            <p>Registration fees will not be refunded unless WCI cancels the program. Paid fees can be applied toward a future training. Any scholarship funds will be returned to the grantor.</p>
-            <p><strong>Please Note:</strong> International trainings are organized through local organizers.  Refunds or grievances  are not the responsibility of WCI or any WCI trainer. Please contact the organizer of the training in your respective location.</p>
+            <p>Cancellation notice must be received two weeks in advance of the program starting dates.  The registration fee may not be refunded for a last minute notification.  Notification must be in writing to WCI either through email or snail mail.  With the notice, paid fees can be refunded or applied to a future program.  If for any reason, WCI cancels a program, all fees will be refunded.  WCI is not responsible for any travel or lodging costs due to cancellations.  Any scholarship funds will be returned to the grantor or given to another participant.</p>
           </div>
         </div>
     </div>

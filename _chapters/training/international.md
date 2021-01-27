@@ -26,11 +26,11 @@ chapter: international
         Other issues/topics can also be addressed as the program is tailored for each group and cultural needs.
         </p>
         <h2>Upcoming International Trainings</h2>
-        <strong>2019 Trainings</strong>
+        <div class="alert alert-info" style="font-size: 14px;">COVID-19 has restricted travel and in-person engagements. However, dates are being scheduled for late 2021<p>Please <a href="/contact" style="color:white">contact Felicia</a> for more details.</p></div>
+        <strong>2021 Trainings</strong>
         <ul>
-            <li>Caxias do Sul, Brasil - Basic and Advanced, November 3rd - 10th, 2019<br/><img src="/assets/img/Brasil.jpg" class="img-responsive img-thumbnail" /></li>           
+          <li><strong>September 24th - 26th</strong> - Prague, Czech Republic: Writing metaphoical stories and life naratives - integrated processes for trauma in childrens lives.</li>
         </ul>
-        <p>Many more dates are being planned for 2020.</p>
         <p>Please <a href="/contact">contact Felicia</a> for more details.</p>
     </div>
 </div>
@@ -77,12 +77,15 @@ chapter: international
       </ul>
     </div>
     <div class="docs-section">
-      <strong>Postgraduate Training</strong>
+      <strong>Valley Institute for Training and Gestalt Therapy</strong>
       <ul>
         <li>Location: Prague, Czech Republic</li>
-        <li>Website: <a href="http://www.gestalt-praha.cz/gestalt-terapie-s-detmi-a-adolescentimi">www.gestalt-praha.cz/gestalt-terapie-s-detmi-a-adolescentimi</a></li>
+        <li>Website: <a href="http://www.gestalt-praha.cz">www.gestalt-praha.cz</a></li>
         <li>Contact Person: Alena Vavrova</li>
       </ul>
+    </div>
+    <div class="docs-section">
+      <strong>Postgraduate Training</strong>
       <ul>
          <li>Location: Ljubljana, Slovenia</li>
          <li>Contact Person: Simon Pevec</li>

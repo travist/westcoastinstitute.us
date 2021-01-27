@@ -8,12 +8,13 @@ weight: 0
         <div class="embed-responsive embed-responsive-16by9">
             <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/I2JxMA_sXig" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
-        <h2 class="header-title">2020 Trainings and Workshops Live Online</h2>
-        <p>In support of the ongoing interest and professional development in Gestalt Play Therapy with Children and Adolescents, WCI has adapted its 2020 programs for live, interactive, online formats. These programs will be the same high quality programs that professionals around the globe seek out wanting to develop their theoretical understanding and clinical skills of Gestalt Play Therapy.  In particular note the reformatting of the 2020 Summer Intensive to be a six session week-end series beginning in September 5, 2020. Please note the changes below and register now since all programs are limited to 9 participants.</p>
+        <h2 class="header-title">2021 Trainings and Workshops Live Online and In Person</h2>
+        <p>In support of the ongoing interest and professional development in Gestalt Play Therapy with Children and Adolescents, WCI has adapted its 2021 programs for live, interactive, Online formats. These programs will be the same high quality programs that professionals around the globe see out wanting to develop their theoretical understanding and clinical skills in working with children and adolecents.</p>
+        <p>We are optimistic about being able to offer many programs ln Person in late Summer and Fall. ln Person experiences include group dinners, fun gatherings and time for other recreational activities and enjoying the beautiful West Coast of California and the Santa Ynez Valley.</p> <p>See <a href="/training">Trainings</a> for more information and note which are Online and which are ln Person.</p>
         <h2 class="header-title">Develop a specialization in child and adolescent psychotherapy</h2>
         <p>We offer unique <strong>accredited <a href="/training">trainings</a>, consultation, and <a href="/certification">certification</a></strong> for how to be effective with children, adolescents, their families and communities. Emphasis in WCI workshops and trainings is the Gestalt Play Therapy perspective and approach developed by Violet Oaklander, Ph.D. Current neuroscience, neurobiology, and understandings regarding child and adolescent development provide an in-depth contemporary view in all programs.</p>
         <ul style="margin-bottom: 30px;">
-            <li><a href="/ceus">Earn CEU</a> credits: APA, CAMFT, APT</li>
+            <li><a href="/ceus">Earn CE</a> credits: CAMFT, APT</li>
             <li>Small group interactive learning experiences.</li>
             <li>Theory-based instruction.</li>
             <li>Use creative modalities to grow your skills.</li>
