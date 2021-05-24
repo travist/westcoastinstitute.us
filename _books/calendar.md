@@ -82,7 +82,7 @@ weight: 12
     </tr>
     <tr>
         <td>November 6th, 2021</td>
-        <td><strong>Advanced Training:</strong> Adoption Issues in Gestalt Play Therapy </td>
+        <td><strong>Advanced Training:</strong> Adoption Experience in Gestalt Play Therapy </td>
     <td>Online</td>
     </tr>
   </tbody>
