@@ -48,6 +48,7 @@ chapter: basic
                       </ul>
                     </li>
                     <li class="list-group-item"><strong>CE:</strong> 60 contact hours.</li>
+                    <li class="list-group-item">Due to COVID-19 health concerns this one-time online event has been approved by APT for 60 contact hours.</li>
                 </ul>
             </div>
             <div class="panel-footer">

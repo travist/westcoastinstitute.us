@@ -46,7 +46,7 @@ weight: 100
           </div>
         </div>
         <div class="panel panel-default">
-          <div class="panel-heading">Advanced Training: The adoption experience in Gestalt Play Therapy</div>
+          <div class="panel-heading">Advanced Training: The Adoption Experience in Gestalt Play Therapy</div>
           <div class="panel-body">
             <div class="checkbox">
               <label>
@@ -57,7 +57,7 @@ weight: 100
             <div class="checkbox">
               <label>
                 <input id="advanced1" type="checkbox" value="">
-                Training Fee - <strong>$<span id="advanced1-value">140</span></strong>
+                Training Fee - <strong>$<span id="advanced1-value">130</span></strong>
               </label>
             </div>
           </div>

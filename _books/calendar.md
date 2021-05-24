@@ -66,11 +66,6 @@ weight: 12
         <td>In-Person</td>
     </tr>
     <tr>
-        <td>August 6th, 2021</td>
-        <td><strong>Advanced Training:</strong> Adoption Issues in Gestalt Play Therapy </td>
-    <td>In-Person</td>
-    </tr>
-    <tr>
         <td>Sept. 25th - 26th, 2021</td>
         <td><strong>Modality Workshop:</strong> Sand Tray: Integrative Modal</td>
         <td>In-Person</td>
@@ -84,6 +79,11 @@ weight: 12
         <td>November 5th, 2021</td>
         <td><strong>Introductory Workshop</strong></td>
         <td>In-Person</td>
+    </tr>
+    <tr>
+        <td>November 6th, 2021</td>
+        <td><strong>Advanced Training:</strong> Adoption Issues in Gestalt Play Therapy </td>
+    <td>Online</td>
     </tr>
   </tbody>
 </table>
