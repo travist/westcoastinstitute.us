@@ -30,7 +30,7 @@
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.0",
     "gulp-wrap": "^0.13.0",
-    "karma": "^2.0.0",
+    "karma": "^6.3.16",
     "main-bower-files": "^2.11.1",
     "node-qunit-phantomjs": "^2.0.0",
     "run-sequence": "^2.2.0",
